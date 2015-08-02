@@ -1,0 +1,12 @@
+.slider
+  = render "shared/slides"
+.new-station.clearfix= link_to "Add New Station", new_data_gateway_path, :class => "btn pull-right"
+.data-tagging.tabs
+	%ul.nav.nav-tabs
+		%li.data-group.default-tab.active-tab
+			%a{:href => "#"}= I18n.t("titles.pages.users_and_tags.labels.data_group").pluralize
+		%li.tagging
+			%a{:href => "#"}= I18n.t("titles.pages.users_and_tags.labels.tag").pluralize
+	#content-tabs.tabs-content
+		.data= render "data_groups"
+

@@ -1,0 +1,81 @@
+#codeSnippetModal.modal.fade
+  .modal-dialog
+    .modal-content{style: 'width: 400px; margin-left: 100px;'}
+      .modal-header
+        %button.close{"aria-label" => "Close", "data-dismiss" => "modal", :type => "button"}
+          %span{"aria-hidden" => "true"} ×
+        %h4.modal-title Widget Code Snippets
+      .modal-body
+        - if @widget_did.present?
+          .row
+            .col-md-12
+              .well
+                %label{style: 'margin-right: 10px'}
+                  %input{type: 'checkbox', name: 'player_autoplay', value:  @station.player_autoplay, checked: (@station.player_autoplay.to_i == 1) ? true : false, class: 'configCheckbox'}
+                  %small Auto Play?
+                %label{style: 'margin-right: 10px'}
+                  %input{type: 'checkbox', name: 'player_zeno_logo', value:  @station.player_zeno_logo, checked: (@station.player_zeno_logo.to_i == 1) ? false : true, class: 'configCheckbox'}
+                  %small Hide Zeno Live Logo?
+                = form_tag '#', id: 'snippetForm' do
+                  = hidden_field_tag :player_autoplay, @station.player_autoplay
+                  = hidden_field_tag :player_zeno_logo, @station.player_zeno_logo
+                  = hidden_field_tag :gateway_id, @station.id
+                  - ext_count = @station.data_gateway_conferences.count
+                  - if ext_count == 1
+                    .form-group
+                      %label.control-label{:for => "textinput"}
+                        %small Metadata
+                      %input#textinput.form-control.input-md{:name => "metadata", :placeholder => "Metadata", :type => "text", value: @metadata}
+                  %button{type: 'submit', data: {target: '#snippetForm'}, class: "btn #{(@station.widget_is_set_up) ? 'btn-success' : 'btn-blue'} btn-block submitSnippetForm"}
+                    = "#{(@station.widget_is_set_up) ? 'Update' : 'Submit'}"
+                %br
+                #snippetContainer{style: "display: #{(@station.widget_is_set_up) ? 'block' : 'none'}"}
+                  %div
+                    Small
+                    %span.pull-right
+                      -#%a.copy{'data-target' => '#sm'}
+                      -#  %i.fa.fa-copy
+                      -#  copy
+                      %a.preview{target: '_blank', href: "https://prod-player-250.zenoradio.com/widget/type/default/?did=#{@widget_did.did_e164}&size=small"}
+                        %i.fa.fa-location-arrow
+                        Preview
+                    %textarea#sm{style: 'width: 100%; min-height: 100px'}
+                      = "<script src='//prod-player-250.zenoradio.com/widget/load/?did=#{@widget_did.did_e164}&width=400&height=300'></script>"
+                    %small
+                      %i No Photo. Requires 400px x 300px on website.
+                  %br
+                  %div
+                    Medium
+                    %span.pull-right
+                      -#%a.copy{'data-target' => '#md'}
+                      -#  %i.fa.fa-copy
+                      -#
+                      %a.preview{target: '_blank', href: "https://prod-player-250.zenoradio.com/widget/type/default/?did=#{@widget_did.did_e164}&size=medium"}
+                        %i.fa.fa-location-arrow
+                        Preview
+                    %textarea#md{style: 'width: 100%; min-height: 100px'}
+                      = "<script src='//prod-player-250.zenoradio.com/widget/load/?did=#{@widget_did.did_e164}&width=400&height=400'></script>"
+                    %small
+                      %i Requires 400px x 400px on website
+                  %br
+                  %div
+                    Large
+                    %span.pull-right
+                      -#%a.copy{'data-target' => '#lg'}
+                      -#  %i.fa.fa-copy
+                      -#  copy
+                      %a.preview{target: '_blank', href: "https://prod-player-250.zenoradio.com/widget/type/default/?did=#{@widget_did.did_e164}&size=large"}
+                        %i.fa.fa-location-arrow
+                        Preview
+                    %textarea#lg{style: 'width: 100%; min-height: 100px'}
+                      = "<script src='//prod-player-250.zenoradio.com/widget/load/?did=#{@widget_did.did_e164}&width=500&height=600'></script>"
+                    %small
+                      %i Requires 500px x 500px on website
+        - else
+          %p.alert.alert-info
+            = 'This station has no valid widget DID, Please click '
+            %a.requestWidgetDidBtn{href: '#', 'data-gateway-id' => @station.id} here
+            = ' to notify zeno admin.'
+          %p.preloader.text-center{style: 'display: none'}
+            %img{src: '/assets/loading.gif', width: 30, height: 30}
+            Please wait...

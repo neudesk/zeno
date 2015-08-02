@@ -1,0 +1,94 @@
+// Place all the styles related to the settings controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+
+
+
+.settings_page {
+  .did_section {
+    margin-bottom: 10px;
+    padding-top: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-bottom: 0px;
+
+    .section_name {
+      font-size: 22px;
+      font-weight: bold;
+      margin-bottom: 10px;
+      color: gray;
+    }
+    .unassign_dids_form {
+      clear: both;
+    }
+
+    .did_code_list {
+      min-height: 20px;
+      height: auto;
+      max-height: 120px;
+      overflow-y: auto;
+      float: left;
+      width: 100%;
+      input[type="checkbox"]{
+        height: auto !important;
+        width: auto !important;
+        min-height: 0 !important;
+        padding: 0px !important;
+        margin: 0px !important;
+      }
+      .did_code {
+        float: left;
+        width: 152px;
+        .value {
+          font-size: 17px;
+          font-weight: bold;
+          color: #666666;
+          padding-right: 20px;
+        }
+      }      
+    }
+
+    .navigator {
+      clear: both;
+      height: 26px;
+      margin-top: 14px;
+      .btn {
+        float: right;
+        margin-right: 5px;
+      }
+      .add_btn {
+        display: none;
+      }
+      .delete_btn {
+        display: none;
+      }
+
+      .cancel_btn {
+        display: none;
+      }
+    }
+  }
+
+
+
+  .nav-tabs{
+    margin-bottom:0px;
+    /*border-bottom: none !important;*/
+    li.content{
+      margin-left: 10px;
+    }
+  }
+  .nav-tabs > .active-tab > a, .nav-tabs > .active-tab > a:hover, .nav-tabs > .active-tab > a:focus {
+    background-color: #F0F6F9 !important;
+    border-radius: 4px 4px 0 0;
+    border-top: 1px solid #DDDDDD;
+    border-left: 1px solid #DDDDDD;
+    border-right: 1px solid #DDDDDD;
+  }
+  .nav-tabs > li > a:hover, .nav-tabs > li > a:focus{
+    border-top: 1px solid #DDDDDD;
+    border-left: 1px solid #DDDDDD;
+    border-right: 1px solid #DDDDDD;
+  }
+}

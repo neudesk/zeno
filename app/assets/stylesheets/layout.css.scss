@@ -1,0 +1,347 @@
+.pretty th .current {
+  padding-right: 18px;
+  background-repeat: no-repeat;
+  background-position: right center;
+}
+.more-margin-right{
+  //margin-right: 50px;
+}
+.new_data_gateway label{
+  width: 200px;
+}
+.new_entry_way_provider_section{
+  margin-left: 180px;
+}
+
+.new_entry_way {
+  label{
+    width: 180px !important;
+  }
+}
+.pretty th .asc {
+  background-image: url(layout/up_arrow.gif);
+}
+
+.pretty th .desc {
+  background-image: url(layout/down_arrow.gif);
+}
+table{
+  .align-center{
+    text-align: center;
+  }
+  .align-left{
+    text-align: left;
+  }
+  .align-right{
+    text-align: right;
+  }
+}
+.navbar-inverse .navbar-inner {
+  background: none repeat scroll 0 0 #FFFFFF;
+
+  border-color: #63738A;
+}
+.margin-top-10{
+  margin-top:10px;
+}
+
+.margin-top-5{
+  margin-top:5px;
+}
+
+.margin-top-0{
+  margin-top:0px;
+}
+
+.header{
+  a {
+    color: #19B6EE;
+    text-decoration: none;
+  }
+  .nav-collapse{
+    &.more{
+      margin-top: 27px;
+    }
+  }
+  .brand-mo{
+    display: block;
+    float: left;
+    font-size: 20px;
+    font-weight: 200;
+    margin-left: -20px;
+    padding: 10px 5px 0px 15px;
+  }
+  a.login{
+    color: white !important;
+    font-size: 120% !important;
+  }
+  // Menu
+  .nav {
+    // Menu item is chosen 
+    .active {
+      a {
+        background-color: #FFFFFF !important;
+        color: #999999 !important;
+      }
+
+    }
+
+    // Normal Menu item
+    .dropdown {
+      a:hover {
+        background-color: #FFFFFF !important;
+        color: #999999 !important;
+      }
+    }
+
+    // Menu item is clicked
+    .dropdown.open {
+      a {
+        background-color: #FFFFFF !important;
+        color: #999999 !important;
+      }
+    }
+
+  }
+  .menu{
+    .nav{
+      margin-bottom:0px !important;
+      a{
+        color: white;
+      }
+      .dropdown-menu {
+        a {
+          color: #6F6B6B;
+          &:hover{color: #fff;};
+        }
+      }
+    }
+  }
+}
+.pagination {
+  margin: 0 !important;
+}
+.main{
+  background: none repeat scroll 0 0 #0F3A55;
+  padding-bottom: 30px;
+  padding-top: 90px;
+  
+  h1.page_heading {
+    background: none repeat scroll 0 0 #0E3A55;
+    border: 1px solid #CCCCCC;
+    color: white;
+    font-size: 20px;
+    padding: 5px 0 5px 10px;
+    text-indent: 10px;
+    text-transform: uppercase;
+    line-height: 40px;
+  }
+
+  .standard.no-borders {
+    border: 1px solid #FFFFFF;
+    border-radius: 0px;
+    background: none;
+  }
+  .standard{
+    background: none;
+    border: 2px solid #CCCCCC;
+    border-radius: 1x 1px 1px 1px;
+
+    .download{
+      margin: 10px;
+    }
+    .sec_con{
+      overflow: hidden;
+      padding: 10px 10px;
+      position: relative;
+      &.anis{
+        padding: 10px 5px;
+      }
+      label{
+        float: left;
+        font-size: 16px;
+        margin-top: 2px;
+        padding: 0 5px;
+        width: 150px;
+        &.anis{
+          margin-top:4px;
+          width: auto;
+        }
+      }
+      .anis{
+        select{
+          width: 80px;
+        }
+        input[type=text]{
+          width: 70px;
+        }
+        input[type=submit]{
+          padding: 3px 8px;
+        }
+      }
+      span.field {
+        width: 500px;
+      }
+      p{
+        margin: 0px;
+      }
+    }
+  }
+  .row-container{
+    margin-top: 20px;
+    margin-bottom: 20px;
+    min-height: 500px;
+    &.row{
+      margin-left: 0px !important;
+    }
+  }
+  .row{
+    margin-bottom: 20px;
+    margin-left: 0px;
+  }
+  &.container{
+    .row{
+      margin-left: 0px !important;
+      &.more{
+        padding: 115px 20px !important;
+      }
+    }
+  }
+  .container{
+    padding-top: 20px;
+    padding-bottom: 20px;
+    padding-left: 20px;
+    padding-right: 20px;
+    width: 940px !important;
+    background: none repeat scroll 0 0 #FFFFFF;
+    &.more{
+      padding-top: 15px;
+      min-height: 700px;
+    }
+  }
+}
+footer{
+  min-height: 57px;
+  background-color:#3A4F64;
+  p.copy{
+    color: white;
+    padding: 15px;
+    text-align: center;
+  }
+}
+#main {
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  margin: 8px;
+
+  .header {
+    background-image: url(layout/content_1_bg.jpg);
+    background-repeat: repeat repeat;
+    float: left;
+    height: 100px;
+    width: 100%;
+
+    #sub-header {
+      height: 200px;
+      margin: 0 auto;
+      width: 100%;
+
+      #check-login {
+        height:48px;
+        width:50%;
+        .f-text {
+          margin: 10px 10px 0 0;
+          a {
+            color: #fff !important;
+            text-decoration: none;
+            font-size: 1.5em;
+          }
+        }
+      }
+
+
+      #logo{
+        width:50%;
+
+        #spec-logo {
+          background-image:url(logo.png);
+          background-repeat:no-repeat no-repeat;
+          border:0 solid red;
+          height:50px;
+          width:134px;
+          margin: 10px;
+        }
+      }
+    }
+  }
+
+  .main-content{
+    /* background-image:url(http://zenoradio.com/images/content_2_bg.jpg);
+    background-repeat:repeat repeat; */
+    min-height: 600px !important;
+    width:100%;
+    background-color: white;
+
+    .menu {
+      ul {
+        margin: 5px 5px 0 0;
+        li.text-account {
+          padding-left: 1px;
+        }
+        li {
+          float: left;
+          padding-left:14px;
+          a {
+            text-decoration: underline !important;
+            &:hover {
+              background-color: none;
+            }
+          }
+          a.icon-user {
+            text-decoration: none !important;
+          }
+          a.active {
+            text-decoration: none !important;
+            color: purple;
+          }
+        }
+        li.dropdown {
+          ul.dropdown-menu li {
+            clear: both !important;
+            padding-left:14px;
+            a {
+              text-decoration: underline !important;
+              &:hover {
+                text-decoration: none !important;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  footer {
+    background-color:#3A4F64;
+    float:left;
+    height:100px;
+    width:100%;
+  }
+}
+
+
+/* Zeno new CSS */
+.tab-content {
+  border-left: 1px solid #E3E3E3;
+  border-right: 1px solid #E3E3E3;
+  border-bottom: 1px solid #E3E3E3;
+  border-radius: 1px 1px 1px 1px;
+  padding: 20px;
+}
+
+.nav-tabs {
+  margin-bottom: 0px;
+}
+
+/* End Zeno new CSS */

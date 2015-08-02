@@ -1,0 +1,27 @@
+%div.panel.panel-default
+  %div.panel-heading
+    .fa.fa-gears
+    RCA Opt-In List
+  %div.panel-body
+    %div.search_phone_number.input-group.input-group-sm
+      %input.form-control{:type => "text", :id => "txt_rca_search_opt_in",:placeholder => "Search", :value => params[:search].present? ? params[:search] : "" }
+      %span.input-group-btn
+        %a{:class => "btn btn-primary", :id => "search_rca_opt_in" }= "Search"
+    %br
+    %table.table.table-striped.rca_table
+      %thead
+        %tr
+          %th= "#"
+          %th= "Name"
+          %th{:style=> "width: 20%;"}= "Opt-In List"
+        %tbody
+          -@rca.each_with_index do |rca,index|
+            %tr{:class => cycle('odd', 'even')}
+              %td= index+1
+              %td= rca.title
+              %td
+                - if rca.opt_in_is_active.present? && rca.opt_in_is_active == true
+                  %input{:type=>"checkbox",:id=>"opt_in_rca_#{rca.id}",:name=>"opt_in_rca",:class => "opt_in_rca", :checked => "checked", :data => {:val => rca.id}}
+                -else
+                  %input{:type=>"checkbox",:id=>"opt_in_rca_#{rca.id}",:name=>"opt_in_rca",:class => "opt_in_rca", :data => {:val => rca.id}}
+    = paginate  @page_no

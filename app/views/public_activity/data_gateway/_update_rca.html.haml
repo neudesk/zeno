@@ -1,0 +1,14 @@
+updated RCA
+- if activity.parameters[:old_rca]
+  - old_rca = DataGroupRca.find_by_id(activity.parameters[:old_rca])
+  - old_rca = old_rca.present? ? old_rca.title : ""
+  = activity.parameters[:old_rca] != "" and activity.parameters[:old_rca] != nil and activity.parameters[:old_rca] != 0 ? raw("\"#{old_rca}\"") : '""'
+- if activity.parameters[:new_rca]
+  to
+  - new_rca = DataGroupRca.find_by_id(activity.parameters[:new_rca])
+  - new_rca = new_rca.present? ? new_rca.title : ""
+  = activity.parameters[:new_rca] != "" and activity.parameters[:new_rca] != nil and activity.parameters[:new_rca] != 0 ? raw("\"#{new_rca}\"") : '""'
+- if activity.parameters[:gateway_id]
+  - gateway = DataGateway.find(activity.parameters[:gateway_id])
+  = "on station"
+  = link_to gateway.title, settings_station_path(gateway.id)

@@ -1,0 +1,46 @@
+.row
+  .col-sm-12
+    .panel.panel-default{:style => "margin-left: 2%;margin-right: 2%;"}
+      .panel-heading
+        %i.clip-bars
+      .panel-body
+        .tabbable.panel-tabs
+          %ul.nav.nav-tabs
+            %li.active
+              %a{"data-toggle" => "tab", :href=> "#realtime", :id => "realtime_tab"}
+                Real Time
+            %li
+              %a{"data-toggle" => "tab", :href=> "#daily", :id=> "daily_tab"}
+                Daily
+            %li
+              %a{"data-toggle" => "tab", :href=> "#weekly", :id => "weekly_tab"}
+                Weekly
+          .tab-content
+            #realtime.flot-mini-container.tab-pane.active
+              .row
+                .col-sm-10
+                  #placeholder-realtime.flot-placeholder{:style => "height:250px"}
+                    %div.page-header
+                      %h1.center
+                        No Data to Display Yet.
+
+                .col-sm-2
+                  %p#realtime_choices
+            #daily.flot-mini-container.tab-pane
+              .row
+                .col-sm-10
+                  #placeholder-daily.flot-placeholder{:style => "height:250px"}
+                    %div.page-header
+                      %h1.center
+                        No Data to Display Yet.
+                .col-sm-2
+                  %p#daily_choices
+            #weekly.flot-mini-container.tab-pane
+              .row
+                .col-sm-10
+                  #placeholder-weekly.flot-placeholder{:style => "height:250px"}
+                    %div.page-header
+                      %h1.center
+                        No Data to Display Yet.
+                .col-sm-2
+                  %p#weekly_choices

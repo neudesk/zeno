@@ -1,0 +1,61 @@
+.slider
+  = render "shared/slides"
+%h1{:style=>"text-align:center;color:gray;"} Numericals Reports
+.row.anis-day-not-active
+  %h1.page_heading Average listening time per user
+  .standard.no-borders
+    %table.table.table-striped.table-hover{:style=>"padding:5px"}
+      %thead
+        %tr
+          %th Radio Name
+          /%th Phone Number
+          %th Country
+          - 8.times do |t|
+            - start_date = t == 0 ? Date.today.beginning_of_week : t.weeks.ago.beginning_of_week
+            - end_date = t == 0 ? Date.today.beginning_of_week : t.weeks.ago.end_of_week
+            - if t == 0
+              %th= Time.now.strftime("%B %d")
+            - else
+              %th= "#{start_date.strftime("%B %d")} - #{end_date.strftime("%B %d")}"
+
+      %tbody
+        - @time_per_users.each do |listener|
+          %tr
+            %td= listener.radio_name
+            /%td= #listener.phone
+            %td= listener.country_name
+            - 8.times do |t|
+              %td= listener.send("week_#{t}").to_f.round(2)
+        %tr
+          %td{COLSPAN:7, :style=>"text-align:right;vertical-align:middle;font-weight:bold;"}
+            Final report
+          %td{COLSPAN:3, :style=>"text-align:left;vertical-align:middle;font-style:italic;"}
+            Total listeners/Total minutes 
+    - if @time_per_users.length > 0
+      = paginate @time_per_users
+
+.row.anis-day-not-active
+  %h1.page_heading Country Aggregate
+  .standard.no-borders
+    %table.table.table-striped.table-hover{:style=>"padding:5px"}
+      %thead
+        %tr
+          %th Country Name
+          /%th Total number of Listeners
+          /%th Total Time
+          - 8.times do |t|
+            - start_date = t == 0 ? Date.today.beginning_of_week : t.weeks.ago.beginning_of_week
+            - end_date = t == 0 ? Date.today.beginning_of_week : t.weeks.ago.end_of_week
+            - if t == 0
+              %th= Time.now.strftime("%B %d")
+            - else
+              %th= "#{start_date.strftime("%B %d")} - #{end_date.strftime("%B %d")}"
+      %tbody
+        - @average_countries.each do |country|
+          %tr
+            %td= country.country_name
+            - 8.times do |t|
+              /%td= country.send("total_listener_#{t}")
+              /%td= country.send("total_time_#{t}")
+              %td= number_with_precision(country.send("total_listener_#{t}").to_f/country.send("total_time_#{t}").to_f, :precision => 2)
+    

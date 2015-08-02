@@ -1,0 +1,17 @@
+%p
+  Hello Admin!
+%p User: #{@content["user_info"]} (#{@content["from_email"]}) has requested a content below:
+%p
+  %strong Stream Name:
+  %span= @content["stream_name"]
+%p
+  %strong Stream URL:
+  %span= @content["stream_url"]
+%p
+  %strong Comment:
+  %span= @content["comment"]
+%p Please have time to review the below content.
+
+
+%p Thanks,
+%p ZenoRadio.

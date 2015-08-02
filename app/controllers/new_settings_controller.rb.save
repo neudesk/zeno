@@ -1,0 +1,57 @@
+xclass NewSettingsController < ApplicationController
+  before_filter :set_station, except: [:index]
+  def index
+    @stations = current_user.stations
+    @q = @stations.search(params[:q])
+    @stations = @q.result(distinct: true).page(params[:page]).per(16)
+    if @stations.total_pages < params[:page].to_i
+      params[:page] = 1
+      @stations = @q.result(distinct: true).page(params[:page]).per(16)
+    end
+    @page = params[:page] || 1
+    @new_station = DataGateway.new
+    @new_extension = DataContent.new
+
+    params[:station_id] = @stations.first.id if @stations.size == 1
+    if params[:station_id].present?
+      @station = DataGateway.find_by_id(params[:station_id])
+      if @station.present?
+        @extensions =  @station.data_gateway_conferences.sort_by{ |x| x.extension.to_i}
+        @phone_numbers = @station.data_entryways
+        @prompts = @station.prompts
+        @prompt = DataGatewayPrompt.new
+        ids = PublicActivity::Activity.where(trackable_id: @station.id, trackable_type: ["DataGateway"]).collect(&:id)
+        ids << PublicActivity::Activity.where(trackable_id: @station.data_contents.collect(&:id), trackable_type: ["DataContent"]).collect(&:id)
+        ids << PublicActivity::Activity.where(sec_trackable_title: @station.id, sec_trackable_type: ["DataGateway"]).collect(&:id)
+        @activities = PublicActivity::Activity.where(id: ids).limit(15).order("created_at DESC")
+
+        # report = Report.generate_report(@station, Date.today.beginning_of_month)
+        # @new_users = report.collect {|x| x[1]}.sum
+        # @active_users = report.collect {|x| x[2]}.sum
+
+        # @chart = Graph.generate_minutes("7days", @station, "%a")
+        # @chart.pop
+        # # @chart = [["Sun", 10000], ["Mon", 13000], ["Tue", 12311], ["Wed", 9009], ["Thu", 9012], ["Fri", 9999], ["Sat", 15000]]
+        # # For testing
+        # @max = @chart.collect{|x| x[1]}.max 
+        # @max += @max * 0.20
+
+        # chart = ReportTotalMinutesByHour.generate_for(@station, Time.now - 36.days)
+        # @chart_labels = chart.collect{ |x| x[0]}
+        # @chart_values = chart.collect{ |x| x[1]}
+        @entryways = @station.data_entryways
+      end
+    end
+  end
+
+  def show
+    @streams =  @station.data_contents
+    @phone_numbers = @station.data_entryways
+  end
+
+  def set_station
+    @station = current_user.stations.find_by_id(params[:id])
+    redirect_to root_url, alert: "Not Authorized." unless @station.present?
+  end
+
+end

@@ -1,0 +1,41 @@
+.opt_in_list
+{
+  padding: 20px;
+  margin: 0px;
+  width:900px;
+  min-height: 150px;
+  border: 1px solid #0081C2;
+}
+.opt_in_list li
+{
+  background: url('phone.png') no-repeat;
+  background-size: 13px 13px;
+  padding-left: 20px;
+  padding-right: 10px;
+  float:left;
+  list-style: none;
+}
+.phone_delete_opt_in
+{
+  background-color: none;
+  border: none;
+  margin-left: 4px;
+  float:right;
+  font-size:13px;font-weight:bold;
+  line-height:20px;color:#000000;
+  text-shadow:0 1px 0 #ffffff;opacity:0.2;
+  filter:alpha(opacity=20);
+  opacity:0.2;
+  filter:alpha(opacity=20);
+}
+.phone_delete_opt_in:hover,.phone_delete_opt_in:focus
+{
+  margin-left: 4px;
+  color:#000000;
+  text-decoration:none;
+  cursor:pointer;
+  opacity:0.4;
+  filter:alpha(opacity=40);
+  opacity:0.4;
+  filter:alpha(opacity=40);
+}

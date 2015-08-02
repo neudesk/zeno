@@ -1,0 +1,149 @@
+- if @station_id
+  - current_gateway = DataGateway.find_by_id(@station_id)
+  #content-detail
+    .pull-right
+      - if current_user.is_marketer?
+        - if current_gateway
+          = link_to "Add New Content", "#", :style => "margin: 10px", :class => "btn pull-right btn-add-extension"
+        - else
+          = link_to "Add New Content", "#", :style => "margin: 10px", :class => "btn pull-right", :style => "cursor:default;opacity:0.4;margin: 10px"
+      - unless current_user.is_marketer?
+        = link_to "Request New Content", "#", :class => "btn pull-left suggest-a-new-content", style: "margin: 10px"
+      - if @other_contents.size > 0 && @station_id
+        = link_to "Add Existing Content", add_existing_gateway_content_extensions_path(:station_id => @station_id), :style => "margin: 10px", :class => "btn-add-extension-to-other-roles btn pull-right", remote: true
+      - else
+        = link_to "Add Existing Content", "#", :style => "cursor:default;opacity:0.4;margin: 10px", :class => "btn pull-right"
+
+    %table.table.table-striped.table-hover.table_content
+      %thead
+        %tr
+          %th Stream name
+          %th Stream
+          %th Channel number
+          - if !current_user.is_thirdparty?
+            %th
+            %th
+
+      %tbody
+        - @extensions.each do |extension|
+          %tr
+            %td= extension.title
+            %td= simple_format(split_str(extension.stream,50))
+            %td.align-center= extension.extension
+            - if !current_user.is_thirdparty?
+              %td= link_to "Edit", edit_gateway_content_extensions_path(:gateway_content_id => extension.extension_id), :class => "link-edit-extension", "data-extension-id" => extension.extension_id, remote: true
+              %td= link_to "Delete", extension_path(extension.extension_id), method: "delete", :confirm => "Are you sure?"
+
+    #suggestion-modal-popup.modal.hide.fade
+      = form_tag request_content_data_gateways_path, class: "suggestion-form" do |form|
+        .modal-header
+          %button.close{:onclick => '$("#modal-popup").modal("hide");window.location.reload()', :type => "button"} ×
+          %h3 Request New Content
+        .modal-body{:style => "min-height: 300px"}
+          .stream-name
+            %label Stream name
+            = text_field_tag "suggestion[stream_name]", "", placeholder: "Please type your stream name", class: "text-change text-length", "data-error-class" => "suggest-stream-name-error", "data-text-error" => "Stream Name"
+            %p.text-error.suggest-stream-name-error.hide.message-info.error-in-add{:style => "font-style:italic"}
+          .stream-title
+            %label Stream URL
+            = text_field_tag "suggestion[stream_url]", "" , placeholder: "Please type your stream url", class: "", "data-error-class" => "suggest-stream-url-error", "data-text-error" => "Stream URL"
+            %p.text-error.suggest-stream-url-error.hide.message-info.error-in-add{:style => "font-style:italic"}
+          .channel-number
+            %label Comment
+            = text_area_tag "suggestion[comment]", "", placeholder: "Please type your comment", class: "text-change text-length", "data-error-class" => "suggest-comment-error", "data-text-error" => "Comment"
+            %p.text-error.suggest-comment-error.hide.message-info.error-in-add{:style => "font-style:italic"}
+        .modal-footer
+          = link_to 'Cancel', '#', class: 'btn btn-cancel', :"data-dismiss" => "modal",  :"aria-hidden" => "true"
+          = link_to 'Send', "#",class: 'btn btn-primary btn-submit'
+
+    - if current_gateway
+      #exetension-modal-popup.modal.hide.fade
+        = form_for current_gateway do |f|
+          #add_extension
+            .modal-header
+              %button.close{:onclick => '$("#modal-popup").modal("hide");window.location.reload()', :type => "button"} ×
+              %h3 Add New Content
+
+            .modal-body{:style => "min-height: 430px"}
+              %p.text-success.hide.message-info Your gateway was successfully updated.
+              %p.text-error.hide.message-info Your gateway was unsuccessfully updated.
+              %label Search URL
+              = text_field_tag "media_url", "" , placeholder: "Please type your stream", "data-items" => "4", "data-provide" => "typeahead", autocomplete: "off", class: "typeahead"
+              = image_tag "loading.gif", :class => "hide loading"
+              = hidden_field_tag :add_extension_stream_found_id
+              = link_to "Search", "#" ,class: "btn-search btn", :style => "margin-top:-7px"
+              /= link_to "Reset", "#" ,class: "btn-reset btn", :style => "margin-top:-7px; display:none"
+              %p.text-error.stream-error.hide.message-info{:style => "font-style:italic;margin-top: -6px"}
+              .existed-extension.hide
+                %h4.text-info Stream Found, Enter a Channel Number
+                - current_dg_con = current_gateway.data_gateway_conferences.first || current_gateway.data_gateway_conferences.build
+                = f.fields_for :data_gateway_conferences, current_dg_con do |extension|
+                  .channel-number
+                    %label Channel Number
+                    = extension.text_field :extension, placeholder: "Please type your new channel number", class: "text-change text-length"
+                    = extension.hidden_field :content_id
+                    /%span.text-info Please type your new channel number
+
+              .new-extension.hide
+                %h4.text-info Congratulation! Enjoy to add new extension
+                = f.fields_for :data_gateway_conferences, DataGatewayConference.new do |new_extension|
+                  .stream-title
+                    = new_extension.fields_for :data_content, new_extension.object.build_data_content do |stream|
+                      /= stream.hidden_field :media_type, {value: 'FFMPEG'}
+                      = stream.hidden_field :media_url
+                      %label Stream name
+                      = stream.text_field :title, placeholder: "Please type your new stream", class: "text-change text-length", "data-error-class" => "stream-error", "data-text-error" => "Stream Name"
+                      %p.text-error.stream-error.hide.message-info.error-in-add{:style => "font-style:italic"}
+
+                      %label Country Name
+                      %span.radio-select= stream.select :country_id, options_for_select(DataGroupCountry.order(:title).collect{|c| [c.title, c.id]})
+                      .media-type
+                        %label Media Type
+                        = stream.select :media_type, options_for_select(PLAYER_TYPE, 'FFMPEG')
+                      %label Backup Stream Url
+                      = stream.text_field :backup_media_url, placeholder: "Backup Stream Url", class: "text-change text-length", "data-error-class" => "stream-error", "data-text-error" => "Backup Stream"
+                      %p.text-error.backup-stream-error.hide.message-info.error-in-add{:style => "font-style:italic"}
+                  .channel-number
+                    %label Channel Number
+                    = new_extension.text_field :extension, placeholder: "Please type your new channel number", class: "text-change text-length", "data-error-class" => "channel-error", "data-text-error" => "Channel Number"
+                    %p.text-error.channel-error.hide.message-info.error-in-add{:style => "font-style:italic"}                    
+            .modal-footer
+              = link_to 'Cancel', '#', class: 'btn btn-cancel', :"data-dismiss" => "modal",  :"aria-hidden" => "true"
+              = link_to 'Update', "#",class: 'btn btn-primary hide btn-submit'
+              = link_to "Update", "#" ,class: "btn btn-primary link-submit", style: "cursor:default;opacity:0.4"
+          #edit_extension
+            .modal-header
+              %button.close{:onclick => '$("#modal-popup").modal("hide");window.location.reload()', :type => "button"} ×
+              %h3 Edit Extension
+            .modal-body{:style => "min-height: 300px"}
+              = f.fields_for :data_gateway_conferences, current_gateway.data_gateway_conferences.first do |extension|
+                .stream-title
+                  %label Country Name
+                  %span.radio-select= select_tag :country_id, options_for_select(@countries, @default_country_id), class: "select-country"
+                  = hidden_field_tag :station_id, @station_id
+                .stream-title
+                  %label Stream Name
+                  %span.radio-select= extension.select :content_id, @other_contents
+                  = image_tag("loading.gif", class: "hide loading")
+                .channel-number
+                  %label Channel Number
+                  = extension.text_field :extension, placeholder: "Please type your channel number", class: "text-change text-length", "data-error-class" => "channel-error", "data-text-error" => "Channel Number"
+                  %p.text-error.channel-error.hide.message-info.error-in-add{:style => "font-style:italic"}
+            .modal-footer
+              = link_to 'Cancel', '#', class: 'btn btn-cancel', :"data-dismiss" => "modal",  :"aria-hidden" => "true"
+              = link_to 'Update', "#",class: 'btn btn-primary btn-submit'
+      .edit_extension_section
+        .modal.hide.fade{id: "editExtensionModal", tabindex: "-1", role: "dialog"}
+      .add_existing_content_section
+        .modal.hide.fade{id: "addExistingContentModal", tabindex: "-1", role: "dialog"}
+
+  :javascript
+    $(document).ready(function(){
+       window.extension = new Extension({"extensions": #{(@extensions + @new_extensions).to_json},
+                                         "us_contents": #{@other_contents},
+                                         "default_contry_id": #{(@countries.first && @countries.first[1]) || 0}
+                                        })
+    });
+
+- else
+  %div.no-message No selected station available!

@@ -1,0 +1,229 @@
+$ ->
+  $(document).ready customHooks
+  $(document).on "page:load", customHooks
+  $("body").on "show", customHooks
+
+  $(document).ajaxStop (e)->
+    $('[tip]').each ->
+      $(this).tooltip
+        title: $(this).attr("tip")
+        placement: "auto"
+        animation: false
+
+  $(document).on "click", ".confirm_ok", (e) ->
+    if $(this).data("target") != undefined
+      e.preventDefault()
+      $("form#" + $(this).attr("data-target")).submit()
+customHooks = ->
+
+  $(window).resize ->
+    if $("#map").length > 0
+      val = $("#map").parent().css("width").replace("px", '')
+      val = parseInt(val) - 30
+      val = val.toString() + "px"
+      $("#map").css("width", val)
+        
+  $(document).on "click", ".with_upload_file", (e) ->
+    parent = forms.parents(".modal").filter(":visible")
+    parent.find("#progress").addClass("hide")
+    parent.find(".progress-bar").width("0%")
+    parent.find("#percentage_container").html("")
+
+  forms = $(".form_progress_bar")
+  forms.ajaxForm
+    beforeSend: ->
+      parent = forms.parents(".modal").filter(":visible")
+
+      percentVal = "0%"
+      has_val = false
+      if parent.find("input:file").length > 0
+        parent.find("input:file").each ->
+          if $(this).val()
+            has_val = true
+
+      if has_val
+        parent.find("#progress").removeClass("hide")
+        parent.find(".progress-bar").width(percentVal)
+        parent.find("#percentage_container").html(percentVal)
+
+      parent.find(".form-submitter").addClass("disabled")
+    uploadProgress: (event, position, total, percentComplete) ->
+      parent = forms.parents(".modal").filter(":visible")
+      upload = Math.floor((position / total) * 100)
+
+      parent.find("#progress").removeClass("hide")  
+      parent.find(".progress-bar").width(upload+"%")
+      if upload == 100
+        percentVal = "99% Uploading... Please wait..."
+      else
+        percentVal = upload + "% Uploading..."
+
+      parent.find("#percentage_container").html(percentVal)
+    success: ->
+      parent = forms.parents(".modal")
+
+      has_val = false
+      if parent.find("input:file").length > 0
+        parent.find("input:file").each ->
+          if $(this).val()
+            has_val = true
+
+      if has_val
+        parent.find(".progress-bar").width("100%")
+        parent.find("#percentage_container").html("100% Completed!")
+
+      parent.find(".form-submitter").removeClass("disabled")
+    complete: (response) ->
+      parent = forms.parents(".modal")
+      try
+        response = jQuery.parseJSON(response.responseText)
+        if parseInt(response.code) == 0
+          $.alert(response.msg)
+          parent.find(".progress-bar").width(0)
+          parent.find("#percentage_container").html("0% Failed!")
+
+  $(".ajax-submit").on "click", (e) ->
+    $(".loaded").hide()
+    $(".loading").show()
+#    $(this).parents("form").submit()
+
+  Main.init()
+  $("nav.pagination").find("ul").addClass("pagination")
+
+  $(".icheck-me").each ->
+    skin =  "_" + $(this).attr('data-skin')
+    color = "-" + $(this).attr('data-color')
+    $(this).iCheck(checkboxClass: 'icheckbox' + skin + color, radioClass: 'iradio' + skin + color)
+
+  $("select.select").each ->
+    if $(this).hasClass("without_search")
+      $(this).select2
+        allowClear: true
+        minimumResultsForSearch: -1
+    else if $(this).hasClass("without_css")
+    else
+      $(this).select2
+        allowClear: true
+
+  $(".select2-search-choice-close").each ->
+    if $(this).prev(".select2-chosen").html() == ""
+      $(this).hide()
+
+  $(".submit_via_onchange").on "change", (e) ->
+    if $(this).hasClass("via_ajax")
+      $(".loaded").hide()
+      $(".loading").show()
+    $(this).parents("form").submit()
+
+  $(".submit_form_via_click").on "click", (e) ->
+    $(this).parents("form").submit()
+
+  $("body").on "click", (e)->
+    $(".tooltip").hide()
+
+  $(".select2-input.select2-default").css("width", "inherit")
+
+  $('[tip]').each ->
+    $(this).tooltip
+      title: $(this).attr("tip")
+      placement: "auto"
+      animation: false
+
+  $(".submit_form_in_panel_body").on "click", (e) ->
+    $(this).parent(".panel-footer").prev(".panel-body").find("form").submit()
+      
+  $("#teal_pagination").find("ul").addClass("pagination-teal")
+
+  $(".taggable").each ->
+    x = $(this).next("div.bootstrap-tagsinput")
+    x.tooltip
+      title: $(this).data("focus")
+      placement: "auto"
+      animation: false
+
+  # Let buttons outside the form submit the form
+  $(".form-submitter").on "click", (e)->
+    e.preventDefault()
+    form = $("form#" + $(this).attr("data-target"))
+    $("form#" + $(this).attr("data-target")).submit()
+    $(this).addClass('disabled')
+
+  $.alert = (message, callback) ->
+    return false unless message
+    modal_html = "<div id='custom_alert' class='modal'><div class='modal-dialog'><div class='modal-content' id='modal_alert'><div class='modal-body'><p>#{message}</p></div><div class='modal-footer'><a data-dismiss='modal' class='button color'>OK</a></div></div></div></div>"
+    $modal_html = $(modal_html)
+    $modal_html.modal
+      backdrop: 'static'
+
+  $.rails.allowAction = (element) ->
+    message = element.data('confirm')
+    subtitle = element.data('subtitle') || ""
+    return true unless message
+    $link = element.clone()
+      .removeAttr('class')
+      .removeAttr('data-confirm')
+      .addClass('btn btn-dark-grey btn-sm confirm_ok')
+      .attr("data-icon", "")
+      .html("OK")
+    $link.click ->
+      $(".modal.fade").modal('hide')
+    modal_html = "<div id='custom_alert' class='modal'><div class='modal-dialog'><div class='modal-content' id='modal_confirm'><div class='modal-body'><p>#{message}</p><div class='subtitle'>#{subtitle}</div></div><div class='modal-footer'><a data-dismiss='modal' class='btn btn-primary btn-sm'>Cancel</a></div></div></div></div>"
+    $modal_html = $(modal_html)
+    $modal_html.find('.modal-footer').append($link)
+    $modal_html.modal
+      backdrop: 'static'
+    return false
+
+  $(".custom_alert").on "click", (e) ->
+    e.preventDefault()
+    $.fn.custom_alert($(this).data("content"))
+
+$.fn.custom_alert = (message)->
+  return false unless message
+  modal_html = "
+  <div class='modal'>
+    <div class='modal-dialog'>
+      <div class='modal-content'>
+        <div class='modal-body wysiwyg_content'>
+          <p>#{message}</p>
+        </div>
+      <div class='modal-footer'>
+        <a data-dismiss='modal' class='button color'>Close</a>
+        </div>
+      </div>
+    </div>
+  </div>"
+  $modal_html = $(modal_html)
+  $modal_html.modal
+    backdrop: 'static'
+
+$.getURLParameter = (paramName) ->
+  searchString = window.location.search.substring(1)
+  i = undefined
+  val = undefined
+  params = searchString.split("&")
+  i = 0
+  while i < params.length
+    val = params[i].split("=")
+    return unescape(val[1])  if val[0] is paramName
+    i++
+  null
+
+$.showTooltip = (x, y, contents) ->
+  $("<div id=\"tooltip\">" + contents + "</div>").css(
+    position: "absolute"
+    display: "none"
+    top: y - 170
+    left: x - 40
+    border: "1px solid #333"
+    padding: "4px 10px"
+    color: "#fff"
+    "border-radius": "3px"
+    "background-color": "#000"
+    opacity: 1
+  ).appendTo("body").fadeIn 200
+
+$.formatDecimal = (yourNumber) ->
+  n = yourNumber.toString().split(".")
+  n[0] = n[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+  n.join "."

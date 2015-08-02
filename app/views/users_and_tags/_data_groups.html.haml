@@ -1,0 +1,5 @@
+#filter-select.bottom-15.pull-left.right-20.clearfix
+	.pull-left.data-groups-filter.clearfix
+		= I18n.t("titles.pages.users_and_tags.labels.data_group")
+		%span.radio-select= select_tag "data_group", options_for_select(@data_group_list, 1)
+= render partial: "group_data", locals: { countries: countries, us_id: us_id }

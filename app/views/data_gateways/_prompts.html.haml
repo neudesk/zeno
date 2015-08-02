@@ -1,0 +1,70 @@
+.extensions.clearfix
+.gateway_prompts
+  .row
+    - if @station
+      .standard.gateway
+        .alert.fade.in.alert-success.hide
+        = simple_form_for(@station, :url => data_gateway_prompts_path(@station.id), :remote => true) do |f|
+          = f.label :Welcome_prompt
+          %span.radio-select= f.select :ivr_welcome_prompt_id, options_from_collection_for_select(@prompts, 'id', 'title', @station.ivr_welcome_prompt_id), { include_blank: true }
+          .clearfix
+            = f.check_box :ivr_welcome_enabled, {class: "pull-left"}
+            = f.label :ivr_welcome_enabled, "Welcome Prompt Enabled",{class: "pull-left", style: "margin-left: 5px"}
+          = f.label :Ask_extension
+          %span.radio-select= f.select :ivr_extension_ask_prompt_id, options_from_collection_for_select(@prompts, 'id', 'title', @station.ivr_extension_ask_prompt_id), { include_blank: true }
+          = f.label :Invalid_extension
+          %span.radio-select= f.select :ivr_extension_invalid_prompt_id, options_from_collection_for_select(@prompts, 'id', 'title', @station.ivr_extension_invalid_prompt_id), { include_blank: true }
+          .clearfix
+            = f.check_box :ivr_extension_invalid_enabled, {class: "pull-left"}
+            = f.label :ivr_extension_invalid_enabled, "Invalid Prompt Enabled", {class: "pull-left", style: "margin-left: 5px"}
+          .save_region.clearfix
+            = f.submit("Save", :class => "btn")
+      .standard.prompts
+
+        .jquery_jplayer
+
+        %table.table.table-striped.table-hover.table_prompts
+          %thead
+            %tr
+              %th Title
+              %th.align-center Size(KB)
+              %th.align-center Duration(s)
+              %th.align-center Edit
+              %th.align-center Delete
+
+          %tbody
+            - @prompts.each do |prompt|
+              %tr
+                %td.title_field
+                  %span.player.jp_container
+                    = link_to "", prompts_mp3_audio_path(prompt.id), :class => "jp_prompt_play icon-play"
+                    = link_to "","#", :class => "jp_prompt_stop icon-stop"
+                  %span.title
+                    = prompt.title
+                %td.align-center= prompt.media_kb
+                %td.align-center= prompt.media_seconds
+                %td.align-center= link_to "", edit_prompt_path(prompt, {:data_gateway_id => @station}), remote: true, :class => "icon-edit edit_prompt_btn"
+                %td.align-center= link_to "", prompt_path(prompt, {:data_gateway_id => @station}),:confirm => "Are you sure you want to delete?", :method => :delete, :remote => true, :class => "icon-trash"
+        .new_prompt_section
+          %a{href: "#newPromptModal", role: "button", "class" => "btn", "data-toggle" => "modal"}= "Create new custom prompt"
+
+      .modal.hide.fade{id: "newPromptModal", tabindex: "-1", role: "dialog"}
+        = simple_nested_form_for(@prompt, :url => prompts_path, :multipart => true, :remote => true) do |f|
+          .modal-header
+            %button{type: "button", "class" => "close", "data-dismiss" => "modal", "aria-hidden" => "true"}="×"
+            %h4= "Create new custom prompt"
+          .modal-body
+            = f.label :title, :class => "title_label"
+            = f.text_field :title, :class => "title_field"
+            = f.hidden_field :gateway_id, {value: @station.id}
+            = f.label :audio, :class => "audio_label"
+            = f.file_field "raw_audio", :class => "audio_field"
+            = hidden_field_tag :data_gateway_id, @station.id
+          .modal-footer
+            %button{"class" => "btn", "data-dismiss" => "modal", "aria-hidden" => "true"}= "Close"
+            %button{"class" => "btn btn-primary"}= "Save"
+
+      .modal.hide.fade{id: "editPromptModal", tabindex: "-1", role: "dialog"}
+    - else
+      %div.no-message No selected station available!
+

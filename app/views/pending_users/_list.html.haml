@@ -1,0 +1,92 @@
+.row
+  .col-sm-12
+    .pull-right
+      = search_form_for @q, url: params[:action] == "index" ? pending_users_path : all_pending_users_path do |f|
+        .input-group.input-group-sm.short-search
+          = f.text_field :station_name_or_name_or_email_or_streaming_url_cont, placeholder: "Enter Keyword Here", class: "form-control"
+          .input-group-btn
+            = f.submit "Search", class: "btn btn-default submit_search"
+.row
+  .col-sm-12
+    - if @users.present?
+      %table#pendingUserTable.table.table-hover.table-striped.tablesorter
+        %thead
+          %tr
+            %th.hidden-xs
+              = sort_link(@q, :status, "Status")
+            %th
+              = sort_link(@q, :email, "Email Address")
+            - if params[:action] == "index"
+              %th.acenter
+                = sort_link(@q, :streaming_url, "Stream URL")
+            %th.acenter.hidden-xs.hidden-sm
+              = sort_link(@q, :station_name, "Station Name")
+            %th.acenter.hidden-xs
+              = sort_link(@q, :country, "Country")
+            %th.acenter.hidden-xs
+              = sort_link(@q, :signup_date, "Sign up date")
+            - if params[:action] == "all"
+              %th.hidden-xs
+                = sort_link(@q, :note, "Note")
+              %th.hidden-xs
+                = sort_link(@q, :date_processed, "Processed Date")
+            %th
+
+        %tbody
+          - @users.each do |user|
+            %tr{:data => {:user => {:puser_id => user.id, :status => user.status, :note => user.note}.to_json}, :class => "tr_#{user.id}"}
+              %td.acenter
+                = display_status(user.status, user.note)
+              %td
+                = user.email
+              - if params[:action] == "index"
+                %td.acenter
+                  = user.streaming_url
+              %td.acenter.hidden-xs.hidden-sm
+                %span.label.label-inverse
+                  = user.station_name
+              %td.acenter.hidden-xs
+                %span.label.label-inverse
+                  = user.country
+              %td.acenter.hidden-xs
+                = user.signup_date.to_date if user.signup_date?
+              - if params[:action] == "all"
+                %td.hidden-xs
+                  = user.note
+                %td.hidden-xs
+                  = user.date_processed.to_date if user.date_processed?
+              %td
+                .pull-right
+                  - if current_user.is_marketer?
+                    .btn-group
+                      = link_to "#", class: "btn btn-danger btn-sm dropdown-toggle", data: {toggle: "dropdown"} do 
+                        = "Actions"
+                        %span.caret
+                      %ul.dropdown-menu.pull-right
+                        - unless user.processed?
+                          %li
+                            = link_to "Ignore this User", "#", data: {id: user.id}, class: "ignore_button"
+                          %li
+                            = link_to "Mark as Duplicate", "#", data: {id: user.id}, class: "duplicate_button"
+                        %li
+                          = link_to "View", pending_user_path(user, from: params[:action])
+                          = link_to "Delete", destroy_processed_pending_user_path(user.id), :confirm => "Are you sure you want to delete #{user.email}?"
+                        - if @new_station.present?
+                          %li
+                            =# link_to "Create Station", '#', :data => {:toggle => "modal", :target => "#new_station"}
+                        - if params[:action] == 'index'
+                          %li
+                            %hr
+                          %li
+                            = link_to "Update Notes", '#', :data => {:toggle => "modal", :target => "#addNotes"}, :class => 'addNoteBtn'
+                  - else
+                    = link_to "View", pending_user_path(user, from: params[:action]), class: "btn btn-primary"
+
+    - else
+      %p
+        = render "shared/no_records", msg: "No pending users found."
+    .pagination_area.pull-right
+      = paginate @users
+= render "duplicate_modal"
+= render "ignore_modal"
+-#= render "new_station_modal"

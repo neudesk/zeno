@@ -1,0 +1,38 @@
+%table.data_numerical_reports_table
+  %thead
+    = render :partial => "data_numerical_reports/country_table_head"
+  %tbody
+  - @result.each do |country|
+    %tr{:class => cycle('odd', 'even')} 
+      %td.name
+        - type = params["type"].present? ? params["type"] : "percentage"
+        %a{:href =>("/data_numerical_reports/country_minutes?type=#{type}&country_id=#{country[1]}&page=#{params["page"]}" if params["country_id"].to_i != country[1]), :class =>[("active_country" if country[1] == params["country_id"].to_i)]}= country[0]
+       
+      -if 0 > country[2]
+        %td.green= country[2].abs.to_s + " %" 
+      -elsif 0 < country[2]
+        %td.red= country[2].abs.to_s + " %"
+      -else
+        %td= country[2].to_s + " %"
+
+      -if 0 > country[3]
+        %td.green=country[3].abs.to_s + " %" 
+      -elsif 0 < country[3]
+        %td.red= country[3].abs.to_s + " %"
+      -else
+        %td= country[3].to_s + " %"
+
+      -if 0 > country[4]
+        %td.green=  country[4].abs.to_s + " %" 
+      -elsif 0 < country [4]
+        %td.red= country[4].abs.to_s + " %"
+      -else
+        %td= country[4].abs.to_s + " %"
+
+      -if 0 > country[5]
+        %td.green= country[5].abs.to_s + " %" 
+      -elsif 0 < country [5]
+        %td.red= country[5].abs.to_s + " %"
+      -else
+        %td= country[5].abs.to_s + " %"
+

@@ -1,0 +1,30 @@
+%div.row
+  %div.col-md-12
+    %div.page-header{:style => 'margin-bottom: 20px'}
+      %h1
+        %i.fa.fa-gears
+        Opt-In Settings
+%div.row
+  %div.col-md-7
+    %ul.nav.nav-tabs{:role=>"tablist"}
+      %li{:class => "#{params[:type] == "rca" || !params[:type].present? ? 'active' : ''}"}
+        %a{:href=>"/opt_in_settings?type=rca"}
+          RCA
+      %li{:class => "#{params[:type] == "brd" ? 'active' : ''}"}
+        %a{:href=>"/opt_in_settings?type=brd"}
+          Broadcaster
+    %div.tab-content
+      - if params[:type] == "rca" || !params[:type].present?
+        %div{:class => "tab-pane active", :id=>"rca"}
+          = render :partial => "/opt_in_settings/rca"
+      - elsif params[:type] == "brd"
+        %div{:class => "tab-pane active", :id=>"brd"}
+          = render :partial => "broadcasters"
+  %div.col-md-5
+    = render :partial => "get_opt_in_list"
+%br
+- content_for :js do
+  :javascript
+    $(document).ready(function(){
+      window.OptInSettings = new OptInSettings()
+    });

@@ -1,0 +1,49 @@
+.slider
+  = render "shared/slides"
+.row.anis-day-not-active
+  %h1.page_heading RCA Minutes
+  .standard.no-borders{:style => "overflow:scroll; overflow-y:hidden;"}
+    %table.table.table-striped.table-hover{:style=>"padding:5px;width:1750px"}
+      %thead
+        - @weeks = get_4_weeks_name
+        %tr
+          %th{ROWSPAN:2, width:400, :style=>"text-align:center;vertical-align:middle;"} RCA Name
+          - @weeks.each do |week|
+            %th{COLSPAN:2, :style=>"text-align:center;vertical-align:middle;"}= "#{week}"
+        %tr
+          - @weeks.each do |week|
+            %th{:style=>"text-align:center;vertical-align:middle;"} Minutes
+            %th{:style=>"text-align:center;vertical-align:middle;"} Percentage
+      %tbody
+        - sum_current = 0
+        - sum_prev = 0
+        - @reports.each do |report|
+          - item =  report
+          - len = @weeks.length - 1
+
+          %tr{:style=>"color:#188EA6;"}
+            %td{:style=>"text-align:left;vertical-align:middle;padding-left:50px"}= report.rca_name
+            - item = report.get_minutes_4_weeks[0]
+            - @weeks.each do |week|
+              - key = "week#{len}"
+              - key1= "week#{len-1}"
+              - puts "#{key} -- #{key1}"
+              /%td{:style=>"text-align:center;vertical-align:middle;"}= "#{item[key].to_f}"
+              %td{:style=>"text-align:center;vertical-align:middle;"}= print2digits(item[key].to_f)
+              - percent = len - 1 >= 0 ? cal_percent(item[key], item[key1]) : ""
+              %td{:style=>"text-align:center;vertical-align:middle;"}= "#{percent}"
+              - len = len - 1
+          - report.rca_gateway_report.each do |gateway|
+            - item =  gateway
+            - len = @weeks.length - 1
+            %tr
+              %td{:style=>"text-align:center;vertical-align:middle;"}= gateway.gateway_name
+              - @weeks.each do |week|
+                - key = "week#{len}"
+                - key1= "week#{len-1}"
+                %td{:style=>"text-align:center;vertical-align:middle;"}= print2digits(item[key].to_f)
+                - percent = len - 1 >= 0 ? cal_percent(item[key], item[key1]) : ""
+                %td{:style=>"text-align:center;vertical-align:middle;"}= "#{percent}"
+                - len = len - 1
+      - if @reports.length > 0
+        = paginate @reports

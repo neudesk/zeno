@@ -1,0 +1,22 @@
+.customs
+  - rand_id = rand(4343)
+  - series.each_with_index  do |c, i|
+    %div{:class => "#{level_name} #{level_name}_#{data[i]}" , "data-level" => "#{level_name}_#{data[i]}"}
+      .pull-left.ckb-custom= check_box_tag("is_exist", "#{level_name}_#{data[i]}", false, :class => "check-status")
+      - if level == 2 && data[i].split("__").size == 2
+        %div{:id => "#{data[i]}", "data-level-id" => "#{level_name}_#{data[i]}", :class => "custom open-charts #{level_name}_#{i} level_#{level} pull-left width-ck"}= link_to "", "#", :class => "icon-chevron-down"
+      - elsif level == 3
+        %div{:id => "#{data[i]}", :class => "custom open-charts level_#{level} pull-left width-ck"}= link_to "", "#", :class => "icon-chevron-up"
+      
+      %div{:class => "pull-left place-chart", :id => "chart_#{i}_#{rand_id}" }
+      .clearfix
+      = render_chart(c, "chart_#{i}_#{rand_id}")
+      %div{:id => "level_2_station_#{data[i]}_#{i}", :class => "mg-bottom" }
+      %div{:id => "level_3_channel_#{data[i]}_#{i}", :class => "mg-bottom" } 
+  - if @countries
+    = hidden_field_tag "page", @countries.current_page
+    %div{:id => "page_#{@countries.current_page}"}
+  - if level_name == "countries" && !params[:page]
+    .mg-bottom
+      .clearfix= link_to "Add", "#", class: "btn btn-primary pull-right apply add hide"
+      .clearfix= link_to "Remove", "#", class: "btn btn-primary pull-right apply remove"

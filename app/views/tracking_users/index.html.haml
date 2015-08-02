@@ -1,0 +1,21 @@
+%div.page-header
+  %h1 Tracking User
+%br
+.activity_search_form
+  %form{"action" => tracking_users_index_path, "method" => 'get'}
+    = text_field_tag :activity_query, @activity_query
+    = select_tag :activity_type, options_for_select([ "", "Login", "Content", "Gateway","Users Account","Data Groups and Tags","Media Types"], @activity_type)
+    %button{"class" => "btn btn-submit", "style" => "margin-top: -11px"}= "Search Activity"
+
+  - @activities.each do |activity|
+    .activity
+      .time= activity.created_at.localtime.to_s(:short)
+      - if activity.owner
+        %span.owner
+          - owner_title = "#{activity.owner.title} (#{activity.owner.email})"
+          = link_to(owner_title, tracking_users_index_path(:activity_query => activity.owner.email))
+      %span.details= render_activity activity
+  =paginate(@activities)
+
+.show_content_section
+  .modal.hide.fade{:id => "showContentModal", :tabindex => "-1", :role => "dialog"}

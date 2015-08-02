@@ -1,0 +1,41 @@
+%br
+.col-sm-6
+  .panel.panel-default
+    .panel-heading
+      %i.clip-grid-3
+      = "New User"
+    .panel-body.panel-graph
+      #new_users_graph.graph{data: {labels: labels, values: new_users}}
+
+.col-sm-6
+  .panel.panel-default
+    .panel-heading
+      %i.clip-grid-3
+      = "Active Users"
+    .panel-body
+      #active_users_graph.graph{data: {labels: labels, values: active_users}}
+      
+.col-sm-6
+  .panel.panel-default
+    .panel-heading
+      %i.clip-grid-3
+      = "Sessions"
+    .panel-body
+      #sessions_graph.graph{data: {labels: labels, values: sessions}}
+
+.col-sm-6
+  .panel.panel-default
+    .panel-heading
+      %i.clip-grid-3
+      = "Minutes"
+    .panel-body
+      #report_minutes_graph.graph{data: {labels: labels, values: minutes}}
+
+.col-sm-12
+  %h3= "Graph Details"
+  - if params[:scope].present?
+    - month, year = params[:scope].split(",")
+    - scope = Date.strptime("#{month}/01/#{year}", "%B/%d/%Y")
+  - else 
+    - scope = Date.today.beginning_of_month
+  = render "reports/tabular", station: station, result: result, total: totals, scope: scope

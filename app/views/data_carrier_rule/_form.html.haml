@@ -1,0 +1,37 @@
+= simple_form_for @rule, url: {action: 'create'}, html: {id: "newRuleForm"}, multipart: true do |f|
+  = hidden_field_tag :creation_type, 'rule'
+  #formErrors{style: 'color: red'}
+  %br
+  %fieldset
+    .row
+      .col-sm-2
+        = f.input :gateway_id, as: :select, collection: @gateways.collect { |x| [x.title, x.id]}, label: 'Station', input_html: {data: {validation: 'required'}, 'data-validation-error-msg' => 'You did not select a station.'}
+      .col-sm-2
+        = f.input :entryway_provider_id, as: :select, collection: @providers.collect { |x| [x.title, x.id]}, label: 'CLEC Providers', input_html: {data: {validation: 'required'}, 'data-validation-error-msg' => 'You must select a CLEC Provider.'}
+      .col-sm-2
+        .input-group
+          .groupinput
+            = f.input :parent_carrier_id, as: :select, collection: @carriers.collect { |x| [x.title, x.id]}, label: 'Carriers', input_html: {data: {validation: 'required'}, 'data-validation-error-msg' => 'You must define a carrier.'}
+          .input-group-btn
+            %button.btn.btn-success{type: "button", style: 'margin-top: 20px', data: {toggle: "modal", target: "#newCarrierModal"}}
+              %span.fa.fa-plus
+      .col-sm-2
+        .input-group
+          .groupinput
+            = f.input :gateway_prompt_id, as: :select, collection: @promptlists.collect {|x| [x.title, x.id]}, disabled: @rule.gateway_id.present? ? false : true, label: 'Prompt', input_html: {data: {validation: 'required'}, 'data-validation-error-msg' => 'Please select a prompt.', style: 'max-width: 180px'}
+          .input-group-btn
+            %button.btn.btn-success{type: "button", disabled: @rule.gateway_id.present? ? false : true, style: 'margin-top: 20px', data: {toggle: "modal", target: "#newCarrierPromptModal"} }
+              %span.fa.fa-plus
+      .col-sm-3{style: 'padding-top: 35px'}
+        .col-sm-7.pull-left
+          %label
+            = f.check_box :hangup_after_play, class: 'icheck-me', data: {color: "blue", skin: "square"}
+            = 'Hang up after play'
+        .col-sm-5.pull-left
+          %label
+            = f.check_box :is_enabled, class: 'icheck-me', data: {color: "blue", skin: "square"}
+            = 'Active'
+      .col-sm-1
+        %button.pull-right.btn.btn-success.ruleSubmit{type: 'submit', style: 'margin-top: 30px', data: {target: 'newRuleForm'}}
+          %i.fa.fa-plus-square
+          Add Rule

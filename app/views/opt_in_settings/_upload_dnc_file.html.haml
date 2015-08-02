@@ -1,0 +1,4 @@
+= form_tag( {:action => 'upload_dnc_file'}, :multipart => true ) do
+  = file_field 'upload', 'datafile' 
+  %button{"class" => "btn btn-submit btn-primary send"}= "Upload file"
+

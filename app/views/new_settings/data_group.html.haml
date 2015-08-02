@@ -1,0 +1,192 @@
+%div.row
+  %div.col-sm-12
+    %div.page-header
+      %h1 User Group
+%hr
+.tabbable
+  %ul.nav.nav-tabs.tab-bricky.tab-blue.tab-padding.tab-space-3
+    %li{class: "#{ 'active' if params[:action] == 'data_group'}"}
+      = link_to "User Group", data_group_path
+    %li{class: "#{ 'active' if params[:action] == 'data_tagging'}"}
+      = link_to "Country, Lang, Genre", data_tagging_path
+#pageHolder
+  %div.row
+    = form_tag data_group_path, :id => 'dataFilterForm', method: :post do
+      = hidden_field_tag 'per', @per_selected, :class => 'dataFilter'
+      = hidden_field_tag 'country', @country, class: 'dataFilter'
+      = hidden_field_tag 'station_filter', @station_filter, :class => 'dataFilter'
+      = hidden_field_tag 'provider', @provider_selected, :class => 'dataFilter'
+      = hidden_field_tag 'did_filter', @did_filter, :class => 'dataFilter'
+      = hidden_field_tag 'rca_filter', @rca_sel, :class => 'dataFilter'
+      .col-sm-2
+        %label{:for => 'user_group'} Data User Group
+        = select_tag "user_group", options_for_select(['RCA', 'BroadCaster', 'ThirdParty'], @user_group), :include_blank => true, class: 'select dataFilterUserGroup'
+      .col-sm-3
+        %label{:for => 'data_user'} Data User
+        = select_tag "data_user_selected", options_from_collection_for_select(@data_user, 'id', 'title', @data_user_selected.present? ? @data_user_selected.id : nil), :include_blank => true, class: 'select dataFilter'
+  - if @user_group.present?
+    %br
+    %div.row
+      %div.col-md-12
+        %i.fa.fa-warning
+        = " Warning: Once you select a station, It will automatically tag to above selected <strong>Data User</strong>.".html_safe
+  %br
+  %div.row
+    %div.col-sm-12
+      .panel.panel-default
+        .panel-heading
+          .fa.fa-cogs
+          Select Stations
+          .panel-tools
+            = select_tag 'country', options_from_collection_for_select(@countries, 'id', 'title', @country.present? ? @country.id : nil), prompt: 'Filter by Country', :class => 'hide subFilters'
+            - if @user_group == 'ThirdParty'
+              = select_tag 'provider', options_for_select(@providers, @provider_selected), :include_blank => true, :class => 'hide subFilters'
+              = text_field_tag 'did_filter', @did_filter, :placeholder => 'Search DID here', :class => 'hide subFilters'
+            - else
+              = select_tag 'rca_filter', options_from_collection_for_select(@rcas, 'id', 'title', @rca_sel), prompt: 'Filter by RCA', :class => 'hide subFilters'
+              = text_field_tag 'station_filter', @station_filter, :class => 'hide subFilters', :placeholder => 'Search station here'
+            = select_tag 'per', options_for_select(['20', '40', '60', '80', '100'], @per_selected), :class => 'subFilters'
+        .panel-body
+          %div.slimScroll#stationHolder
+            - if @objects.present?
+              = form_tag save_data_group_path, method: :post, :id => 'stationForm' do
+                = hidden_field_tag 'data_user_selected', (@data_user_selected.present? ? @data_user_selected.id : nil)
+                = hidden_field_tag 'user_group', @user_group
+                = hidden_field_tag 'country', @country.present? ? @country.id : nil
+                = hidden_field_tag 'station_filter', @station_filter
+                = hidden_field_tag 'did_filter', @did_filter
+                = hidden_field_tag 'provider', @provider_selected
+                = hidden_field_tag 'rca_filter', @rca_sel
+                = hidden_field_tag 'page', params[:page]
+                - @objects.each do |obj|
+                  .col-sm-3.well-sm
+                    %label
+                      = check_box_tag 'selected_stations[]', obj.id, (@selected.include? obj.id.to_i), :class => 'square-teal', :data => {:id => obj.id, :usergroup => @user_group}
+                      - if @user_group == 'ThirdParty'
+                        = "#{obj.did_e164} #{truncate(obj.title.to_s, :length => 9, :separator => ' ')}"
+                      - else
+                        = truncate(obj.title.to_s, :length => 18, :separator => ' ')
+                %br
+                  .pull-right
+                    = paginate(@objects)
+            - else
+              .col-sm-4.col-sm-offset-4
+                %i.fa.fa-warning.fa-2x
+                %span
+                  = "No station to display yet. Please select <strong>Data User</strong> first or Evaluate your search.".html_safe
+
+- content_for :js do
+  :javascript
+    $(document).ready(function(){
+      $('body').on('ifChecked', 'input[type="checkbox"].square-teal, input[type="radio"].square-teal', function(event){
+        object_id = $(this).attr('data-id');
+        url = '/new_settings/save_data_group';
+        data = $('#dataFilterForm').serialize();
+        data += '&data_object_id=' + object_id;
+        $.ajax({
+          url : url,
+          type : 'post',
+          data: data
+        });
+      });
+      $('body').on('ifUnchecked', 'input[type="checkbox"].square-teal, input[type="radio"].square-teal', function(event){
+        object_id = $(this).attr('data-id');
+        url = '/new_settings/data_group/'+ object_id +'/delete';
+        data = {'user_group' : $(this).attr('data-usergroup')}
+        $.ajax({
+          url : url,
+          type : 'get',
+          data: data
+        });
+      });
+      $('body').on('change', '.subFilters', function(){
+        form = $('#dataFilterForm');
+        key = $(this).attr('name');
+        val = $(this).val();
+        form.find('input[name="'+ key +'"]').val(val).trigger('change');
+      });
+      $('nav.pagination>ul').addClass('pagination');
+      //$('.slimScroll').slimScroll({
+      //   height: '300px',
+      //   color: '#404040',
+      //   size: '8px'
+      //});
+
+      $('body').on('click', '#assignBtn', function(event){
+        event.preventDefault();
+        form = $(this).attr('form-target');
+        $(form).submit();
+      });
+      $('body').on('change', '.dataFilterUserGroup', function(){
+        preload();
+        document.location = '/new_settings/data_group?user_group='+$(this).val();
+      });
+      $('body').on('change', '.dataFilter', function(){
+        var form = $(this).parents('form');
+        var data = form.serialize();
+        var url = form.attr('action');
+        $.ajax({
+          type: 'post',
+          beforeSend: preload,
+          data: data,
+          url: url
+        }).done(function(data){
+          res = $('<div>').html(data);
+          $('#stationHolder').html(res.find('#stationHolder').html());
+          dataUserOptions = res.find('#data_user_selected');
+          $('#data_user_selected').select2('destroy').html(dataUserOptions.html());
+          $('#data_user_selected').select2();
+          $('nav.pagination>ul').addClass('pagination');
+          $('input[type="checkbox"].square-teal, input[type="radio"].square-teal').iCheck({
+              checkboxClass: 'icheckbox_square-aero',
+              radioClass: 'iradio_square-aero',
+              increaseArea: '10%' // optional
+          });
+          $('.subFilters').removeClass('hide');
+        });
+      });
+      $("select.select").select2({allowClear: true});
+    });
+    function preload(){
+      html = '<div class="col-sm-4 col-sm-offset-4">';
+        html += '<span>';
+          html += '<img src="/assets/loader.gif" />';
+          html += ' Please wait...';
+        html += '</span>';
+      html += '</div>';
+      $('#stationHolder').html(html);
+    }
+
+-#- content_for :js do
+-#  :javascript
+-#    $(document).ready(function(){
+-#      $('.slimScroll').slimScroll({
+-#         height: '300px',
+-#         color: '#404040',
+-#         size: '8px'
+-#      });
+-#       $('body').on('change', '.dataFilter', function(){
+-#        $(this).parents('form').submit();
+-#       });
+-#      //$('body').on('change', '.dataFilter', function(){
+-#      //  var form = $(this).parents('form');
+-#      //  var url = form.attr('action');
+-#      //  $.ajax({
+-#      //    type: 'post',
+-#      //    beforeSend: preload,
+-#      //    url: url
+-#      //  }).done(function(data){
+-#      //    res = $('<div>').html(data);
+-#      //    $('#pageHolder').html(res.find('#pageHolder').html());
+-#      //  });
+-#      });
+-#      function preload(){
+-#        html = '<div class="col-sm-4 col-sm-offset-4">';
+-#          html += '<span>';
+-#            html += '<img src="/assets/loader.gif" />';
+-#            html += ' Please wait...';
+-#          html += '</span>';
+-#        html += '</div>';
+-#        $('#stationHolder').html(html);
+-#      }
+-#    });

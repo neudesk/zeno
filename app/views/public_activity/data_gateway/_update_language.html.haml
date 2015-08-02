@@ -1,0 +1,14 @@
+updated language
+- if activity.parameters[:old_language]
+  '
+  = activity.parameters[:old_language]
+  '
+to
+- if activity.parameters[:new_language]
+  '
+  = activity.parameters[:new_language]
+  '
+- if activity.parameters[:gateway_id]
+  - gateway = DataGateway.find(activity.parameters[:gateway_id])
+  = "on station"
+  = link_to gateway.title, settings_station_path(gateway.id)

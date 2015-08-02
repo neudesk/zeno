@@ -1,0 +1,18 @@
+%div.page-header
+  %h1
+    %i.fa.fa-clock-o
+    = "RCA Minutes"
+%br
+.tabbable
+  %ul.nav.nav-tabs.tab-bricky.tab-blue.tab-padding.tab-space-3
+    %li{class: "#{ 'active' if params[:type] != 'minutes'}"}
+      = link_to "Percentage", rca_minutes_data_numerical_reports_path(rca_id: params[:rca_id], type: "percentage")
+    %li{class: "#{'active' if params[:type] == 'minutes'}"}
+      = link_to "Minutes", rca_minutes_data_numerical_reports_path(rca_id: params[:rca_id], type: "minutes")
+  .tab-content
+    - if params[:type] != "minutes"
+      .tab-pane.active
+        = render "percentage"
+    - else
+      .tab-pane.active
+        = render "minutes"

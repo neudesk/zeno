@@ -1,0 +1,21 @@
+
+= "Updated station "
+- if activity.parameters[:gateway_id].present?
+  = link_to activity.trackable_title, settings_station_path(activity.parameters[:gateway_id])
+- else
+  which has been deleted
+%strong{style: 'margin: 10px 0 10px 0; display: block'} Fields updated:
+%div{style: 'padding-left: 20px'}
+  %ul
+    - activity.parameters[:changed].each do |value|
+      - if value[:old_state] != value[:new_state]
+        %li
+          %strong= "#{value[:field]} : "
+          - if value[:old_state].nil? or value[:old_state] == '' and value[:new_state].present?
+            = "updated #{value[:field]} to #{value[:new_state]}"
+          - if value[:new_state].present? and value[:old_state].present?
+            = "updated value from #{value[:old_state]} "
+            %strong to
+            = " #{value[:new_state]} "
+          - if value[:new_state].nil? or value[:new_state] == '' and value[:old_state].present?
+            = "unassigned #{value[:old_state]} from #{value[:field]} field"

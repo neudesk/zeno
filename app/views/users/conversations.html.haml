@@ -1,0 +1,24 @@
+.space12{:style => "margin: 0 auto;width: 270px;margin-top: 10px;"}
+  .btn-group.btn-group-lg
+    %a.btn.btn-default{:href=>"/my_account"} User Info
+    %a.btn.btn-default.active{:href=>"/conversations"} Conversation
+.panel-body.messages.conversation
+  %ul.messages-list
+    = render partial: "message_list"
+  .messages-content
+    .conv
+      = render partial: "conversations"
+    .message_reply
+      .loading{:style => "display: none;"}
+        #loader.row.loading{:style => "display: none;"}
+          .col-sm-12.acenter
+            %img{:alt => "Loader", :src => "/assets/loader.gif"}
+            Just a moment
+      = form_tag( reply_to_message_path, :method => "POST", :remote => true, id: "reply_form") do
+        = hidden_field_tag "admin_id", @id
+        = hidden_field_tag "message_id", params[:message].present? ? params[:message] : @message_id
+        = text_area_tag("message", nil, class: "message_box")
+        %input.btn.btn-primary.btn-sm.btn-message-reply{:type => "button", :value => "Reply"}
+      
+       
+        

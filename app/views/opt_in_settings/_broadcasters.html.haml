@@ -1,0 +1,27 @@
+%div.panel.panel-default
+  %div.panel-heading
+    .fa.fa-gears
+    Broadcaster Opt-In List
+  %div.panel-body
+    %div.search_phone_number.input-group.input-group-sm
+      %input.form-control{:type => "text", :id => "txt_broadcast_opt_in_search",:placeholder => "Search", :value => params[:search].present? ? params[:search] : "" }
+      %span.input-group-btn
+        %a{:class => "btn btn-primary", :id => "search_broadcast_opt_in" }= "Search"
+    %br
+    %table.table.table-striped.broadcaster_table
+      %thead
+        %tr
+          %th= "#"
+          %th= "Name"
+          %th{:style=> "width: 20%;"}= "Opt-In List"
+        %tbody
+          -@broadcasters.each_with_index do |brd,index|
+            %tr{:class => cycle('odd', 'even')}
+              %td= index+1
+              %td= brd.title
+              %td
+                - if brd.opt_in_is_active.present? && brd.opt_in_is_active == true
+                  %input{:type=>"checkbox",:id=>"opt_in_brd_#{brd.id}",:name=>"opt_in_brd",:class => "opt_in_brd", :checked => "checked", :data => {:val => brd.id}}
+                -else
+                  %input{:type=>"checkbox",:id=>"opt_in_brd_#{brd.id}",:name=>"opt_in_brd",:class => "opt_in_brd", :data => {:val => brd.id}}
+    = paginate  @page_no

@@ -1,0 +1,46 @@
+%div.panel.panel-default
+  %div.panel-heading
+    .fa.fa-phone
+    Do Not Call List
+    .panel-tools
+      %a.btn.btn-xs.btn-link{:id => 'settings_new', :href=>"#", "data-toggle"=>"modal", "data-target"=>"#phoneFormModal"}
+        %i.fa.fa-plus
+        Add New DNC Phone Number
+  %div.panel-body
+    %div.col-md-6.pull-right
+      %div.input-group
+        %input.form-control{:type => "text", :id => "txt_search",:placeholder => "Phone Number Here"}
+        %span.input-group-btn
+          %button.btn.btn-default{:type=>"button", :id => "btn_search"}
+            = "Search"
+    %div.clearfix
+    %br
+    %ul{:style => "height: 135px;overflow-y: scroll;", :class => "dnc_list", :id => "phone_num_list"}
+      - if @dnc_list.count > 0
+        -@dnc_list.each do |dnc|
+          %li{:id => dnc.id.to_s}
+            %span.label.label-info.phone_number
+              = dnc.phone_number
+              %a{:class => "reachout_tab_settings_phone_delete btn btn-xs", :data =>{:val => dnc.id.to_s}, :style => "color: #fff" }
+                %i.fa.fa-trash-o
+      - else
+        %li
+          %span.label.label-info.phone_number
+            %span.label.label-info.phone_number
+              = "No Records Yet"
+
+%div.modal.fade{:id=>"phoneFormModal", :tabindex=>"-1", :role=>"dialog", "aria-labelledby"=>"myModalLabel", "aria-hidden"=>"true"}
+  %div.modal-dialog
+    %div.modal-content
+      %div.modal-header
+        %h4.modal-title{:id=>"myModalLabel"} New Do Not Call Phone Number
+      %div.modal-body
+        .info
+        %div.phone_form
+          %input{:type => "text", :id => "txt_phone",:placeholder => "Phone ex: +11234567891"}
+      %div.modal-footer
+        %button.btn.btn-default{:type=>"button", "data-dismiss"=>"modal"}
+          ="Close"
+        %a.btn.btn-success.btn-sm{:id => "add_phone"}
+          %i.fa.fa-save
+          ="Add"

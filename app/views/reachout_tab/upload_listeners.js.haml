@@ -1,0 +1,16 @@
+$('.reachout_tab_phone_list').append("#{j(render('upload_listeners', {}))}");
+var idList = {};
+var nodes = $('.reachout_tab_phone_list li');for (var i in nodes) {if (!isNaN(i) && nodes[i].id) {idList[nodes[i].id] = idList[nodes[i].id]? idList[nodes[i].id]+1:1;}}for (var id in idList) {if (idList[id] > 1) $("#"+id).remove();}
+
+$('#bar').css('width','100%');clearTimeout(window.ReachoutTab.time);setTimeout(function(){$('.form .progress').hide();},3000);
+num = $('span[class="label label-info phone_number"]');
+// it should update the phone list count
+var current_count = parseInt($('#listenerCount').text())
+var new_count = parseInt(#{@accepted})
+var total_count = current_count + new_count
+$('#listenerCount').text(total_count)
+$('#listenerCount_step4').text(total_count)
+$('#file_data_result_length').remove();
+$('#uploadPhoneListModal').modal('hide');
+html = '<div class="row" id="flash" class="flash"><div class="col-md-12"><div class="alert alert-info"><a class="close" data-dismiss="alert">×</a><strong>#{@accepted}</strong> phone number accepted.<br /><strong>#{@taken}</strong> phone number is already taken.<br /></div></div></div>'; $('body').append(html);
+setTimeout(function(){$('.flash').fadeOut(3000);}, 8000)

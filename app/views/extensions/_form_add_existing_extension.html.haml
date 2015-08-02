@@ -1,0 +1,25 @@
+= simple_nested_form_for(@dataGatewayConference, :url => save_existing_gateway_content_extensions_path, :remote => true) do |f|
+  .modal-header
+    %button{type: "button", "class" => "close", "data-dismiss" => "modal", "aria-hidden" => "true"}="×"
+    %h3 Add Extensions
+  .modal-body
+    .search_stream_section{:style => "display:block;"}
+      %label Search Stream Name
+      = text_field_tag :search_stream, @search_stream, :class => "search_stream_field", :autocomplete => "off"
+      = hidden_field_tag :existing_content_content_id, '', {:name => "data_gateway_conference[content_id]", :disabled => "disabled"}
+      %button{type: "button", "class" => "btn-info", id: "existing_content_remove_search", style: "display:none;" }="X"     
+    = f.hidden_field :gateway_id, {value: @station_id}
+    .country-title
+      %label Country Name
+      %span.radio-select= select_tag :country, options_for_select(@countries, @default_country_id), class: "select-country", id: "existing_content_country_id"
+    .stream-title
+      %label Stream Name
+      %span.radio-select= f.select :content_id, options_for_select(@other_contents, @default_content_id), {},{:class => "select-content", "data-text-error" => "Stream Name"}
+      = image_tag("loading.gif", class: "hide loading")
+    .channel-number
+      %label Channel Number
+      = f.text_field :extension, placeholder: "Please type your channel number", class: "text-change text-length", "data-error-class" => "channel-error", "data-text-error" => "Channel Number"
+      %p.text-error.channel-error.hide.message-info.error-in-add{:style => "font-style:italic"}
+  .modal-footer
+    %button{"class" => "btn btn-cancel", "data-dismiss" => "modal", "aria-hidden" => "true"}= "Close"
+    %button{"class" => "btn btn-primary btn-submit"}= "Add"

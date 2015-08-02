@@ -1,0 +1,10 @@
+has changed media type on content 
+- if activity.trackable
+  %span
+    = link_to activity.trackable.title, data_content_path(activity.trackable), :remote => 'true'
+    - if activity.parameters[:channel_no].present? && activity.parameters[:channel_no] != ""
+      = "(Extension no: " + activity.parameters[:channel_no] + ")"
+from "#{activity.parameters[:old_media_type]}" to "#{activity.parameters[:new_media_type]}"
+- if activity.parameters[:channels]
+  on
+  %span= " Stations : " + activity.parameters[:channels] 

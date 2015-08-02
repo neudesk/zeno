@@ -1,0 +1,43 @@
+%table.table
+  %thead
+    %tr
+      %th Extension
+      %th{style: 'max-width: 260px;'}
+      %th{style: 'width: 180px;'}
+  %tbody
+    - if @extensions.present?
+      - @extensions.each do |ext|
+        %tr
+          %td{style: 'max-width: 260px;'}
+            = ext.content.try(:title)
+            - media_url = ext.content.try(:media_url)
+            - if media_url.present?
+              = link_to media_url, style: 'display: block; word-wrap: break-word;', target: '_blank' do
+                %i.fa.fa-link
+                = media_url
+          %td
+            - schedules = DataContentOffAir.where(:content_id => ext.content_id)
+            %form{action: update_schedule_data_contents_path, method: 'post', class: "scheduleForm_#{ext.content_id}", style: 'display: none'}
+              = hidden_field_tag "content_id", ext.content_id
+              .row
+                - if schedules.present?
+                  - schedules.each do |sched|
+                    .col-md-4
+                      = "#{get_day_label(sched.day.to_s)} : "
+                    .col-md-4
+                      = text_field_tag "time_start[#{sched.day.to_i}]", sched.time_start.strftime('%H:%M'), class: 'form-control'
+                    .col-md-4
+                      = text_field_tag "time_end[#{sched.day.to_i}]", sched.time_end.strftime('%H:%M'), class: 'form-control'
+                    .clearfix
+                - else
+                  - (-1..6).each do |day|
+                    .col-md-4
+                      = "#{get_day_label(day.to_s)} : "
+                    .col-md-4
+                      = text_field_tag "time_start[#{day.to_i}]", '00:00', class: 'form-control'
+                    .col-md-4
+                      = text_field_tag "time_end[#{day.to_i}]", '00:00', class: 'form-control'
+                    .clearfix
+          %td{style: 'width: 180px; text-align: center'}
+            %button.btn.btn-info.btn-sm.showForm{data: {target: ".scheduleForm_#{ext.content_id}"}, style: 'margin-right: 4px'} Show Schedule
+            %button.btn.btn-default.btn-sm.cancelForm{data: {target: ".scheduleForm_#{ext.content_id}"}, style: 'display: none'} Cancel

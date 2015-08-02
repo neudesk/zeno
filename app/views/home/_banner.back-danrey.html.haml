@@ -1,0 +1,49 @@
+.clearfix
+  .row-fluid
+    .col-sm-12
+      = "Version 1"
+    .col-sm-12{style: "padding-bottom: 5px;"}
+      %iframe{src: "#{hostname}/banner1/1", seamless: true, scrolling: "no", height: "165px", width: "580px"}
+    .col-sm-12
+      - val = "<iframe src=\"#{hostname}/banner1/1\" height=\"165px\" scrolling=\"no\" seamless=\"\" width=\"580px\"></iframe>"
+      = text_area_tag "embed_body", val, style: "width: 100%", rows: 1
+
+    .col-sm-12
+      = "Version 2"
+    .col-sm-12{style: "padding-bottom: 5px;"}
+      %iframe{src: "#{hostname}/banner2/1", seamless: true, scrolling: "no", height: "239px", width: "278px"}
+    .col-sm-12
+      - val = "<iframe src=\"#{hostname}/banner2/1\" height=\"239px\" scrolling=\"no\" seamless=\"\" width=\"278px\"></iframe>"
+      = text_area_tag "embed_body", val, style: "width: 100%", rows: 1
+
+    .col-sm-12
+      = "Version 3"
+    .col-sm-12
+      %iframe{src: "#{hostname}/banner3/1", seamless: true, scrolling: "no", height: "239px", width: "278px"}
+    .col-sm-12
+      - val = "<iframe src=\"#{hostname}/banner3/1\" height=\"239px\" scrolling=\"no\" seamless=\"\" width=\"278px\"></iframe>"
+      = text_area_tag "embed_body", val, style: "width: 100%", rows: 1
+
+    .col-sm-12
+      = "Version 4"
+    .col-sm-12
+      %iframe{src: "#{hostname}/banner4/1", seamless: true, scrolling: "no", height: "250px", width: "300px"}
+    .col-sm-12
+      - val = "<iframe src=\"#{hostname}/banner4/1\" height=\"250px\" scrolling=\"no\" seamless=\"\" width=\"300px\"></iframe>"
+      = text_area_tag "embed_body", val, style: "width: 100%", rows: 1
+
+    .col-sm-12
+      = "Version 5"
+    .col-sm-12
+      %iframe{src: "#{hostname}/banner5/1", seamless: true, scrolling: "no", width: "300px", height: "50px"}
+    .col-sm-12
+      - val = "<iframe src=\"#{hostname}/banner5/1\" height=\"50px\" scrolling=\"no\" seamless=\"\" width=\"300px\"></iframe>"
+      = text_area_tag "embed_body", val, style: "width: 100%", rows: 1
+
+    .col-sm-12
+      = "Version 6"
+    .col-sm-12
+      %iframe{src: "#{hostname}/banner6/1", seamless: true, scrolling: "no", width: "320px", height: "50px"}
+    .col-sm-12
+      - val = "<iframe src=\"#{hostname}/banner6/1\" height=\"50px\" scrolling=\"no\" seamless=\"\" width=\"320px\"></iframe>"
+      = text_area_tag "embed_body", val, style: "width: 100%", rows: 1

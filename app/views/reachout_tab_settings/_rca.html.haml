@@ -1,0 +1,47 @@
+.panel.panel-default
+  .panel-heading
+    .fa.fa-gears
+    RCA Settings List
+  .panel-body
+    .search_phone_number
+      .input-group
+        .pull-right
+          %input.form-control#txt_rca_search{:type => "text", :placeholder => "Search", value: params[:search]}
+        %span.input-group-btn
+          %button.btn.btn-primary#search_rca{:type=>"button"}
+            = "Search"
+    - if @rca.present?
+      %table.table.table-striped.rca_table
+        %thead
+          %tr
+            %th= "#"
+            %th= "Name"
+            %th{style: "width: 20%;"}
+              = "Send Campaign"
+            %th{style: "width: 20%;"}
+              = "Upload List"
+          %tbody
+            -@rca.each_with_index do |rca,index|
+              %tr
+                %td= index + 1
+                %td= rca.title
+                %td
+                  - if rca.reachout_tab_is_active
+                    %input.send_campaign_rca{type: "checkbox", id: "send_campaign_rca_#{rca.id}", name: "send_campaign_rca", checked: "checked", data: {val: rca.id}}
+                  - else
+                    %input.send_campaign_rca{type: "checkbox", id: "send_campaign_rca_#{rca.id}",name: "send_campaign_rca", data: {val: rca.id}}
+                %td
+                  - if rca.reachout_tab_is_active
+                    - if rca.upload_list_is_active
+                      %input.upload_list_rca{type: "checkbox", id: "upload_list_rca_#{rca.id}", name: "upload_list_rca", checked: "checked", data: {val: rca.id}}
+                    -else
+                      %input.upload_list_rca{type: "checkbox", id: "upload_list_rca_#{rca.id}", name: "upload_list_rca", data: {val: rca.id}}
+                  - else
+                    - if rca.upload_list_is_active
+                      %input.upload_list_rca{type: "checkbox", id: "upload_list_rca_#{rca.id}", disabled: "true", name: "upload_list_rca", :checked => "checked", data: {val: rca.id}}
+                    - else
+                      %input.upload_list_rca{type: "checkbox", id: "upload_list_rca_#{rca.id}", disabled: "true", name: "upload_list_rca", data: {val: rca.id}}
+      .pull-right
+        = paginate @page_no
+    - else
+      = render "shared/no_records", msg: "No records found."

@@ -1,0 +1,25 @@
+.row
+  .col-sm-12
+    .panel.panel-default
+      .panel-heading
+      .panel-body
+        .tabbable.panel-tabs
+          %ul.nav.nav-tabs
+            %li.active
+              %a{"data-toggle" => "tab", :href=> "#hourly", :id => "hourly_tab"}
+                Hourly
+            %li
+              %a{"data-toggle" => "tab", :href=> "#daily", :id=> "daily_tab"}
+                Daily
+            %li
+              %a{"data-toggle" => "tab", :href=> "#weekly", :id => "weekly_tab"}
+                Weekly
+          .tab-content
+            #hourly.tab-pane.active
+              #placeholder_hourly.flot-placeholder
+              %p#choices
+            #daily.tab-pane
+              #placeholder_daily.flot-placeholder
+              %p#daily_choices
+            #weekly.tab-pane
+              #placeholder_weekly.flot-placeholder

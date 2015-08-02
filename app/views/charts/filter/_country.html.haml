@@ -1,0 +1,2 @@
+- selected = @country.id if @country
+= select_tag "country", options_from_collection_for_select(@countries_filter, 'country_id', 'title', selected), :prompt => "Country" if @countries_filter

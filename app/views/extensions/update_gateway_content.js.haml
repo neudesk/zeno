@@ -1,0 +1,16 @@
+$("#editExtensionModal").modal("hide");
+:plain
+  if ($(".extensions_section").find(".active-tab").find("a").length > 0) {
+    $(".extensions_section").find(".active-tab").find("a").click();
+  } else {
+    $(".settings_section").find(".active-tab").find("a").click();
+  }
+  
+- flash.each do |key, value|
+  - if flash[:notice]
+    $(".ajax-alert").removeClass("alert-error");
+    $(".ajax-alert").html("#{escape_javascript(flash[:notice])}"); 
+  - else
+    $(".ajax-alert").addClass("alert-error");
+    $(".ajax-alert").html("#{raw(escape_javascript(flash[:error]))}"); 
+  $(".ajax-alert").show().delay(1000).fadeOut();

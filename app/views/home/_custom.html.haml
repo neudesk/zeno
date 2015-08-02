@@ -1,0 +1,21 @@
+.row
+  .span10.chart-filter
+    .country-filter
+      = select_tag "country", options_from_collection_for_select(@countries, 'id', 'name'), :prompt => "Country"
+    .station-filter
+      = select_tag "station", {}, :prompt => "Station"
+    .did-filter
+      = select_tag "did", {}, :prompt => "Did's"
+
+
+
+  .span1
+    .btn-group
+      %a.btn.dropdown-toggle{"data-toggle" => "dropdown", :href => "#"}
+        7 days
+        %span.caret
+      %ul.dropdown-menu
+        - for country in @countries do
+          %li
+            %a{:href => "#"}
+              = country.name

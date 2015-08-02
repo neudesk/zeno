@@ -1,0 +1,57 @@
+.row
+  .col-sm-12
+    .panel.panel-default
+      .panel-heading
+        .fa.fa-clock-o
+        Minutes
+      .panel-body
+        .tabbable.panel-tabs
+          %ul.nav.nav-tabs
+            %li.active
+              %a{"data-toggle" => "tab", :href=> "#hourly", :id => "hourly_tab"}
+                Hourly
+            %li
+              %a{"data-toggle" => "tab", :href=> "#daily", :id=> "daily_tab"}
+                Daily
+            %li
+              %a{"data-toggle" => "tab", :href=> "#weekly", :id => "weekly_tab"}
+                Weekly
+          .tab-content
+            #hourly.tab-pane.active
+              .row
+                .col-sm-10
+                  #placeholder_hourly.flot-placeholder
+                    %div.page-header
+                      %h1.center
+                        No Data to Display Yet.
+                .col-sm-2
+                  %p#choices
+            #daily.tab-pane
+              .row
+                .col-sm-10
+                  #placeholder_daily.flot-placeholder
+                .col-sm-2
+                  %p#daily_choices
+            #weekly.tab-pane
+              .row
+                .col-sm-12
+                  #placeholder_weekly.flot-placeholder
+%br
+
+= render "maps/show_map"
+
+-if rca?
+  = render 'rca_minutes'
+
+= render "dashboard"
+
+- content_for :js do
+
+  :javascript
+    $(document).ready(function(){
+      window.Home = new Home()
+      window.MinutesGraph = new MinutesGraph()
+    });
+    
+
+

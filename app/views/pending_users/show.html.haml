@@ -1,0 +1,191 @@
+= simple_form_for @user, url: approved_pending_user_path(@user.id), method: :post, html: {id: "show_pending_form"} do |f|
+  = f.hidden_field :service_type
+  .row-fluid
+    .col-sm-12
+      .form-actions
+        .pull-right
+          - if current_user.is_marketer?
+            .btn-group
+              = link_to "#", class: "btn btn-danger dropdown-toggle", data: {toggle: "dropdown"} do 
+                = "Actions"
+                %span.caret
+              %ul.dropdown-menu.pull-right
+                - unless @user.processed?
+                  %li 
+                    = link_to "Add as User", "#", class: "form-submitter", data: {target: "show_pending_form"}
+                  %li.divider
+                  %li
+                    = link_to "Ignore this User", "#", data: {id: @user.id}, class: "ignore_button"
+                  %li
+                    = link_to "Mark as Duplicate", "#", data: {id: @user.id}, class: "duplicate_button"
+                  %li.divider
+                %li
+                  - if params[:from] == "all"
+                    = link_to "Back", all_pending_users_path
+                  - else
+                    = link_to "Back", pending_users_path
+          - else
+            - if params[:from] == "all"
+              = link_to "Back", all_pending_users_path, class: "btn btn-primary"
+            - else
+              = link_to "Back", pending_users_path, class: "btn btn-primary"
+
+  .row
+    .col-sm-5
+      .user-left
+        %table.table.table-hover.no-border.small-padding
+          %thead
+            %tr.no-border
+              %th{colspan: 2}
+                %h3= "Account Information"
+          %tbody
+            %tr
+              %td.col-sm-4
+                = f.label :company_name, label: "Company/Name"
+              %td.col-sm-8
+                = f.input :company_name, label: false, input_html: {class: "form-control"}
+            %tr
+              %td= f.label :name, label: "Contact Name"
+              %td= f.input :name, label: false, input_html: {class: "form-control"}
+            %tr
+              %td= f.label :email, label: "Email Address"
+              %td= f.input :email, label: false, input_html: {class: "form-control"}
+            %tr
+              %td= f.label :permission_id, label: "Role"
+              %td= f.input :permission_id, as: :select, label: false, collection: roles_for_new_select, input_html: {class: "without_search"}, data: {user: f.object.id}
+              %tr#group_tr
+                %td
+                  %label.control-label.required Group
+                %td
+                  .input-group
+                    #choose.groupinput
+                      = f.input :group, as: 'select', label: false, disabled: true
+                    #new.groupinput.hide
+                      = f.input :new_group, label: false, input_html: {class: "form-control"}
+                    .input-group-btn{style: 'vertical-align: top; padding-top: 3px;'}
+                      %button.btn.btn-default.dropdown-toggle{data: {toggle: "dropdown"}, type: "button", style: 'margin-top: 3px' }
+                        Option
+                        %span.caret
+                      %ul.dropdown-menu
+                        %li
+                          = link_to "Add New", "#", class: "group_action", data: {type: 'new', target: 'new'}
+                        %li
+                          = link_to "Choose Group", '#', class: "group_action", data: {type: 'choose', target: 'choose'}
+            %tr
+              %td= f.label :enabled, label: "Enabled"
+              %td
+                = f.input :enabled, as: :select, selected: f.object.enabled || 1, input_html: {class: "without_search"}, label: false
+
+        %table.table.table-hover.no-border.small-padding
+          %thead
+            %tr.no-border
+              %th{colspan: 2}
+                %h3= "Contact Information"
+          %tbody
+            %tr
+              %td.col-sm-4
+                %i.clip-phone-4
+                = f.label :landline, label: "Landline"
+              %td.col-sm-8
+                = f.input :landline, input_html: {class: "form-control"}, label: false
+            %tr
+              %td= f.label :cellphone, label: "Cellphone"
+              %td= f.input :cellphone, input_html: {class: "form-control"}, label: false
+            %tr
+              %td= f.label :address, label: "Address"
+              %td= f.input :address, input_html: {class: "form-control"}, label: false
+            %tr
+              %td
+                %i.clip-earth-2
+                = f.label :city, label: "City"
+              %td= f.input :city, input_html: {class: "form-control"}, label: false
+            %tr
+              %td
+                %i.fa.fa-globe
+                = f.label :state, label: "State"
+              %td= f.input :state, input_html: {class: "form-control"}, label: false
+            %tr
+              %td
+                %i.fa.fa-globe
+                = f.label :zip_code, label: "Zip Code"
+              %td= f.input :zip_code, input_html: {class: "form-control"}, label: false
+            %tr
+              %td
+                = f.label :country, label: "Country"
+              %td= f.input :country, label: false, as: :select, collection: DataGroupCountry.all.collect { |x| [x.title, x.title] }, input_html: {autocomplete: "off"}
+            %tr
+              %td
+                %i.fa.fa-facebook-square
+                = f.label :facebook, label: "facebook"
+              %td= f.input :facebook, input_html: {class: "form-control"}, label: false
+            %tr
+              %td
+                %i.fa.fa-twitter-square
+                = f.label :twitter, label: "Twitter"
+              %td= f.input :twitter, input_html: {class: "form-control"}, label: false  
+
+    .col-sm-7
+      %table.table.table-hover
+        %thead
+          %tr
+            %td.col-sm-2
+              %i.clip-user-3.circle-icon.circle-green
+            %td.col-sm-2
+              = f.label :rca, label: "RCA"
+            %td.col-sm-8
+              = f.input :rca, input_html: {class: "form-control"}, label: false
+          %tr
+            %td
+              %i.clip-cube-2.circle-icon.circle-bricky
+            %td= f.label :affiliate, label: "Affiliate"
+            %td= f.input :affiliate, input_html: {class: "form-control"}, label: false
+
+      %table.table.table-hover.no-border.small-padding
+        %thead
+          %tr.no-border
+            %th{colspan: 2}
+              %h3= "Station Information"
+        %tbody
+          %tr
+            %td.col-sm-3
+              = f.label :station_name, label: "Station Name"
+            %td.col-sm-9
+              = f.input :station_name, label: false, input_html: {class: "form-control"}
+          %tr
+            %td= f.label :streaming_url, label: "Streaming URL"
+            %td= f.input :streaming_url, label: false, input_html: {class: "form-control"}
+          %tr
+            %td= f.label :website, label: "Website"
+            %td= f.input :website, label: false, input_html: {class: "form-control"}
+          %tr
+            %td= f.label :language, label: "Language"
+            - lang = DataGroupLanguage.where(:id => f.object.language).present? ? DataGroupLanguage.where(:id => f.object.language): DataGroupLanguage.where(:title => f.object.language)
+            %td
+              -if lang.present?
+                = f.input :language, as: :select, collection: DataGroupLanguage.all.collect{ |x| [x.title, x.id]}, selected: lang.first.id.to_i, label: false
+              - else
+                = f.input :language, as: :select, collection: DataGroupLanguage.all.collect{ |x| [x.title, x.id]}, label: false
+            -#%td= f.input :language, label: false, input_html: {class: "form-control"}
+          %tr
+            %td= f.label :genre, label: "Genre"
+            %td= f.input :genre, label: false, input_html: {class: "form-control"}
+          %tr
+            %td= f.label :on_air_schedule, label: "On-Air Schedule"
+            %td= f.input :on_air_schedule, label: false, input_html: {class: "form-control"}, placeholder: "Should be in EST format"
+      %br
+      - services = @user.service_type.split(',') if @user.service_type.present?
+      - unless services.nil?
+        %table.table.table-hover.no-border.small-padding
+          %thead
+            %tr.no-border
+              %th{colspan: 2}
+                %h3= "Services"
+        %br
+        .row
+          - services.each do |s|
+            %div.col-xs-6{:style => 'text-align: center; margin-bottom: 10px'}
+              %span{:class => "deviceBox #{s}"}
+              = s.gsub('_', ' ').titleize
+
+= render "duplicate_modal"
+= render "ignore_modal"

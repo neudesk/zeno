@@ -1,0 +1,24 @@
+// Place all the styles related to the Search controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+.google-like {
+  margin-top: 120px;
+  input {
+    width: 100%;
+    padding: 15px;
+    font-size: 20px;
+  }
+}
+.search-table {
+  .header {
+    background-color: #0F3A55;
+    color: white;
+  }
+
+  .separator {
+    td {
+      padding-bottom: 10px;
+    }
+  }
+}

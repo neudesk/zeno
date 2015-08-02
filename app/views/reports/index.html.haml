@@ -1,0 +1,130 @@
+- if current_user.stations.blank?
+  %div.row{:id => 'stationList', :style => ""}
+    %div.col-md-12{:id => 'SlideContainer'}
+      %div
+        .row.slides.slider-group-search.margin-top-0
+        
+          %div.col-md-3
+            %div.input-group
+              = text_field_tag :query, params[:query], :class => "form-control", :style=>'border-top-left-radius: 4px !important;border-bottom-left-radius: 4px !important;padding-left:12px;font-family:"Open Sans"', placeholder: "Enter your search here.."
+              .input-group-btn
+                %input.btn.btn-primary{:type => 'button', :value => 'Search', :id => 'searchStation'}
+          
+          %div.col-md-3
+            %span.radio-select
+              = select_tag :country_id, options_from_collection_for_select(DataGroupCountry.get_tagged_countries_on_user(current_user).order(:title), 'id', 'title', params[:country_id]), :prompt => "Select country", :class=>'query-search-country-id select'
+          
+          %div.col-md-3
+            - if current_user.is_marketer?
+              %span.radio-select
+                = select_tag :rca_id, options_from_collection_for_select(DataGroupRca.order(:title), 'id', 'title', params[:rca_id]), :prompt => "Select RCA", :class=>'query-search-rca-id select'
+          
+          %div.col-md-3{:style=>'padding:0px'}
+            .col-md-6{:style=>'padding:0px'}
+              %a.btn.btn-primary{:href => controller_name, :title => "All Stations"}
+                %i.fa.fa-list-alt
+                = "All Stations"
+
+            .pull-right.station_pagination{:style=>'width:90px'}
+              .input-group
+                %input#page.pull-right{:style=>'padding:4px 8px 4px 8px;width:55px; font-family:"Open Sans";border-radius:4px;border:1px solid #eee;', :value=>1}
+                .input-group-btn
+                  %button.btn.btn-primary{:style=>'background:none;border:none'}
+                    %span
+                      = "of "
+                    %span#total_page
+                      = @total_page
+        %div.slider_content
+          %div.slider-loading
+          %span.prev#prev-slide
+          %span.next#next-slide
+          #inside_slider.animated
+            #no-data.alert.alert-warning
+              No stations Found
+  .row
+    .col-sm-2.pull-right
+      %a.btn.btn-primary.btn-small#pullStationBtn
+        Station Lists
+  %br
+- else
+  %div.row{:id => 'stationList', :style => ""}
+    %div.col-md-12{:id => 'SlideContainer'}
+      %div
+        .row.slides.slider-group-search.margin-top-0
+
+          %div.col-md-3
+            %div.input-group
+              = text_field_tag :query, params[:query], :class => "form-control", :style=>'border-top-left-radius: 4px !important;border-bottom-left-radius: 4px !important;padding-left:12px;font-family:"Open Sans"', placeholder: "Enter your search here.."
+              .input-group-btn
+                %input.btn.btn-primary{:type => 'button', :value => 'Search', :id => 'searchStation'}
+
+          %div.col-md-3
+            %span.radio-select
+              = select_tag :country_id, options_from_collection_for_select(DataGroupCountry.get_tagged_countries_on_user(current_user).order(:title), 'id', 'title', params[:country_id]), :prompt => "Select country", :class=>'query-search-country-id select'
+
+          %div.col-md-3
+            - if current_user.is_marketer?
+              %span.radio-select
+                = select_tag :rca_id, options_from_collection_for_select(DataGroupRca.order(:title), 'id', 'title', params[:rca_id]), :prompt => "Select RCA", :class=>'query-search-rca-id select'
+
+          %div.col-md-3{:style=>'padding:0px'}
+            .col-md-6{:style=>'padding:0px'}
+              %a.btn.btn-primary{:href => controller_name, :title => "All Stations"}
+                %i.fa.fa-list-alt
+                = "All Stations"
+            .pull-right.station_pagination{:style=>'width:90px'}
+              .input-group
+                %input#page.pull-right{:style=>'padding:4px 8px 4px 8px;width:55px; font-family:"Open Sans";border-radius:4px;border:1px solid #eee;', :value=>1}
+                .input-group-btn
+                  %button.btn.btn-primary{:style=>'background:none;border:none'}
+                    %span
+                      = "of "
+                    %span#total_page
+                      = @total_page
+        %div.slider_content
+          %div.slider-loading{:style=>'display:none'}
+          %span.prev#prev-slide
+          %span.next#next-slide
+          #inside_slider.animated.fadeIn
+  .row
+    .col-sm-2.pull-right
+      %a.btn.btn-primary.btn-small#pullStationBtn
+        Station Lists
+  %br
+
+  .row
+    - if @station.present?
+      .col-sm-1.col-xs-2
+        %span.station_avatar
+          %span{:style=>"background: url(#{(@station.logo.exists? ? @station.logo.url(:xhdpi) : image_path('radio.png'))}) center center; background-size: 80px"}
+      .col-sm-11.col-xs-10
+        .pull-right{style: "margin-top: 15px;"}
+          = link_to "Station's Settings", "/new_settings/station/#{@station.id}", class: "btn btn-primary"
+        %h2{:style => "color: #59B2E5"}
+          = @station.title.titleize
+    .col-sm-12
+      = form_tag "/reports/render_graphs?station_id=#{params[:station_id]}", remote: true, method: :get, id: 'graphsForm' do
+        .col-sm-4
+          .row-fluid
+            .col-xs-5
+              -#= select_tag :scope, options_for_select(0.upto(11).each_with_index.collect { |m,i| [m.months.ago.strftime("%B %Y"), m.months.ago.strftime("%B,%Y") ]}), class: "select without_search change_reports"
+              = select_tag "month", options_for_select(0.upto(11).each_with_index.collect { |m,i| [m.months.ago.strftime("%B %Y"),i ]}), class: "select without_search change_reports"
+            -if @gateway_id.present?
+              .col-xs-5
+                = select_tag :entryway_id, options_for_select([["All", ""]] + @all_current_user_did.collect { |entryway| [entryway.did_e164, entryway.id]}, params[:did_id] || "" ), :class => 'select change_did'
+            .col-xs-1.loading
+              = image_tag("loader.gif")
+  .row
+    .col-sm-12
+      #charts_result
+        = render "chart_result", station: @station, labels: @labels, result: @result, new_users: @new_users_values, active_users: @active_users_values, sessions: @sessions_values, minutes: @minutes_values, totals: @totals
+
+- content_for :js do
+  :javascript
+    $(document).ready(function(){
+      $(".change_reports, .change_did").on("change", function(e) {
+        $(".loading").show()
+        $(this).parents("form").submit()
+      });
+      window.report = new Report()
+    });

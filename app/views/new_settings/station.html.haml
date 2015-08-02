@@ -1,0 +1,182 @@
+= hidden_field_tag "station_id", params[:station_id]
+- unless current_user.stations.count == 1
+  %div.row{:id => 'stationList', :style => "#{params[:gateway_id].present? ? 'display: none' : ''}"}
+    %div.col-md-12{:id => 'SlideContainer'}
+      %div
+        .row.slides.slider-group-search.margin-top-0
+
+          %div.col-md-3
+            %div.input-group
+              = text_field_tag :query, params[:query], :class => "form-control searchFilter", :style=>'border-top-left-radius: 4px !important;border-bottom-left-radius: 4px !important;padding-left:12px;font-family:"Open Sans"', placeholder: "Enter your search here.."
+              .input-group-btn
+                %input.btn.btn-primary{:type => 'button', :value => 'Search', :id => 'searchStation'}
+
+          %div.col-md-3
+            %span.radio-select
+              = select_tag :country_id, options_from_collection_for_select(DataGroupCountry.get_tagged_countries_on_user(current_user).order(:title), 'id', 'title', params[:country_id]), :prompt => "Select country", :class=>'query-search-country-id select searchFilter'
+
+          %div.col-md-3
+            - if current_user.is_marketer?
+              %span.radio-select
+                = select_tag :rca_id, options_from_collection_for_select(DataGroupRca.order(:title), 'id', 'title', params[:rca_id]), :prompt => "Select RCA", :class=>'query-search-rca-id select searchFilter'
+
+          %div.col-md-3{:style=>'padding:0px'}
+            .col-md-6{:style=>'padding:0px'}
+              - if current_user.is_marketer?
+                %a.btn.btn-primary{:href => "#new_station", :title => "Add Station", "data-toggle"=>"modal"}
+                  %i.fa.fa-plus
+                  = "Add New Station"
+
+
+            .pull-right.station_pagination{:style=>'width:90px'}
+              .input-group
+                %input#page.pull-right{:style=>'padding:4px 8px 4px 8px;width:55px; font-family:"Open Sans";border-radius:4px;border:1px solid #eee;', :value=>1}
+                .input-group-btn
+                  %button.btn.btn-primary{:style=>'background:none;border:none'}
+                    %span
+                      = "of "
+                    %span#total_page
+                      = @total_page
+          %br
+          .clearfix
+          %div.slider_content
+            %div.slider-loading{:style=>'display:none'}
+            %span.prev#prev-slide
+            %span.next#next-slide
+            #inside_slider.animated.fadeIn
+  .row
+    .col-sm-2.pull-right
+      %a.btn.btn-primary.btn-small#pullStationBtn
+        Station Lists
+
+= render "new_station_modal"
+= render "station_page_modal"
+
+%br
+
+- if @station.present?
+  .row
+    .col-sm-1
+      %span.station_avatar
+        %span{:style=>"background: url(#{(@station.logo.exists? ? @station.logo.url(:xhdpi) : image_path('radio.png'))}) center center; background-size: 80px"}
+    .col-sm-11
+      %h2{:style => "color: #59B2E5"}
+        = @station.title
+        %small.pull-right
+          %a{:href=>"/new_settings?#{@return_params}"}
+            %i.fa.fa-arrow-circle-left
+            Go Back
+    .col-sm-8
+      .panel.panel-default.panel-phone
+        .panel-heading.backgroundColor.blue
+          = "Phone Numbers"
+
+          .pull-right.panel-heading-buttons
+            - if marketer?
+              - if @phone_numbers.present?
+                = link_to "#", class: "btn btn-sm btn-default open_delete", tip: "Delete Phone Number" do
+                  %i.fa.fa-wrench
+                = link_to "#", class: "btn btn-sm btn-default close_delete", tip: "Cancel" do
+                  %i.clip-close
+              = link_to "#new_phone", class: "btn btn-sm btn-default", tip: "Add phone number", data: {toggle: "modal"} do
+                %i.fa.fa-plus
+
+        .panel-body
+          - if @phone_numbers.present?
+            .row-fluid.phone_numbers
+              - @phone_numbers.each do |phone|
+                .col-lg-2.col-md-3.col-sm-3.col-xs-4{tip: phone.title}
+                  - if phone.desktop?
+                    %i.fa.fa-desktop
+                  - elsif phone.android?
+                    %i.fa.fa-android
+                  - else
+                    %i.fa.fa-phone
+                  = phone.did_e164
+            - if marketer?
+              .row-fluid.phone_form{style: 'display: none'}
+                = simple_form_for @station, url: manage_phones_data_gateway_path(@station), method: :post, html: {id: "manage_phones_form"} do |f|
+                  - @phone_numbers.each do |phone|
+                    .col-lg-2.col-sm-3{tip: phone.title}
+                      = check_box_tag 'selected_dids[]', phone.id, false, class: "icheck-me", data: {color: "blue", skin: "square"}
+                      %span.check_box_note
+                        - if phone.desktop?
+                          %i.fa.fa-desktop
+                        - elsif phone.android?
+                          %i.fa.fa-android
+                        - else
+                          %i.fa.fa-phone
+                        = phone.did_e164
+                  .row
+                    .col-sm-12.aright
+                      = f.submit "Delete", class: "btn btn-sm btn-primary", confirm: "Are you sure you want to delete these phone numbers?", data: {target: "manage_phones_form"}
+          - else
+            = render "shared/no_records", msg: "No phone numbers found."
+
+      .tabbable
+        %ul.nav.nav-tabs.tab-bricky.tab-blue.tab-padding.tab-space-3
+          %li{class: "#{ 'active' if flash[:hash].nil? || flash[:hash] == "extensions"}"}
+            = link_to "Extensions", "#extensions", data: {toggle: "tab"}
+          %li{class: "#{ 'active' if flash[:hash] == "prompts"}"}
+            = link_to "Prompts", "#prompts", data: {toggle: "tab"}
+          %li{class: "#{ 'active' if flash[:hash] == "information"}"}
+            = link_to "Station Information", "#information", data: {toggle: "tab"}
+          %li{class: "#{ 'active' if flash[:hash] == "scheduler"}"}
+            = link_to "Content Scheduler", "#scheduler", data: {toggle: "tab"}
+          - if marketer?
+            %li{class: "#{ 'active' if flash[:hash] == "notes"}"}
+              = link_to "Notes", "#notes", data: {toggle: "tab"}
+        .tab-content
+          .tab-pane#extensions{class: "#{ 'active' if flash[:hash].nil? || flash[:hash] == "extensions"}"}
+            = render "extensions"
+          .tab-pane#prompts{class: "#{ 'active' if flash[:hash] == "prompts"}"}
+            = render "prompts"
+          .tab-pane#information{class: "#{ 'active' if flash[:hash] == "information"}"}
+            = render "information"
+          - if marketer?
+            .tab-pane#notes{class: "#{ 'active' if flash[:hash] == "notes"}"}
+              = render "notes"
+          .tab-pane#scheduler{class: "#{ 'active' if flash[:hash] == "scheduler"}"}
+            = render "scheduler"
+
+    .col-sm-4
+      / = render "graphs"
+      .row
+        .col-sm-12
+          %div{:style => 'text-align: center'}
+            - unless current_user.is_broadcaster?
+              %h3 Request for Station Tools
+              %div.btn-group
+                %button.btn.btn-default{'data-toggle' => "modal",  'data-target' => "#mobileWidgetModal"}
+                  Mobile App
+                %a.btn.btn-default{'data-toggle' => "modal",  'data-target' => "#codeSnippetModal"}
+                  Widget Code Snippets
+              %br
+              %br
+            = link_to "See Station Statistics", new_report_index_path(station_id: @station), class: "btn btn-primary btn-sm", tip: "Click to go to reporting page"
+            - if current_user.is_marketer?
+              = link_to "Duplicate This Station", create_station_dup_path(@station.id), class: "btn btn-warning btn-sm", :style => 'margin-left: 10px', tip: "Create a duplicate of this stations", :confirm => 'Are you sure you want to duplicate this station?'
+            - if (current_user.is_rca? || current_user.is_marketer? ) && current_user.is_intercom_admin? && @user.present?
+              = link_to "#", class: "btn btn-primary btn-sm", :style => 'margin-left: 10px', id: "bubble", :tip => 'Send Message', :data => {:email => @user.email, :name => @user.title} do
+                %i.fa.fa-comments-o
+                Message Broadcaster
+      %br
+      = render "history"
+
+
+  = render "new_phone_modal"
+  = render "request_media_player_widget_modal", :station_tool => @station_tool
+  = render "request_mobile_widget"
+  = render "widget_snippet_code_modal"
+  = render  partial: "users/send_message"
+
+
+:javascript
+  $(document).ready(function(){
+    window.newsettings = new NewSettings()
+    window.station = new Station()
+    window.datagatewaynotes = new DataGatewayNotes()
+    $.validate();
+  });
+
+ 

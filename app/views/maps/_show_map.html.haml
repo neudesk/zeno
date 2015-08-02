@@ -1,0 +1,51 @@
+.row#map-holder
+  .col-sm-9
+    .panel.panel-default
+      .panel-heading
+        .fa.fa-map-marker
+        Map
+        .panel-tools
+          %a#reloadMap.btn-link.back-step{:href=>"#", :style => 'margin-right: 10px;'}
+            %i.fa.fa-refresh
+      .panel-body
+        %div#preloadOverlay.hide
+          %div
+            %img{:src => '/assets/loader.gif'}
+            Loading map...
+        %div{style: "width: 900px;"}
+        %div{:style=>"background:red;width: 890px;height: 400px; z-index: 9;position: absolute;opacity: 0;margin-left: 59px;"}
+        #map{:style =>  "width: 900px; height: 400px;"}
+          %div.page-header
+            %h1.center
+              No Data to Display Yet.
+  .col-sm-3
+    .row.map_info
+      .col-lg-12.col-md-12.col-sm-12.col-xs-4
+        %p#usagePercentage{:style => "color: #5a8fc2; font-size: 60px; margin: 0px; font-family: 'Raleway', sans-serif;"}
+          = @usage_percent.present? ? @usage_percent[:total_users] : ""
+        %p{:style => "padding-bottom: 25px; font-weight: bold;"}
+          = "Total Listeners"
+      
+      .col-lg-12.col-md-12.col-sm-12.col-xs-4
+        - if @usage_percent.present?
+          = easy_as_pie @usage_percent[:phone_percent], "<label>#{@usage_percent[:num_phone_users]}</label>".html_safe
+        %p
+          = "Phone Listeners"
+      .col-lg-12.col-md-12.col-sm-12.col-xs-4
+        - if @usage_percent.present?
+          = easy_as_pie @usage_percent[:widget_percent], @usage_percent[:num_widget_users]
+        %p
+          = "Media Player Listeners"      
+      .col-lg-12.col-md-12.col-sm-12.col-xs-4
+        - if @usage_percent.present?
+          = easy_as_pie @usage_percent[:app_percent], @usage_percent[:num_app_users]
+        %p
+          = "App Listeners"
+    
+:javascript
+$(document).ready(function() {
+  $('.chart').easyPieChart({
+    size: 65,
+    trackColor: "#A9A9A9"
+    });
+});

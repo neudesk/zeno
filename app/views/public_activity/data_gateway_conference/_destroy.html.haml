@@ -1,0 +1,20 @@
+deleted a extension
+- gateway = DataGateway.find(activity.parameters[:gateway_id]) rescue nil
+- if gateway
+  %span in
+  = link_to gateway.title, settings_station_path(gateway.id)
+%br
+%br
+= "Details: "
+- data_content = DataContent.find(activity.parameters[:content_id]) rescue nil
+- if data_content
+  %div{style: "margin-left: 10px;"}
+    = "Content Name: "
+    = link_to data_content.title, data_content_path(data_content), :remote => 'true'
+%div{style: "margin-left: 10px;"} 
+  = "Extension No: #{activity.parameters[:channel_no]}"
+%div{style: "margin-left: 10px;"}
+  - if activity.parameters[:media_url].present?
+    = "Media URL: #{cut_string(activity.parameters[:media_url])}"
+  -else
+    Media URL: None

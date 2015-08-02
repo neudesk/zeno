@@ -1,0 +1,52 @@
+%div.page-header
+  %h1
+    %i.fa.fa-question-circle
+    Pending Users
+%br
+.tabbable
+  %ul#myTab.nav.nav-tabs.tab-bricky.tab-blue.tab-padding.tab-space-3
+    %li.active
+      = link_to "Unprocessed", pending_users_path
+    %li
+<<<<<<< HEAD
+      = link_to "Processed", all_pending_users_path('q[s]' => 'date_processed asc')
+    -#%li
+    -#  = link_to "Auto Sign-ups", auto_signups_pending_users_path
+=======
+      = link_to "Processed", all_pending_users_path
+  .tab-content
+    .tab-pane.in.active
+      = render "list"
+
+= render "notes_modal"
+
+:javascript
+  $(document).ready(function(){
+    //$("#pendingUserTable").tablesorter();
+    $('body').on('click', '.addNoteSubmitter', function(event){
+      event.preventDefault();
+      form = $(this).attr('data-target');
+      data = $('#'+form).serialize();
+      tr_target = "tr_"+$('#'+form).find('input[name="puser_id"]').val();
+      console.log(tr_target);
+      $.ajax({
+        url : 'pending_users/note/update/',
+        type: 'post',
+        data: data,
+        async: false
+      }).done(function(dataresponse){
+        $('#addNotes').modal('hide');
+        $('.'+tr_target).attr('data-user', '{"puser_id" : "'+ dataresponse.puser_id +'", "status": "'+ dataresponse.status +'", "note": "'+ dataresponse.note +'"}');
+        classes = {'pending_info': 'label-success', 'pending_reply': 'label-warning', 'pending_services': 'label-default'}
+        $('.'+tr_target).find('td:first span').text(dataresponse.status.replace('_', ' ')).removeClass().addClass('label '+ classes[dataresponse.status]).attr('tip', dataresponse.note);
+        location.reload();
+      });
+    });
+    $('body').on('click', '.addNoteBtn', function(event){
+      event.preventDefault();
+      dataUser = JSON.parse($(this).parents('tr').attr('data-user'));
+      $('select.statusSelections').val(dataUser.status).trigger('change');
+      $('textarea[name="note"]').val(dataUser.note);
+      $('input[name="puser_id"]').val(dataUser.puser_id);
+    });
+  });

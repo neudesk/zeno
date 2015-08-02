@@ -1,0 +1,53 @@
+.row
+  .col-sm-6
+    %h3= "Current Top 3 Most Growth"
+    %table.table.table-striped.table-hover.table-bordered.table-with-labels
+      %thead
+        %tr
+          %th= "RCA"
+          %th.acenter=  "Last week"
+          %th.acenter=  "Current week"
+      %tbody
+        - if @result.present?
+          - @result.first(3).each do |res|
+            %tr
+              %td
+                - if params[:rca_id].present?
+                  = link_to res[0], reports_path(station_id: res[1])
+                - else
+                  = res[0]
+              %td.acenter
+                = res[2].present? ? format_decimal(res[2]) : 0
+              %td.acenter
+                = res[3].present? ? format_decimal(res[3]) : 0 
+                  
+  .col-sm-6
+    %h3= "Current Top 3 Most Drop"
+    %table.table.table-striped.table-hover.table-bordered.table-with-labels
+      %thead
+        %tr
+          %th= "RCA"
+          %th.acenter=  "Last week"
+          %th.acenter=  "Current week"
+      %tbody
+        - if @result.present?
+          - @result.last(3).sort{|a, b| b[3].to_i <=> a[3].to_i}.each do |res|
+            %tr
+              %td
+                - if params[:rca_id].present?
+                  = link_to res[0], reports_path(station_id: res[1])
+                - else
+                  = res[0]
+              %td.acenter
+                = res[2].present? ? format_decimal(res[2]) : 0
+              %td.acenter
+                = res[3].present? ? format_decimal(res[3]) : 0
+
+
+/ %div.left{:style=>"float:left;"}
+/   %p= "Current Top 3 Most Growth"
+/   =render :partial => "data_numerical_reports/top_3_minutes" ,:locals => {:result => @result.first(3)}
+/   %br
+/ %div.right{:style=>"float:left;"}
+/   %p{:class => "drop"}= "Current Top 3 Most Drop"
+/   =render :partial => "data_numerical_reports/top_3_minutes", :locals => {:result => @result.last(3).sort{|a, b| b[3].to_i <=> a[3].to_i}}

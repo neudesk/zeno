@@ -1,0 +1,83 @@
+%div.page-header
+  %h1
+    %i.fa.fa-clock-o
+    = "CLEC Minutes"
+
+%br
+.container
+  .row
+    .col-sm-12
+      %ul#clecTabs.nav.nav-tabs{role: 'tablist'}
+        %li{role: 'presentation'}
+          %a#home-tab{href: daily_clec_minutes_data_numerical_reports_path} Daily
+        %li.active{role: 'presentation'}
+          %a#weeks-tab{href: weekly_clec_minutes_data_numerical_reports_path} Weekly
+        %li{role: 'presentation'}
+          %a#months-tab{href: monthly_clec_minutes_data_numerical_reports_path} Monthly
+        %li.pull-right
+          =form_tag weekly_clec_minutes_data_numerical_reports_path, method: 'get', id: 'searchForm' do
+            = text_field_tag :query, params[:query], placeholder: 'Search CLEC'
+            = select_tag :per, options_for_select(['10', '20', '30'], params[:per])
+      .clearfix
+      %div#clecTabsContent.tab-content
+        #weeks.tab-pane.fade.in.active{role: 'tabpanel', 'aria-labelledby'=>'home-tab'}
+          %table.table.table-stripped
+            %thead
+              %tr
+                %th CLEC Provider
+                - @labels.reverse.each do |l|
+                  %th= l
+            %tbody
+              - @providers.each do |prov|
+                - week = prov[:data][:week].length > 0 ? prov[:data][:week][4].to_i.round() : 0
+                - week2 = prov[:data][:week2].length > 0 ? prov[:data][:week2][4].to_i.round() : 0
+                - week3 = prov[:data][:week3].length > 0 ? prov[:data][:week3][4].to_i.round() : 0
+                - week4 = prov[:data][:week4].length > 0 ? prov[:data][:week4][4].to_i.round() : 0
+                %tr
+                  %td= prov[:title]
+                  %td
+                    - if week4 > 0
+                      %label.label.label-info{style: 'width: 80px; display: block'}
+                        %i.fa.fa-arrow-up
+                        = week4
+                    - else
+                      %label.label.label-danger{style: 'width: 80px; display: block'}
+                        %i.fa.fa-arrow-down
+                        = week4
+                  %td
+                    - if week3 >= week4 and week3 != 0
+                      %label.label.label-info{style: 'width: 80px; display: block'}
+                        %i.fa.fa-arrow-up
+                        = week3
+                    - else
+                      %label.label.label-danger{style: 'width: 80px; display: block'}
+                        %i.fa.fa-arrow-down
+                        = week3
+                  %td
+                    - if week2 >= week3 and week2 != 0
+                      %label.label.label-info{style: 'width: 80px; display: block'}
+                        %i.fa.fa-arrow-up
+                        = week2
+                    - else
+                      %label.label.label-danger{style: 'width: 80px; display: block'}
+                        %i.fa.fa-arrow-down
+                        = week2
+                  %td
+                    - if week >= week2 and week != 0
+                      %label.label.label-info{style: 'width: 80px; display: block'}
+                        %i.fa.fa-arrow-up
+                        = week
+                    - else
+                      %label.label.label-danger{style: 'width: 80px; display: block'}
+                        %i.fa.fa-arrow-down
+                        = week
+
+          .pull-right
+            = paginate(@providers)
+          .clearfix
+
+- content_for :js do
+  :javascript
+    $(document).ready(function(){
+       window.ClecMinutes = new ClecMinutes()
+    });

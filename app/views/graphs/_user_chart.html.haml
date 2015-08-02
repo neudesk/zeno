@@ -1,0 +1,12 @@
+.loaded_user
+  .row
+    .col-sm-12
+      = form_tag("/graphs/user_chart?station_id=#{params[:station_id]}", remote: true, method: :get) do
+        .col-sm-8.pull-center
+          = select_tag :scope, options_for_select(["Today", "Yesterday", "7days", "30days", "90days"], params[:scope]), class: "select without_search change_user_chart"
+  #user_graph{data: {labels: labels, values: values}}
+  %br
+.row#loader.loading_user
+  .col-sm-12.acenter
+    = image_tag("loader.gif") 
+    = "Just a moment"

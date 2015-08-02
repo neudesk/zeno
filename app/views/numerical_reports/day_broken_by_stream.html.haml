@@ -1,0 +1,47 @@
+.slider
+  = render "shared/slides"
+%h1{:style=>"text-align:center;color:gray;"} Numericals Reports
+.row.top-listeners
+  %h1.page_heading Station by day broken down by stream
+  .standard.no-borders
+    = form_tag day_broken_by_stream_numerical_reports_path, :method => :get do |f|
+      .pull-left
+        .sec_con
+          %label.pull-left Name of Station
+          %p.pull-left
+            %span.radio-select= select_tag :gateway_id, options_for_select([["All", ""]] + @gateways, params[:gateway_id] || "" )
+        .sec_con
+          %label.pull-left Week
+          %p.pull-left
+            %span.radio-select= select_tag :week, options_for_select([["All", ""]] + get_list_weeks_of_current_year, params[:week] || DateTime.now.cweek)
+      .pull-left
+        .sec_con
+          %label.pull-left Stream
+          %p.pull-left
+            %span.radio-select= select_tag :stream, options_for_select([["All", ""]] + @streams, params[:stream] || "")
+        .sec_con
+          %label.pull-left Items per page
+          %p.pull-left= text_field_tag :per_page, params[:per_page] || 10
+      .pull-left{:style => "margin-top:34px;"}
+        = submit_tag "Generate Report", :style => "padding: 10px;margin-left:20px", :class => "btn"
+    %table.table.table-striped.table-hover.pretty
+      %thead
+        %tr
+          %th.date{:style => "width:60px"}= sortable "date", "Date"
+          /%th.time.align-center{:style => "width:60px"}= sortable "time", "Time"
+          %th.minute.align-center{:style => "width:150px"}= sortable "minutes", "Listeners Minutes"
+          %th.name{:style => "width:150px"}= sortable "listener", "Name of Listener"
+          %th{:style => "width:100px"}= sortable "stream", "Stream"
+          %th.number.align-center{:style => "width:150px"}= sortable "anis", "Numbers"
+          %th.provider{:style => "width:150px"}= sortable "carriers", "Carriers"
+      %tbody
+        - @reports.each do |report|
+          %tr
+            %td= report.date.to_date.strftime("%B %d")
+            /%td.align-center= report.date.to_datetime.strftime("%H:%M %P")
+            %td.align-center= (report.minutes.to_f/60).round(2)
+            %td= report.listener
+            %td= report.stream
+            %td.align-center= report.anis
+            %td= report.carriers
+    = paginate @reports

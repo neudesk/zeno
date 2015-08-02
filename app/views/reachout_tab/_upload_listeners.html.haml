@@ -1,0 +1,8 @@
+= hidden_field_tag 'file_data_result_length', @file_data_result_length
+- if @file_data_result.present?
+  -@file_data_result.last(3000).each do |res|
+    %li{:id => res.to_s}
+      %span.label.label-info.phone_number
+        =res.to_s
+        %a{:class => "reachout_tab_phone_delete btn btn-xs", :data =>{:val => res.to_s}, :style => "color: #fff" }
+          %i.fa.fa-trash-o

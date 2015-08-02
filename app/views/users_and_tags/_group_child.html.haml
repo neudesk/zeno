@@ -1,0 +1,21 @@
+.child-part
+	%table{:class => "child-table"}
+		%tr{:class => "child-header"}
+			-for g in 0..4
+				%td{:class => "child-data"}=""
+		- row_numbers = data.size/5
+		- row_numbers += 1 if data.size%5 != 0
+		- for row in 0..row_numbers - 1
+			%tr{:class => "child-row"}
+				- index = (row == 0) ? 0 : row * 5 
+				- row_data = data.slice(index,5)
+				- for j in 0..4
+					%td{:class => "child-data"}
+						- if row_data[j]
+							%label.pull-left.title-name.left-20
+								= check_box_tag("is_exist", "#{row_data[j][:id]}", row_data[j][:group_id] == group, :class => "top-2")
+								= row_data[j][:title]
+						- else
+							=""
+		%tr{:class => "child-row"}
+			%td{:class => "child-data"}= link_to "Assign", "#", :class => "btn pull-left left-20 bottom-8 assign-data", :data_group => group

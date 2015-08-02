@@ -1,0 +1,33 @@
+
+= "Updated user with user email "
+= link_to activity.trackable_title, user_path(activity.parameters[:user_id])
+%strong{style: 'margin: 10px 0 10px 0; display: block'} Fields updated:
+%div{style: 'padding-left: 20px'}
+  %ul
+    - if activity.parameters[:old_group] != activity.parameters[:new_group]
+      %li
+        - key = activity.parameters[:role]
+        - past = activity.parameters[:old_group]
+        - current = activity.parameters[:new_group]
+        %strong= "#{key} : "
+        - if past.nil? or past == ''
+          = "assigned to group #{current}"
+        - else
+          = "re assigned from #{past} "
+          %strong to
+          = " #{current} "
+    - activity.parameters[:changed].each do |value|
+      - if value[:new_state].present?
+        - if value[:old_state] != value[:new_state]
+          %li
+            - unless value[:new_state] == ''
+              - if value[:field] == 'encrypted_password'
+                %strong= "User Password"
+              - else
+                %strong= "#{value[:field]} : "
+                - if value[:old_state].nil? or value[:old_state] == ''
+                  = "updated value to #{value[:new_state]}"
+                - else
+                  = "updated value from #{value[:old_state]} "
+                  %strong to
+                  = " #{value[:new_state]} "

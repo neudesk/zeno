@@ -1,0 +1,98 @@
+%ul.nav.navbar-nav{style: 'width: 100%'}
+  %li{class: "#{'active' if request.path == "/"}"}
+    = link_to "Dashboard", root_url
+  - unless thirdparty?
+    - if marketer?
+      %li{:class => params[:controller] == "new_settings" ? "active" : ""}
+        = link_to "Settings", class: "dropdown-toggle", data: { close_others: true, hover: "dropdown", toggle: "dropdown" } do
+          Settings
+          %i.fa.fa-angle-down
+        %ul.dropdown-menu
+          %li
+            = link_to "New Settings",  new_settings_path
+          %li
+            = link_to "Redirect DID Rules",  data_carrier_rule_index_path
+          / %li
+          /   = link_to "User Group Tagging", data_group_path
+          %li
+            = link_to "Bulk Tagging", data_group_path
+    - else
+      %li{class: "#{'active' if params[:controller] == 'new_settings'} "}
+        = link_to "Settings", new_settings_path
+  %li{class: "#{ 'active' if ['graphs', 'reports', 'data_numerical_reports'].include?(params[:controller])}"}
+    = link_to "#", class: "dropdown-toggle", data: { close_others: true, hover: "dropdown", toggle: "dropdown" } do
+      Reporting
+      %i.fa.fa-angle-down
+    %ul.dropdown-menu
+      %li{class: "#{'active' if params[:controller] == 'graph'} "}
+        = link_to "Graphs", new_graph_new_report_index_path
+      %li{class: "#{'active' if params[:controller] == 'reports'} "}
+        = link_to "Reports", new_report_index_path
+      - if marketer?
+        %li.divider
+        %li{class: "#{'active' if params[:action] == 'rca_minutes_minutes'} "}
+          = link_to "RCA minutes", new_rca_minutes_new_report_index_path
+        %li{class: "#{'active' if params[:action] == 'country_minutes_minutes'} "}
+          = link_to "Country minutes", new_country_minutes_new_report_index_path
+        %li{class: "#{'active' if params[:action] == 'country_users'} "}
+          = link_to "Country Users", new_country_users_new_report_index_path
+
+  - if reachout_tab_is_active
+    %li{class: "#{'active' if %w{reachout_tab reachout_tab_settings}.include? params[:controller]}"}
+      = link_to "#", class: "dropdown-toggle", data: { close_others: true, hover: "dropdown", toggle: "dropdown" } do
+        Reachout
+        %i.fa.fa-angle-down
+      %ul.dropdown-menu
+        %li{class: "#{'active' if params[:action] == 'top_listeners'} "}
+          = link_to "Reachout", reachout_tab_index_path
+        - if current_user.is_marketer?
+          %li{class: "#{'active' if params[:action] == 'top_listeners'} "}
+            = link_to "Reachout Settings", reachout_tab_settings_path
+        - if reachout_tab_is_active
+          %li{class: "#{'active' if params[:controller] == 'campaign_results'} "}
+            = link_to "Campaign Statistics", new_campaign_results_path
+        - if current_user.is_marketer?
+          %li{class: "#{'active' if params[:controller] == 'mapping_rules'} "}
+            = link_to "ANI Mapping Rules", mapping_rules_index_path
+  - if marketer?
+    %li{class: "#{'active' if params[:controller] == 'trackings'} "}
+      = link_to "Tracking", users_trackings_path
+
+  - unless thirdparty? or broadcaster?
+    %li{class: "#{'active' if params[:controller] == 'search'} "}
+      = link_to "Search", search_content_search_path
+
+  - if marketer?
+    %li{class: "#{'active' if %w{system_variables users my_account pending_users}.include? params[:controller] }"}
+      = link_to "#", class: "dropdown-toggle", data: { close_others: true, hover: "dropdown", toggle: "dropdown" } do
+        Account
+        %i.fa.fa-angle-down
+      %ul.dropdown-menu
+        %li{class: "#{'active' if params[:action] == 'my_account'} "}
+          = link_to "My Account", my_account_path
+        %li{class: "#{'active' if params[:action] == 'users_account'} "}
+          = link_to "Users Account", users_account_users_path
+        %li{class: "#{'active' if params[:controller] == 'pending_users'} "}
+          = link_to "Pending Users", pending_users_path
+        %li{class: "#{'active' if request.path == system_variables_path} "}
+          = link_to "System Variables", system_variables_path
+  - elsif rca?
+    %li{class: "#{'active' if %w{system_variables users my_account pending_users}.include? params[:controller] }"}
+      = link_to "#", class: "dropdown-toggle", data: { close_others: true, hover: "dropdown", toggle: "dropdown" } do
+        Account
+        %i.fa.fa-angle-down
+      %ul.dropdown-menu
+        %li{class: "#{'active' if %w{my_account edit_account}.include? params[:action]} "}
+          = link_to "My Account", my_account_path
+        %li{class: "#{'active' if params[:action] == 'users_account'} "}
+          = link_to "Users Account", users_account_users_path
+  - else
+    %li{class: "#{'active' if %w{my_account edit_account}.include? params[:action]} "}
+      = link_to "My Account", my_account_path
+  %li.clock.pull-right
+    %a.pull-left= "All times shown are in GMT -4"
+    %i.clip-clock.pull-left
+    %a.pull-left
+      %span.hours= "--"
+      %span.seconds= ":"
+      %span.minutes= "--"

@@ -1,0 +1,11 @@
+.row
+  - if objects.present?
+    = form_tag("/mass_updates/save_data_groups?group_id=#{group.id}&group_class=#{group_class}", remote: true) do |f|
+      - objects.each do |obj|
+        .col-sm-1
+          = check_box_tag "data_groups[]", obj.id, selected.include?(obj.id), class: "icheck-me", data: {color: "blue", skin: "square"}
+        .col-sm-5.data_groups_boxes
+          = obj.title
+  - else
+    .col-sm-12
+      = render "shared/no_records", msg: "No records found."

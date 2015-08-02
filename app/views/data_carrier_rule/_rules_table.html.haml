@@ -1,0 +1,62 @@
+.panel.panel-default
+  .panel-heading
+    %i.clip-grid-3
+    = "Rules"
+    .pull-right
+      #searchCarrierBox{style: 'margin-top: -7px'}
+        = form_tag data_carrier_rule_index_path, method: :get do
+          = text_field_tag :q, params[:q], placeholder: 'Search'
+          %button.btn.btn-default.btn-sm{type: 'submit'}
+            %i.fa.fa-search
+          %a.btn.btn-default.btn-sm{href: data_carrier_rule_index_path}
+            %i.fa.fa-refresh
+  .panel-body
+    %table.table.table-stripped.table-hover{style: 'width: 100%'}
+      %thead
+        %tr
+          %th= check_box_tag "all_items[]"
+          %th Station
+          %th CLEC Providers
+          %th Reroute CLEC
+          %th Carrier
+          %th Prompt
+          %th{style: 'width: 130px'} Hang up after play
+          %th{style: 'width: 130px'} Active          
+          %th{style: 'min-width: 150px'} Actions
+      %tbody
+        - @rules.each do |rule|
+          %tr
+            %td= check_box_tag "items[]"
+            %td
+              = link_to '#', tip: rule.data_gateway.title do
+                = "#{rule.id} - #{truncate(rule.data_gateway.title)}"
+            %td= rule.data_entryway_provider.title
+            %td= rule.new_data_entryway_provider.try(:title)
+            %td= rule.data_parent_carrier.try(:title)
+            %td
+              = link_to prompts_mp3_audio_path(rule.data_gateway_prompt.id), class: 'playWavBtn', tip: rule.data_gateway_prompt.title do
+                %i.fa.fa-music
+                = truncate(rule.data_gateway_prompt.title)
+            %td
+              - if rule.hangup_after_play
+                %span.label.label-info
+                  Yes
+              - else
+                %span.label.label-danger
+                  No
+            %td
+              - if rule.is_enabled
+                %span.label.label-info
+                  Yes
+              - else
+                %span.label.label-success
+                  No                          
+            %td
+              = link_to '#', class: 'btn btn-info btn-xs editRule', style: 'margin-right: 5px', data: {toggle: "modal", target: "#editRuleModal", object: {rule: rule.to_json, prompts: rule.data_gateway.data_gateway_prompts.to_json}} do
+                %i.fa.fa-pencil
+                Edit
+              = link_to data_carrier_rule_path(rule.id), method: :delete, confirm: 'Are you sure want to delete this rule?', class: 'btn btn-danger btn-xs' do
+                %i.fa.fa-trash-o
+                Delete
+    .pull-right
+      = paginate(@rules)    

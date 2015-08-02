@@ -1,0 +1,102 @@
+.loaded
+  = simple_form_for @station, url: update_station_data_gateway_path(@station.id), multipart: true, method: :put, remote: :true do |f|
+    .row
+      .col-sm-3
+        %label.control-label.required Station Name
+        = f.input :title, label: false, input_html: { class: "form-control"}
+        %label.select.optional.control-label
+          - brd = User.joins(:data_group_broadcasts => [:data_gateways]).where("data_gateway.id = #{@station.id}")
+          - if brd.present? and current_user.is_marketer?
+            = link_to user_path(brd.first.id), :style => 'color: rgb(85, 86, 88);' do
+              = "Broadcaster "
+              %i.fa.fa-search
+          - else
+            = "Broadcaster"
+        = f.input :broadcast_id, label: false, as: :select, collection: DataGroupBroadcast.order("trim(title)").collect { |x| [x.title, x.id]}, disabled: broadcaster?
+        -if !current_user.is_broadcaster?
+          = f.label :flag_broadcaster, label: "Broadcaster?"
+          = f.check_box :flag_broadcaster, :class=> "icheck-me", data: {color: "blue", skin: "square"}
+      .col-sm-3
+        %label.select.optional.control-label
+          - rca = User.joins(:data_group_rcas => [:data_gateways]).where("data_gateway.id = #{@station.id}")
+          - if rca.present? and current_user.is_marketer?
+            = link_to user_path(rca.first.id), :style => 'color: rgb(85, 86, 88);' do
+              = "RCA "
+              %i.fa.fa-search
+          - else
+            = "RCA"
+        = f.input :rca_id, as: :select, label: false, collection: DataGroupRca.all.collect { |x| [x.title, x.id] }, disabled: broadcaster?, input_html: {class: 'verify_value'}
+        %label.select.optional.control-label
+          - if rca.present? and current_user.is_marketer?
+            = link_to user_path(rca.first.id), :style => 'color: rgb(85, 86, 88);' do
+              = "ACA"
+              %i.fa.fa-search
+          - else
+            = "ACA"
+        = f.input :rca_monitor_id, as: :select, label: false, collection: DataGroupRca.all.collect { |x| [x.title, x.id] }, disabled: marketer? ? false : true, input_html: {class: 'verify_value'}
+        = f.input :website, label: "Website", input_html: { class: "form-control"}
+      .col-sm-3
+        - if !@phone_numbers.nil?
+          = f.input :data_entryway_id, label: 'Main DID', as: :select, collection: @phone_numbers.collect { |x| [x.did_e164, x.id]}
+        = f.input :country_id, as: :select, label: "Country", collection: DataGroupCountry.all.collect { |x| [x.title, x.id] }
+        = f.input :language_id, as: :select, collection: DataGroupLanguage.all.collect { |x| [x.title, x.id]}
+      .col-sm-3
+        %div.fileinput.fileinput-new{:data => {:provides => "fileinput"}, :style => 'position: relative;'}
+          %div.fileinput-preview.thumbnail{:data => {:trigger => "fileinput"}, :style => "width: 80px; height: 70px;"}
+            - if @station.logo.present?
+              %img{:src => "#{(@station.logo.exists? ? @station.logo.url(:xhdpi) : image_path('radio.png'))}"}
+          - if @station.logo.present?
+            = link_to data_delete_gateway_logo_path(@station.id), :class => 'btn btn-default btn-sm', :confirm => 'Are you sure you want to delete current station logo?' do
+              %i.fa.fa-trash-o
+          %div
+            %span.btn.btn-default.btn-file
+              %span.fileinput-new Select image
+              %span.fileinput-exists Change
+              %input{:type => "file", :name => "data_gateway[logo]"}
+            %a.btn.btn-default.fileinput-exists{:href => '#', :data => {:dismiss => "fileinput"}} Remove
+          %div
+            %small
+              Note: Logo width and height must be in 1x1 inch or 96x96 pixels dimensions.
+    %br
+    .row
+      .col-sm-12
+        %table.table.table-hover
+          %thead
+            %tr
+              %th= "Station Name"
+              %th
+                = "Language"
+              %th
+                = "Genre"
+              %th
+                = "Country"
+          %tbody
+            - idx = 1
+            = f.fields_for :data_gateway_conferences do |ff|
+              %tr{class: "#{ idx % 2 == 0 ? 'even' : 'odd' }"}
+                = ff.fields_for :content do |fff|
+                  %td
+                    = "#{idx}. #{fff.object.title}"
+                  %td
+                    = fff.input :language_id, label: false, as: :select, collection: DataGroupLanguage.all.collect{ |x| [x.title, x.id]}
+                  %td
+                    = fff.input :genre_id, label: false, as: :select, collection: DataGroupGenre.all.collect{ |x| [x.title, x.id]}
+                  %td
+                    = fff.input :country_id, label: false, as: :select, collection: DataGroupCountry.all.collect{ |x| [x.title, x.id]}
+                  - if idx == 1
+                    - if fff.object.broadcast_id.nil? && @brd_has_no_content
+                      %td{style: 'background: #fff; border: 0; padding-top: 20px; width: 150px;'}
+                        %label{style: 'color: #54b273; font-weight: bold'}
+                          %input{name: 'set_zeno_brd_id', type: 'checkbox', value: false, class: 'icheck-me', data: {color: "blue", skin: "square", brdid: @station.broadcast_id, contentid: fff.object.id}}
+                          ZenoLive access
+                  - idx = idx + 1
+    .row
+      .col-sm-12
+        .pull-right
+          = f.submit "Save", class: "btn btn-green confirmSubmit"
+          - if current_user.is_marketer?
+            = link_to "Delete Station", data_gateway_path(@station), :method => :delete, remote: false, :class => "btn btn-danger", :confirm => "Are you sure you want to delete #{@station.title} station ?"
+
+.loading
+  = render "shared/loading"
+

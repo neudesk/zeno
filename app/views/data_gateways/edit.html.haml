@@ -1,0 +1,43 @@
+.data_gateways.new_data_gateway
+  .row
+    %h1.page_heading Edit Station
+    .standard
+      = form_for(@station) do |f|
+        .clearfix
+          .clearfix
+            = f.label :title, :class => "title_label pull-left more-margin-right"
+            = f.text_field :title, :class => "title_field pull-left", :required => true
+          .clearfix
+            = f.label :country, :class => "country_label pull-left more-margin-right"
+            = f.select :country_id, options_from_collection_for_select(DataGroupCountry.order(:title), 'id', 'title', @station.country_id)
+          .clearfix
+            = f.label :language, :class => "language_label pull-left more-margin-right"
+            = f.select :language_id, options_from_collection_for_select(DataGroupLanguage.all, 'id', 'title', @station.language_id)
+          .clearfix
+            = f.label :broadcast, :class => "broad_cast_label pull-left more-margin-right"
+            = f.select :broadcast_id, options_from_collection_for_select(DataGroupBroadcast.order("trim(title)"), 'id', 'title', @station.broadcast_id), :include_blank => true
+          .clearfix
+            = f.label :rca, :class => "rca_label pull-left more-margin-right"
+            = f.select :rca_id, options_from_collection_for_select(DataGroupRca.order("trim(title)"), 'id', 'title', @station.rca_id), :include_blank => true
+          .clearfix
+            = f.label :website, :class => "rca_label pull-left more-margin-right"
+            = f.text_field :website, :class => "title_field pull-left"
+          .clearfix
+            = f.label :logo, :class => "rca_label pull-left more-margin-right"
+            = f.file_field :logo, :class => "pull-left"
+
+          - if @station.logo.exists?
+            .clearfix{"style" => "padding-top: 10px"}
+              = f.label :logo, 'Current Logo', :class => "rca_label pull-left more-margin-right"
+              .logo_small= image_tag @station.logo(:thumb), alt: @station.title, title: @station.title
+
+          .clearfix
+            = f.label :flag_broadcaster, 'Broadcaster?', :class => "rca_label pull-left more-margin-right"
+            = f.check_box :flag_broadcaster
+          .clearfix
+            = f.label :data_entryway, 'Main DID (phone number)', :class => "broad_cast_label pull-left more-margin-right"
+            = f.select :data_entryway_id, options_from_collection_for_select(@entryways, 'id', 'did_e164', @station.data_entryway_id), :include_blank => true
+    
+              
+        .save_region.clearfix
+          = f.submit("Save", :class => "btn", style: "padding: 10px 20px")

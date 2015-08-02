@@ -1,0 +1,36 @@
+.row.listeners
+  .number_of_listeners_section.clearfix
+    .pull-left NUMBERS OF LISTENERS
+    .pull-right{:style => "padding-right: 55px"}= @total
+  %table.table.table-striped.table-hover.listeners_table
+    %thead.blue-head
+      %tr
+        %th Station
+        %th Channel
+        - if current_user.is_thirdparty?
+          %th DID
+        %th Extension
+        %th.pull-right{:style => "margin-right: 40px"} Listeners
+
+    %tbody
+      - @listener_entryways.each do |station|
+        %tr        
+          %td= station.station_name
+          %td= station.channel
+          - if current_user.is_thirdparty?
+            %td= station.did
+          %td= station.extension
+          %td.text-right{style: "padding-right: 70px;text-align: right;"}= station.listeners
+  = paginate  @paginate_listeners, :params => {:controller => 'home', :action => 'index'}
+
+  -if (!params[:sort].present? || params[:sort] == "DESC") && @listener_entryways.length >= 10
+    .pagination
+      %ul
+        %li
+          %a{:href => "/?sort=ASC" }= "Sort Stations A - Z"
+  -elsif params[:sort].present? && params[:sort] == "ASC" && @listener_entryways.length >= 10
+    .pagination
+      %ul
+        %li
+          %a{:href => "/?sort=DESC" }= "Sort Stations Z - A"
+  

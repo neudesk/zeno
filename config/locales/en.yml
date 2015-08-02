@@ -1,0 +1,64 @@
+# Sample localization file for English. Add more files in this directory for other locales.
+# See https://github.com/svenfuchs/rails-i18n/tree/master/rails%2Flocale for starting points.
+
+en:
+  titles:
+    pages:
+      labels:
+        station_name: "Station name"
+        all: "All"
+      visual_reports:
+        labels:
+          visual_reports: "Visual Reports"
+          highlight: "A. Highlights"
+          total_listeners: "Total Listeners"
+          total_minutes: "Total Minutes"
+          best_day: "Best Day"
+      extentions:
+        labels:
+          content: "Content"
+          tag: "Tag"
+          country: "Country"
+      settings:
+        labels:
+          extentions: "Extensions"
+          prompts: "Prompts"
+          tags: "Tags"
+
+      users_and_tags:
+        labels:
+          data_group: "Data Group"
+          tag: "Tag"
+          country: "Country"
+
+  activerecord:
+    errors:
+      models:
+        data_group_rca:
+          attributes:
+            title:
+              blank: "RCA group title can't be blank"
+        data_group_broadcast:
+          attributes:
+            title:
+              blank: "Broadcast group title can't be blank"
+        data_group3rdparty:
+          attributes:
+            title:
+              blank: "Third party group title can't be blank"
+        user:
+          attributes:
+            email:
+              blank: "Please register your email"
+              taken: "This email has been used"
+              invalid: 'Your email is incorrect'
+            password:
+              blank: "Please register your password"
+              confirmation: "Passwords are not consistent"
+              too_short: 'Password is too short (minimum is 8 characters)'
+            password_confirmation:
+              blank: "Please specify password confirmation"
+            role:
+              blank: "Please assign a role"
+            group:
+              blank: "Please assign a group"

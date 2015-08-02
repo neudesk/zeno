@@ -1,0 +1,33 @@
+= hidden_field_tag "start_call_time", @start
+= hidden_field_tag "stop_call_time", @stop
+- if current_user.stations.length > 1
+  = render "shared/slider"
+.row
+- if params[:gateway_id].present? || @gateway_id.present?
+  - @gateway_id = params[:gateway_id].present? ? params[:gateway_id] : @gateway_id
+  %div.col-md-12.page-header{:style => 'margin: 40px 0 0 0'}
+    %div{:id => "current_station"}
+      - current_station = DataGateway.find(@gateway_id)
+      %span.pull-left
+        - logo = '/assets/radio.png'
+        - if current_station.logo.url(:xhdpi) != '/logos/xhdpi/missing.png'
+          - logo = current_station.logo.url(:xhdpi)
+        %span{:style => "background: url(#{logo}) center center no-repeat; background-size: 80px;"}
+      %h2.pull-left
+        = current_station.title
+      %div.clearfix
+  -if @campaigns.present?
+    %div.row
+      %div.col-md-12
+        %div{:class => ("campaign_box" if !params[:page].present?)}
+          = render :partial => "/reachout_tab/campaigns"
+  %div.row
+    %div.col-md-6.col-md-offset-3
+      = render "reachout_tab_form_wizard" 
+  %br
+- content_for :js do
+  :javascript
+    $(document).ready(function(){
+       window.ReachoutTab = new ReachoutTab()
+    });
+

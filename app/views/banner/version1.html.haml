@@ -1,0 +1,17 @@
+.container{style: "background: url('#{hostname}/embed/ghana_flag_01.jpg'); background-repeat: 'no-repeat'"}
+  .row-fluid
+    .col-xs-12
+      .contents
+        %p Listen to
+        %p.title= "GHANA RADIO"
+        %p.subtitle= "ON YOUR PHONE"
+        %p More than 40 stations to choose from
+        %div.buttons
+          %a.bookmark{href: "#"}
+            %img{src: "#{hostname}/embed/bookmark3.png"}
+            %a.phonebook{href: "tel:7124322380"}
+              %img{src: "#{hostname}/embed/phonebook1.png"}
+              %a.download_quickplay{href: "#{hostname}/download?secret_code='#{SymmetricEncryption.encrypt(1)}'"}
+                %img{src: "#{hostname}/embed/quickplay1.jpg"}
+      .player
+        %script#radio_script{"data-autoplay" => "1", "data-did" => "17001000190", "data-background_image" => "transparent", "data-display_name" => "Ghana Radio Now", "data-display_number" => "(712) 432-2380", "data-height" => "150", "data-width" => "100%", src: "#{hostname}/embed/inject.js", type: "text/javascript"}

@@ -1,0 +1,54 @@
+.row
+  .col-sm-12
+    = simple_form_for @station, url: update_prompt_data_gateway_path(@station.id) do |f|
+      .row
+        .col-sm-6
+          = f.input :ivr_welcome_prompt_id, as: :select, label: "Welcome Prompt", collection: @prompts.collect { |x| [x.title, x.id]}
+          = f.check_box :ivr_welcome_enabled, class: "icheck-me", data: {color: "blue", skin: "square"}
+          = f.label :ivr_welcome_enabled, label: "Welcome Prompt Enabled"
+        .col-sm-6
+          = f.input :ivr_extension_ask_prompt_id, as: :select, label: "Ask Extension", collection: @prompts.collect { |x| [x.title, x.id]}
+      .row
+        .col-sm-12
+          %button.btn.btn-success{type: 'submit'} Save
+  %br
+.row
+  .col-sm-12
+    .pull-right.h3-button
+      = link_to "#new_prompt", class: "btn btn-sm btn-default", tip: "Add new prompt", data: {toggle: "modal"} do
+        %i.fa.fa-plus
+    %h3= "Existing Prompts"
+    - if @prompts.present?
+      %table.table.table-striped.table-hover
+        %thead
+          %tr
+            %th{style: "width: 10px"}
+            %th= "Title"
+            %th= "Size (KB)"
+            %th= "Duration(s)"
+            %th
+            %th
+        %tbody
+          - @prompts.each do |prompt|
+            %tr
+              %td
+                = link_to prompts_mp3_audio_path(prompt.id), class: "jp_prompt_play", target: "_blank" do 
+                  %i.clip-youtube
+              %td= prompt.title
+              %td= prompt.media_kb
+              %td= prompt.media_seconds
+              %td.aright
+                = link_to download_prompt_path(id: prompt), method: :get, class: "btn btn-primary btn-sm " do
+                  Download
+              %td.aright
+                = link_to prompt_path(prompt, {data_gateway_id: @station}), method: :delete, confirm: "Are you sure you want to remove this prompt?", class: "btn btn-sm btn-danger" do
+                  = "Delete"
+    - else
+      = render "shared/no_records", msg: "No prompts found."
+= render "new_settings/new_prompt_modal"
+
+
+
+
+
+

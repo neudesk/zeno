@@ -1,0 +1,23 @@
+%div.page-header
+  %h1
+    %i.fa.fa-clock-o
+    = "Country Minutes"
+%br
+.tabbable
+  %ul.nav.nav-tabs.tab-bricky.tab-blue.tab-padding.tab-space-3
+    %li{class: "#{ 'active' if params[:type] == 'percentage' || params[:type].nil? }"} 
+      = link_to "Percentage", country_minutes_data_numerical_reports_path(country_id: params[:country_id], type: "percentage")
+    %li{class: "#{'active' if params[:type] == 'minutes'}"}
+      = link_to "Minutes", country_minutes_data_numerical_reports_path(country_id: params[:country_id], type: "minutes")
+    %li{class: "#{'active' if params[:type] == 'users'}"}
+      = link_to "Users", country_minutes_data_numerical_reports_path(country_id: params[:country_id], type: "users")
+  .tab-content
+    - if params[:type] == "minutes"
+      .tab-pane.active
+        = render "minutes_country"
+    - elsif params[:type] == "users"
+      .tab-pane.active
+        = render "users_country"
+    - else
+      .tab-pane.active
+        = render "percentage_country"

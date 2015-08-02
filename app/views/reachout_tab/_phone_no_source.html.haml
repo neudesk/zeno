@@ -1,0 +1,84 @@
+%div.col-md-7
+  .panel.panel-default
+    .panel-heading
+      .fa.fa-phone
+      Phone
+      .panel-tools
+        %a.btn-link
+          = @last_called.present? ? "Last Called - " + @last_called.schedule_start_date.strftime("%Y-%m-%d").to_s : "Last Called - None"
+        %a.btn-link
+          = " | "
+        %a.btn-link{"data-toggle" => "modal", "data-target" => "#uploadPhoneListModal"}
+          %i.fa.fa-upload
+          Upload Phone List
+        %a.btn-link
+          = " | "
+        = link_to "<i class='fa fa-trash-o'></i> Remove phone numbers".html_safe, reachout_tab_destroy_uploaded_phones_path(@gateway_id), :method => :delete, :data => { confirm: 'Are you sure?' }, :class => "btn-link"
+        %a.btn-link
+          = " | "
+        %a.btn-link{"data-toggle" => "modal", "data-target" => "#add_phone"}
+          %i.fa.fa-plus
+          = "Add Phone Number"
+        %a.btn-link
+          = " | "
+        %a.btn.btn-xs.btn-link.panel-collapse.collapses{:href=>"#"}
+    .panel-body
+      %div.phone_no
+        #campaigns.phones
+          %div.search_phone_number
+            %div.input-group
+              = number_field_tag "reachout_tab_phone_txt_search",nil, :maxlength => 11, :placeholder => "Search", :class => 'form-control'
+              %span.input-group-btn
+                %a{:class => "btn btn-default", :id => "btn_search_no"}="Search"
+            %br
+          %div{:class => "phone_list_loader", :style => "float:left;margin-left:10px;margin-top:7px;display:none;"}
+            %img{:alt=>"Loader", :src=>"/assets/ajax/loader.gif"}
+          %ul{:style => "height: 50px;overflow-y: scroll;", :class => "reachout_tab_phone_list", :id => "phone_num_list"}
+            - @uploaded_listeners.last(3000).each do |listeners|
+              %li{:id => listeners.ani_e164.to_s}
+                %span.label.label-info.phone_number
+                  =listeners.ani_e164.to_s
+                  %a{:class => "reachout_tab_phone_delete btn btn-xs", :data =>{:val => listeners.ani_e164.to_s}, :style => "color: #fff" }
+                    %i.fa.fa-trash-o
+
+%div.modal.fade{:id => "add_phone", :tabindex => "-1", :role => "dialog", "aria-labelledby" => "myModalLabel", "aria-hidden"=>"true"}
+  %div.modal-dialog
+    %div.modal-content
+      %div.modal-header
+        %button.close{:type => " button", "data-dismiss" => "modal"}
+          %span{"aria-hidden=" => "true"}
+            = "&times;".html_safe
+          %span.sr-only
+            = "Close"
+        %h4.modal-title{:id => "myModalLabel"}
+          = "Modal title"
+      %div.modal-body
+        %div.add_phone_number
+          %div.input-group
+            = number_field_tag "reachout_tab_phone_txt_phone",nil, :maxlength => 11, :placeholder => "Phone ex: 11234567891", :class => 'form-control'
+            %span.input-group-btn
+              %a{:class => "btn btn-default", :id => "add_phone_no"}="Add phone number"
+          %span{:class => "error_msg", :style => "color:red"}
+
+%div.modal.fade{:id => "uploadPhoneListModal", :tabindex => "-1", :role => "dialog", "aria-labelledby" => "uploadPhoneListModalLabel", "aria-hidden" => "true"}
+  %div.modal-dialog
+    %div.modal-content
+      %div.modal-header
+        %button.close{:type => "button", "data-dismiss" => "modal"}
+          %span{"aria-hidden" => "true"}
+            = "&times;".html_safe
+          %span.sr-only
+            = "Close"
+        %h4.modal-title{:id => "myModalLabel"}
+          = "Upload Phone List"
+      %div.modal-body
+        = form_tag({:action => 'upload_listeners'}, :id =>"upload_phone_form",:html => { :multipart => true }, :remote => true) do |f|
+          %div.form
+            = hidden_field_tag 'gateway_id', @gateway_id
+            %p Upload Phone List
+            = file_field 'upload', 'datafile'
+            %span
+              = "Note: Please upload 40,000 max phone numbers at a time."
+      %div.modal-footer
+        %button.btn.btn-default{:type => "button", "data-dismiss" => "modal"}
+          = "Cancel"

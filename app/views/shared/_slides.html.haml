@@ -1,0 +1,36 @@
+.row.slides.margin-top-0
+  = form_tag  "", method: :post, :class => 'search_form' do
+    = hidden_field_tag 'gateway_id'
+    = hidden_field_tag 'controller_name'
+    = hidden_field_tag  'current_page',(params[:current_page].nil? ? 1 :params[:current_page])
+    %p.search
+      %div.col-md-3
+        %div.input-group.input-group-sm.queryfield
+          = text_field_tag :query, params[:query], :class => "input-large search-query form-control", placeholder: "Enter your search here and enter"
+          .input-group-btn
+            %input.btn.btn-primary{:type => 'submit', :value => 'Search', :id => 'searchStation'}
+      %div.col-md-3
+        %span.radio-select
+          = select_tag :country_id, options_from_collection_for_select(DataGroupCountry.get_tagged_countries_on_user(current_user).order(:title), 'id', 'title', params[:country_id]), :prompt => "Select country"
+      %div.col-md-3
+        - if current_user.is_marketer?
+          %span.radio-select
+            = select_tag :rca_id, options_from_collection_for_select(DataGroupRca.order(:title), 'id', 'title', params[:rca_id]), :prompt => "Select RCA"
+      %div.col-md-3
+        %a.btn.btn-info.link{:href => controller_name, :title => "All Stations", :id => 'showAll'}
+          %i.fa.fa-list-alt
+          = "All Stations"
+
+%div.slider_content
+  %div.slider-loading{:style => "display: none;"}
+  %span{:class => 'prev'}
+  %div.inside_slider{:style=>'min-height:336px'}
+    %div{:class => "slides carousel", :id => "gateway_search"}
+  %span{:class => 'next'} 
+- content_for :js do
+  :javascript
+    $(document).ready(function(){
+      window.slider = new Slider()
+    });
+
+

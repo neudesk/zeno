@@ -1,0 +1,51 @@
+%div.row{:id => 'stationList', :style => "#{params[:gateway_id].present? ? 'display: none' : ''}"}
+  %div.col-md-12{:id => 'SlideContainer'}
+    %div
+      .row.slides.slider-group-search.margin-top-0
+        %div.col-md-3
+          %div.input-group
+            = text_field_tag :query, params[:query], :class => "form-control searchFilter", :style=>'border-top-left-radius: 4px !important;border-bottom-left-radius: 4px !important;padding-left:12px;font-family:"Open Sans"', placeholder: "Enter your search here.."
+            .input-group-btn
+              %input.btn.btn-primary{:type => 'submit', :value => 'Search', :id => 'searchStation'}
+
+        %div.col-md-3
+          %span.radio-select
+            = select_tag :country_id, options_from_collection_for_select(DataGroupCountry.get_tagged_countries_on_user(current_user).order(:title), 'id', 'title', params[:country_id]), :prompt => "Select country", :class=>'query-search-country-id select searchFilter'
+
+        %div.col-md-3
+          - if current_user.is_marketer?
+            %span.radio-select
+              = select_tag :rca_id, options_from_collection_for_select(DataGroupRca.order(:title), 'id', 'title', params[:rca_id]), :prompt => "Select RCA", :class=>'query-search-rca-id select searchFilter'
+
+        %div.col-md-3{:style=>'padding:0px'}
+          - if current_user.is_marketer?
+            .col-md-6{:style=>'padding:0px'}
+              %a.btn.btn-primary{:href => "#new_station", :title => "Add Station", "data-toggle"=>"modal"}
+                %i.fa.fa-plus
+                = "Add New Station"
+
+
+          .pull-right.station_pagination{:style=>'width:90px'}
+            .input-group
+              %input#page.pull-right{:style=>'padding:4px 8px 4px 8px;width:55px; font-family:"Open Sans";border-radius:4px;border:1px solid #eee;', :value=>1}
+              .input-group-btn
+                %button.btn.btn-primary{:style=>'background:none;border:none'}
+                  %span
+                    = "of "
+                  %span#total_page
+        %br
+        .clearfix
+        %div.slider_content
+          %div.slider-loading{:style=>'display:none'}
+          %span.prev#prev-slide
+          %span.next#next-slide
+          #inside_slider.animated.fadeIn
+
+= render "new_station_modal"
+= render "station_page_modal"
+
+- content_for :js do
+  :javascript
+    $(document).ready(function(){
+      window.newsettings = new NewSettings()
+    });

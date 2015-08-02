@@ -1,0 +1,24 @@
+/ Main hero unit for a primary marketing message or call to action
+/ For slides
+
+.extensions.extensions_section.clearfix
+  .row.listeners
+    .extentions.data-tagging.tabs
+      %ul.nav.nav-tabs
+      .collapsible-content
+        - if current_user.is_marketer?
+          .collapsible-content-menu.content.default-tab.active-tab
+            %a.icon-chevron-down{:href => "#", "data-station-id" => @station_id, "data-country-id" => params[:country_id], "data-query" => params[:query], "data-rca-id" => params[:rca_id], "data-slider-search-enabled" => params[:slider_search_enabled]}= I18n.t("titles.pages.extentions.labels.content").pluralize
+        .content-tabs.tabs-content
+          .data= render "content"
+      - if current_user.is_marketer?
+        .collapsible-content
+          .collapsible-content-menu.data-group
+            %a.icon-chevron-right{:href => "#"}= I18n.t("titles.pages.users_and_tags.labels.data_group").pluralize
+          .data-groups-tabs.tabs-content.hide
+            .data
+        .collapsible-content
+          .collapsible-content-menu.tagging
+            %a.icon-chevron-right{:href => "#"}= I18n.t("titles.pages.users_and_tags.labels.tag").pluralize
+          .data-tags-tabs.tabs-content.hide
+            .data

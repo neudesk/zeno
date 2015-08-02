@@ -1,0 +1,46 @@
+%div.modal.fade{:id => "add_phone", :tabindex => "-1", :role => "dialog", "aria-labelledby" => "myModalLabel", "aria-hidden"=>"true"}
+  %div.modal-dialog
+    %div.modal-content
+      %div.modal-header
+        %button.close{:type => " button", "data-dismiss" => "modal"}
+          %span{"aria-hidden=" => "true"}
+            = "&times;".html_safe
+          %span.sr-only
+            = "Close"
+        %h4.modal-title{:id => "myModalLabel"}
+          = "Add Phone Number"
+      %div.modal-body
+        %div.add_phone_number
+          %div.input-group
+            = number_field_tag "reachout_tab_phone_txt_phone",nil, :maxlength => 11, :placeholder => "Phone ex: 11234567891", :class => 'form-control'
+            %span.input-group-btn
+              %a{:class => "btn btn-default", :id => "add_phone_no"}="Add phone number"
+          %span{:class => "error_msg", :style => "color:red"}
+
+%div.modal.fade{:id => "uploadPhoneListModal", :tabindex => "-1", :role => "dialog", "aria-labelledby" => "uploadPhoneListModalLabel", "aria-hidden" => "true"}
+  %div.modal-dialog
+    %div.modal-content
+      %div.modal-header
+        %button.close{:type => "button", "data-dismiss" => "modal"}
+          %span{"aria-hidden" => "true"}
+            = "&times;".html_safe
+          %span.sr-only
+            = "Close"
+        %h4.modal-title{:id => "myModalLabel"}
+          = "Upload Phone List"
+        %div.modal-body
+          %div.form
+            = form_tag({:action => 'upload_listeners'}, :style => "float:left", :id =>"upload_phone_form",:html => { :multipart => true }, :remote => true) do |f|
+              = hidden_field_tag 'gateway_id', @gateway_id
+              = file_field 'upload', 'datafile'
+              %br
+              %hr
+              %button{:class => "btn btn-primary", :id => "btn_upload"}="Upload"
+              %button.btn.btn-default{:type=>"button", "data-dismiss"=>"modal"}="Cancel"
+            %div{:class=>"progress progress-striped progress-info active show_popover uploadPreloader", :style => "width:250px;"}
+              %div{:id=>"bar", :class=>"bar", :style=>"width: 0%; background: #5BC0DE; height: 20px;"}
+            %div{:style =>"clear:both;"}
+            %sub Note: Please upload 40,000 max phone numbers at a time
+          %br
+          %div{:style =>"clear:both;"}
+

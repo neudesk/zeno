@@ -1,0 +1,10 @@
+%h1.page_heading.clearfix Sessions
+%br
+= render "total_calls_graph"
+
+
+- content_for :js do
+  :javascript
+    $(document).ready(function(){
+      window.Session = new Session()
+    });

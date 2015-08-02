@@ -1,0 +1,97 @@
+%div{:style => 'width: 1000px; margin: 0 auto'}
+  %div
+    %img{:src => 'http://dashboard.zenoradio.com/assets/layout/logo-be4b2a8b2ab82d4c488885a228700684.png'}
+  %br
+  %br
+  %div
+    = "Hello <strong>#{@content[:rca]}</strong>, ".html_safe
+    %br
+    %br
+    %p
+      = "User <strong>#{@content[:from].email}</strong> is requesting a #{@content[:player_data].tool_type == 'media_player' ? '<strong>Media Player Widget</strong>' : '<strong>Mobile App</strong>'}.".html_safe
+    - if @content[:player_data].tool_type == 'media_player'
+      %h4
+        Media Player Widget Specifications
+      %table{:style => 'border: 1px solid #cccccc;'}
+        %thead
+          %tr
+            %th{:style => 'background: #686868; color: #ffffff;border: 1px solid #ddd;'}
+              Media Player Type
+            %th{:style => 'background: #686868; color: #ffffff;border: 1px solid #ddd;'}
+              Media Player Channeling
+            %th{:style => 'background: #686868; color: #ffffff;border: 1px solid #ddd;'}
+              Displayed Station Name
+            %th{:style => 'background: #686868; color: #ffffff;border: 1px solid #ddd;'}
+              Displayed Phone #
+            - if @content[:player_data].is_customized?
+              %th{:style => 'background: #686868; color: #ffffff;border: 1px solid #ddd;'}
+                Is Auto Play?
+              - if @content[:player_data].is_auto_play?
+                %th{:style => 'background: #686868; color: #ffffff;border: 1px solid #ddd;'}
+                  Channel To Play Auto
+              %th{:style => 'background: #686868; color: #ffffff;border: 1px solid #ddd;'}
+                Player Width
+              %th{:style => 'background: #686868; color: #ffffff;border: 1px solid #ddd;'}
+                Player Height
+              %th{:style => 'background: #686868; color: #ffffff;border: 1px solid #ddd;'}
+                Volume Percentage
+              %th{:style => 'background: #686868; color: #ffffff;border: 1px solid #ddd;'}
+                Additional Info
+        %tbody
+          %tr
+            %td{:style => 'border: 1px solid #cccccc;'}
+              - if @content[:player_data].is_customized?
+                = "Customized"
+              - else
+                = "Default"
+            %td{:style => 'border: 1px solid #cccccc;'}
+              = @content[:player_data].channeling_type
+            %td{:style => 'border: 1px solid #cccccc;'}
+              = @content[:player_data].station_name
+            %td{:style => 'border: 1px solid #cccccc;'}
+              = @content[:player_data].phone_number_display
+            - if @content[:player_data].is_customized?
+              %td{:style => 'border: 1px solid #cccccc;'}
+                = @content[:player_data].is_auto_play
+              - if @content[:player_data].is_auto_play?
+                %td{:style => 'border: 1px solid #cccccc;'}
+                  - if @content[:player_data].channel_to_auto_play?
+                    = "Yes"
+                  - else
+                    = "No"
+              %td{:style => 'border: 1px solid #cccccc;'}
+                = @content[:player_data].player_width
+              %td{:style => 'border: 1px solid #cccccc;'}
+                = @content[:player_data].player_height
+              %td{:style => 'border: 1px solid #cccccc;'}
+                = @content[:player_data].player_volume
+              %td{:style => 'border: 1px solid #cccccc;'}
+                = @content[:player_data].additional_info
+    - if @content[:player_data].tool_type == 'mobile_app'
+      %h4
+        Mobile App Specifications
+      %table{:style => 'border: 1px solid #cccccc;'}
+        %thead
+          %tr
+            %th{:style => 'background: #686868; color: #ffffff;border: 1px solid #ddd;'}
+              Station Name Display
+            %th{:style => 'background: #686868; color: #ffffff;border: 1px solid #ddd;'}
+              Station Description
+            %th{:style => 'background: #686868; color: #ffffff;border: 1px solid #ddd;'}
+              Station DID
+            %th{:style => 'background: #686868; color: #ffffff;border: 1px solid #ddd;'}
+              Station Website
+            %th{:style => 'background: #686868; color: #ffffff;border: 1px solid #ddd;'}
+              Station Tagline
+        %tbody
+          %tr
+            %td{:style => 'border: 1px solid #cccccc;'}
+              = @content[:player_data].station_name
+            %td{:style => 'border: 1px solid #cccccc;'}
+              = @content[:player_data].station_description
+            %td{:style => 'border: 1px solid #cccccc;'}
+              = @content[:player_data].did
+            %td{:style => 'border: 1px solid #cccccc;'}
+              = @content[:player_data].station_website
+            %td{:style => 'border: 1px solid #cccccc;'}
+              = @content[:player_data].tagline

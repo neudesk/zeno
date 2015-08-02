@@ -1,0 +1,85 @@
+// Place all the styles related to the tracking controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+.tracking {
+  .chart-content{
+    margin-top: 10px;
+  }
+}
+
+.tracking.tracking_stations {
+  .generate_report_section {
+
+    height: 90px;
+    margin-bottom: 5px;
+
+    .station_input_section {
+      padding-left: 50px;
+    }
+    .time_input_section {
+      padding-left: 50px;
+
+    }
+
+    .generate_button_section {
+      padding-left: 50px;
+      input {
+        width: 206px;
+      }
+
+    }
+  }
+
+}
+
+
+.tracking.tracking_did {
+  .generate_report_section {
+
+    height: 90px;
+    margin-bottom: 5px;
+
+    .did_input_section {
+      padding-left: 50px;
+    }
+    .time_input_section {
+      padding-left: 50px;
+
+    }
+
+    .generate_button_section {
+      padding-left: 50px;
+      input {
+        width: 206px;
+      }
+
+    }
+  }
+
+}
+
+
+.tracking.tracking_country {
+  .generate_report_section {
+
+    height: 90px;
+    margin-bottom: 5px;
+
+    .country_input_section {
+      padding-left: 50px;
+    }
+    .time_input_section {
+      padding-left: 50px;
+
+    }
+
+    .generate_button_section {
+      padding-left: 50px;
+      input {
+        width: 206px;
+      }
+
+    }
+  }
+
+}

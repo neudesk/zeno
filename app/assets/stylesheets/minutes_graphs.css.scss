@@ -1,0 +1,199 @@
+/* ---------------------------------------------------------------------- */
+/*	Flot Chart
+/* ---------------------------------------------------------------------- */
+.flot-container {
+  box-sizing: border-box;
+  position: relative;
+  height: 450px;
+}
+.flot-placeholder {
+  height: 100%;
+  font-size: 14px;
+  line-height: 1.2em;
+  width: 100%;
+}
+.legend table {
+  border-spacing: 5px;
+}
+.flot-container #choices {
+  position: absolute;
+  width: 135px;
+  right: 0;
+  top: 0;
+}
+#placeholder2 {
+  margin-right: 135px;
+}
+.flot-small-container {
+  height: 300px;
+}
+.flot-mini-container {
+  height: 135px;
+}
+.flot-medium-container {
+  height: 360px;
+}
+/* ---------------------------------------------------------------------- */
+/*	Panels and panel elements
+/* ---------------------------------------------------------------------- */
+.panel-default > .panel-heading {
+  background-color: #F5F5F5;
+  border-color: #DDDDDD;
+  color: #333333;
+}
+.panel-heading {
+  background-color: #F5F4F9;
+  background-image: linear-gradient(to bottom, #F5F4F9 0%, #ECEAF3 100%);
+  background-repeat: repeat-x;
+  border-bottom: 1px solid #CDCDCD;
+  border-radius: 6px 6px 0 0;
+  box-shadow: 0 1px 0 #FFFFFF inset;
+  height: 36px;
+  padding-left: 40px;
+  position: relative;
+}
+.panel-heading > [class^="fa-"], .panel-heading > [class*=" fa-"], .panel-heading > [class^="icon-"], .panel-heading > [class*=" icon-"], .panel-heading > [class^="clip-"], .panel-heading > [class*=" clip-"] {
+  border-right: 1px solid #CDCDCD;
+  box-shadow: 1px 0 0 0 #FFFFFF;
+  opacity: 0.7;
+  padding: 12px 10px 8px;
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 36px;
+}
+.panel-white {
+  box-shadow: none;
+}
+.panel-white .panel-heading {
+  background-color: #ffffff;
+  background-image: none;
+  border-bottom: 1px solid #CDCDCD;
+  border-radius: 6px 6px 0 0;
+  box-shadow: none;
+  height: 36px;
+  padding-left: 40px;
+  position: relative;
+}
+.panel-white .panel-heading > [class^="fa-"], .panel-white .panel-heading > [class*=" fa-"], .panel-white .panel-heading > [class^="icon-"], .panel-white .panel-heading > [class*=" icon-"], .panel-white .panel-heading > [class^="clip-"], .panel-white .panel-heading > [class*=" clip-"] {
+  border-right: 1px solid #CDCDCD;
+  box-shadow: none;
+  opacity: 0.7;
+  padding: 12px 10px 8px;
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 36px;
+}
+.panel-box {
+  background: #FAFAFA;
+  border: 1px solid #CDCDCD;
+  border-radius: 6px 6px 6px 6px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  clear: both;
+  margin-bottom: 16px;
+  margin-top: 16px;
+  position: relative;
+}
+.panel.panel-full-screen {
+  height: 100%;
+  left: 0;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 9998;
+}
+.panel-scroll {
+  position: relative;
+  margin: 10px;
+  padding: 0px;
+  width: auto;
+  height: 400px;
+  overflow: hidden;
+}
+/* ---------------------------------------------------------------------- */
+/*	Panel Tools
+/* ---------------------------------------------------------------------- */
+.panel-tools {
+  position: absolute;
+  right: 5px;
+  top: 8px;
+}
+.panel-tools .btn-link {
+  color: #0480BE;
+}
+.panel-tools .btn-link:hover {
+  color: #036392;
+}
+.panel-tools .btn-link {
+  color: #57A957;
+}
+.panel-tools .btn-link:hover {
+  color: #417E41;
+}
+.panel-tools .btn-link {
+  color: #C43C35;
+}
+.panel-tools .btn-link:hover {
+  color: #972E28;
+}
+.panel-tools .btn-link {
+  color: #333333;
+}
+.panel-tools .btn-link:hover {
+  color: #000000;
+}
+.panel-tools .btn-link:focus, .panel-tools .btn-link:hover, .panel-tools .btn-link:active {
+  text-decoration: none;
+  outline: 0 !important;
+}
+.panel-tools .btn.expand:before {
+  content: "\f077";
+  display: inline;
+  float: right;
+  font-family: FontAwesome;
+  font-weight: 300;
+  height: auto;
+  text-shadow: none;
+}
+.panel-tools .btn.collapses:before {
+  content: "\f078";
+  display: inline;
+  float: right;
+  font-family: FontAwesome;
+  font-weight: 300;
+  height: auto;
+  text-shadow: none;
+}
+.panel-tools .btn {
+  border-style: none;
+}
+.panel-tools .btn-link {
+  color: #666666;
+}
+.panel-tools .btn-link:hover {
+  color: #333333;
+}
+
+#choices input[type="checkbox"], #daily_choices input[type="checkbox"]
+{
+  float:left;
+  margin-right: 3px;
+}
+.home_page .tab-content
+{
+  padding: 5px !important;
+}
+.flot-medium-container
+{
+  position: relative;
+}
+#choices, #daily_choices
+{
+  width: 100%;
+}
+#choices label, #daily_choices label{
+  color: #525050;
+  text-align: left;
+  margin-left: 35px;
+}

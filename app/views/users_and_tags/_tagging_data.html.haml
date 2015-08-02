@@ -1,0 +1,6 @@
+#data-detail.clearfix
+	- @tagging_data.each do |c|
+		.group.bottom-15{:id => c.id, :class => "clearfix"}
+			.first.expand-data.tagging-data{:id => c.id, :class => "width-ck pull-left right-10"}= link_to "", "#", :class => "icon-chevron-down"
+			.second{:class => "pull-left"}= c.title
+		.child.clearfix{:id => "child_#{c.id}"}

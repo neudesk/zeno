@@ -1,0 +1,47 @@
+%div.panel.panel-default
+  %div.panel-heading
+    .fa.fa-gears
+    Opt-In List
+  %div.panel-body
+    %p{:class => "opt_in_list_length"}= "Opt-In List Length : " + @opt_in_list_length.to_s
+    %div.search_phone_number.input-group.input-group-sm
+      %input.form-control{:type => "text", :id => "txt_search_opt_in",:placeholder => "Search"}
+      %span.input-group-btn
+        %a{:class => "btn btn-primary", :id => "btn_search_opt_in"}="Search"
+    %br
+    %ul{:style => "height: 50px;overflow-y: scroll;", :class => "opt_in_list"}
+      -@opt_in_list.each do |opt_in|
+        %li{:id => opt_in.id, :style=>'display: inline-block; margin: 2px;'}
+          %span.label.label-info.phone_number
+            =opt_in.ani_e164
+            %a{:href=>'#', :class => "phone_delete_opt_in btn btn-xs", :data =>{:val => opt_in.id.to_s}, :style => "color: #fff" }
+              %i.fa.fa-trash-o
+    %div.btn-group
+      %a.btn.btn-default.btn-xs{"data-toggle"=>"modal", "data-target"=>"#uploadOptModal"}
+        %i.fa.fa-save
+        Upload OPT file
+      %a.btn.btn-default.btn-xs{"data-toggle"=>"modal", "data-target"=>"#addPhoneModal"}
+        %i.fa.fa-plus
+        ="Add phone number"
+      =link_to "<i class='fa fa-trash-o'></i>Remove all phone numbers".html_safe, destroy_uploaded_phones_opt_in_settings_path(), :method => :delete, :data => { confirm: 'Are you sure?' }, :class => "btn btn-default btn-xs"
+
+%div.modal.fade{:id=>"addPhoneModal", :tabindex=>"-1", :role=>"dialog", "aria-labelledby"=>"myModalLabel", "aria-hidden"=>"true"}
+  %div.modal-dialog
+    %div.modal-content
+      %div.modal-header
+        %button.close{:type=>"button", "data-dismiss"=>"modal"}
+          %span{"aria-hidden"=>"true"}
+            = "&times;".html_safe
+          %span.sr-only
+            Close
+        %h4.modal-title{:id=>"myModalLabel"}
+          Modal title
+      %div.modal-body
+        %div.add_phone_number
+          %input{:type => "text", :id => "txt_phone_opt_in",:placeholder => "Phone ex: +11234567891"}
+      %div.modal-footer
+        %button.btn.btn-default{:type=>"button", "data-dismiss"=>"modal"}
+          = "Cancel"
+        %a{:class => "btn btn-primary", :id => "add_phone_opt_in"}="Add phone number"
+
+= render :partial => "upload_opt_in_file"

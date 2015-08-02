@@ -1,0 +1,106 @@
+%table.table.table-striped.table-bordered
+  %thead
+    %th= "Station Name"
+    %th= "Created by"
+    %th.acenter= "Date Created"
+    %th.acenter= "Schedule"
+    %th.acenter Call progress
+    %th.acenter Status
+    %th
+  %tbody
+    - campaigns.each do |campaign|
+      - stats = campaign.statistics
+      - @rca = User.find(campaign.created_by).permission_level
+      - if current_user.is_marketer?
+        %tr.campaing_table_row{:class => cycle('odd', 'even'), :data => {:id => campaign.id, :status => campaign.status == 1 ? "Active" : "Inactive"}}
+          %td
+            = campaign.data_gateway.try(:title)
+          %td
+            = campaign.creator.try(:title)
+          %td.acenter.date-size
+            = html_datetime(campaign.created_at.localtime)
+          %td.acenter.date-size
+            = html_datetime(campaign.schedule_start_date)
+          %td.acenter
+            .progress{style: "width: 100%; margin: 0px", class: "progress_#{campaign.id}"}
+              .progress-bar.progress-bar-danger{style: "width: #{stats["na_percent"].to_s}%", tip: "Total Leads: #{stats["total_all"].to_s} \n No Answer: #{stats["na"].to_s}"}
+              .progress-bar.progress-bar-warning{style: "width: #{stats["pu_percent"].to_s}%", tip: "Total Leads: #{stats["total_all"].to_s} \n Dialed but Call Disconected: #{stats["pu"].to_s} "}
+              .progress-bar.progress-bar-success{style: "width: #{stats["pm_percent"].to_s}%", tip: "Total Leads: #{stats["total_all"].to_s} \n Played Message: #{stats["pm"].to_s} "}
+          
+          %td.acenter
+            %p{:class => "status_#{campaign.id}"}
+            = display_status(campaign.status)
+          %td.action-buttons-3
+            .btn-group
+              %a.btn.btn-primary.dropdown-toggle{:data => {:toggle => "dropdown"}}
+                Actions
+                %span.caret
+              %ul.dropdown-menu{:role => "menu"}
+                %li{:role => "presentation"}
+                  = link_to view_campaign_result_path(campaign), tip: "View Campaign", class: 'campaignActionView' do
+                    %i.fa.fa-share
+                    View
+                %li{:role => "presentation"}
+                  = link_to edit_campaign_result_path(campaign, gateway_id: campaign.data_gateway.try(&:id)), remote: true, tip: "Edit Campaign" do
+                    %i.fa.fa-edit
+                    Edit
+                %li{:role => "presentation"}
+                  = link_to download_phone_lists_path(campaign), tip: "Download Campaign Phone List" do
+                    %i.fa.fa-download
+                    Download
+                %li{:role => "presentation"}
+                  = link_to reachout_tab_index_path(:gateway_id => campaign.gateway_id, :campaign_id => campaign.id), tip: "Re-Send Campaign for not called listeners",  :class => "resend_camapign" do
+                    %i.fa.fa-mail-reply
+                    Re-Send Campaign    
+                %li.divider{:role => "presentation"}
+                %li{:role => "presentation"}
+                  = link_to campaign_result_path(campaign), tip: "Delete Campaign", method: :delete, confirm: "Are you sure you want to delete this campaign?" do
+                    %i.fa.fa-times
+                    Delete
+      - elsif @rca == "Admin" or campaign.created_by == current_user.id or @rca != "Rca"
+      
+        %tr.campaing_table_row{:class => cycle('odd', 'even'), :data => {:id => campaign.id, :status => campaign.status == 1 ? "Active" : "Inactive"}}
+          %td
+            = campaign.data_gateway.try(:title)
+          %td
+            = campaign.creator.try(:title)
+          %td.acenter.date-size
+            = html_datetime(campaign.created_at - 4.hours)
+          %td.acenter.date-size
+            = html_datetime(campaign.schedule_start_date)
+          %td.acenter
+            .progress{style: "width: 100%; margin: 0px", class: "progress_#{campaign.id}"}
+              .progress-bar.progress-bar-danger{style: "width: #{stats["na_percent"].to_s}%", tip: "Total Leads: #{stats["total_all"].to_s} \n No Answer: #{stats["na"].to_s}"}
+              .progress-bar.progress-bar-warning{style: "width: #{stats["pu_percent"].to_s}%", tip: "Total Leads: #{stats["total_all"].to_s} \n Dialed but Call Disconected: #{stats["pu"].to_s} "}
+              .progress-bar.progress-bar-success{style: "width: #{stats["pm_percent"].to_s}%", tip: "Total Leads: #{stats["total_all"].to_s} \n Played Message: #{stats["pm"].to_s} "}
+          %td.acenter
+            %p{:class => "status_#{campaign.id}"}
+            = display_status(campaign.status)
+          %td.acenter.action-buttons-3
+            .btn-group
+              %a.btn.btn-primary.dropdown-toggle{:data => {:toggle => "dropdown"}}
+                Actions
+                %span.caret
+              %ul.dropdown-menu{:role => "menu"}
+                %li{:role => "presentation"}
+                  = link_to view_campaign_result_path(campaign), remote: true, tip: "View Campaign", class: 'campaignActionView' do
+                    %i.fa.fa-share
+                    View
+                - if current_user.is_marketer? or current_user.is_rca?
+                  %li{:role => "presentation"}
+                    = link_to edit_campaign_result_path(campaign, gateway_id: campaign.data_gateway.try(&:id)), remote: true, tip: "Edit Campaign" do
+                      %i.fa.fa-edit
+                      Edit
+                - if current_user.is_marketer?
+                  %li{:role => "presentation"}
+                    = link_to download_phone_lists_path(campaign), tip: "Download Campaign Phone List", :class => "resend_camapign" do
+                      %i.fa.fa-download
+                      Download
+                %li.divider{:role => "presentation"}
+                %li{:role => "presentation"}
+                  = link_to campaign_result_path(campaign), tip: "Delete Campaign", method: :delete, confirm: "Are you sure you want to delete this campaign?" do
+                    %i.fa.fa-times
+                    Delete
+.pull-right
+  = paginate campaigns, remote: true
+#edit_campaign_modal.modal

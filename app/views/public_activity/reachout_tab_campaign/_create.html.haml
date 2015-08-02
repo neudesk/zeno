@@ -1,0 +1,15 @@
+= "Created a new campaign for gateway "
+= DataGateway.find_by_id(activity.parameters[:gateway_id]).title rescue '(Deleted).'
+%br
+%br
+Details:
+%ul{style: 'padding: 10px'}
+	%li
+		Campaign id:
+		= activity.parameters[:id]
+	%li
+		Scheduled Start Date:
+		= activity.parameters[:start]
+	%li
+		Listener Type:
+		= activity.parameters[:type]

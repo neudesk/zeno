@@ -1,0 +1,69 @@
+.my_radio.station
+  .row
+    - if @station
+      .standard
+        = simple_nested_form_for(@station, :url => my_radio_station_path(:id => @station), :remote => true) do |f|
+          %div.row
+            %div.station
+              - if current_user.is_marketer?
+                .station_name{style: "margin:0px"} Station Name
+                = f.input :title, label: false
+              - else
+                %h3{style: "margin:0px"}= @station.title
+            %div.broadcaster
+              .broadcast.clearfix
+                .broadcaster_title.pull-left= "Broadcaster: "
+                .pull-left{style: "padding: 10px 0px 10px 10px; font-size: 16px; width: 155px"}= @station.try(:data_group_broadcast).try(:title) || "N/A"
+            %div.country
+              .country_title= "Country"
+              .country_name
+                %span.radio-select= f.select :country_id, options_from_collection_for_select(DataGroupCountry.order(:title), 'id', 'title', @station.data_group_country.try(:id))
+          %div.row
+            - if current_user.is_marketer?            
+              %div.tags_rca
+                .tags_rca_container
+                  .tags_rca_title.pull-left= "RCA: "
+                  %span.radio-select.small-select.pull-left= f.select :rca_id, options_from_collection_for_select(DataGroupRca.order("trim(title)"), 'id', 'title', @station.rca_id), :include_blank => true
+            .span4.text-left
+              .tags_rca_title.pull-left= "Website: "
+              = f.text_field :website, :class => 'large'
+          %div.row
+            .current-logo
+              .tags_rca_title.pull-left= "Logo: "
+              = f.file_field :logo, :class => 'large'
+
+              - if @station.logo.exists?
+                .logo_small= image_tag @station.logo(:thumb), alt: @station.title, title: @station.title 
+
+          .contents
+            - @extensions.each_with_index do |extension, index|              
+              .fields
+                .content                  
+                  .content_name                    
+                    %span= "#{extension.extension}. #{extension.title}"
+                  .hr_line
+                  %div.station_tags
+                    %div.language
+                      .language_title= "Language"
+                      .language_name
+                        %span.radio-select= select_tag("data_gateway[data_contents_attributes][#{index}][language_id]", options_from_collection_for_select(@languages, 'id', 'title', extension.language_id), :include_blank => true)
+                        .new_language_section
+                          .fields{style: "display: none;"}
+                            = text_field_tag "data_gateway[data_contents_attributes][#{index}][data_group_language_attributes][title]"                         
+                            %p.remove_new_language_btn
+                              = hidden_field_tag "data_gateway[data_contents_attributes][#{index}][data_group_language_attributes][_destroy]", 1
+                              %a.hidden.remove_nested_fields{:href=>"javascript:void(0)"} Remove a language                            
+                    %div.genre
+                      .genre_title= "Genre"
+                      .gerne_name
+                        %span.radio-select= select_tag("data_gateway[data_contents_attributes][#{index}][genre_id]", options_from_collection_for_select(@genres, 'id', 'title', extension.genre_id), :include_blank => true)
+                    %div.country
+                      .country_title= "Country"
+                      .country_name
+                        %span.radio-select= select_tag("data_gateway[data_contents_attributes][#{index}][country_id]", options_from_collection_for_select(@countries, 'id', 'title', extension.country_id), :include_blank => true)
+                = hidden_field_tag "data_gateway[data_contents_attributes][#{index}][id]", extension.id
+          .save_region.clearfix
+            = f.submit("Save", :class => "btn", style: "padding: 10px 30px")
+    - else
+      %div.no-message No selected station available!
+

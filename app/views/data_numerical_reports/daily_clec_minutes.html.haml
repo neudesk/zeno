@@ -1,0 +1,96 @@
+%div.page-header
+  %h1
+    %i.fa.fa-clock-o
+    = "CLEC Minutes"
+
+%br
+.container
+  .row
+    .col-sm-12
+      %ul#clecTabs.nav.nav-tabs{role: 'tablist'}
+        %li.active{role: 'presentation'}
+          %a#home-tab{href: daily_clec_minutes_data_numerical_reports_path} Daily
+        %li{role: 'presentation'}
+          %a#weeks-tab{href: weekly_clec_minutes_data_numerical_reports_path} Weekly
+        %li{role: 'presentation'}
+          %a#months-tab{href: monthly_clec_minutes_data_numerical_reports_path} Monthly
+        %li.pull-right
+          =form_tag daily_clec_minutes_data_numerical_reports_path, method: 'get', id: 'searchForm' do
+            = text_field_tag :query, params[:query], placeholder: 'Search CLEC'
+            = select_tag :per, options_for_select(['10', '20', '30'], params[:per])
+      .clearfix
+      %div#clecTabsContent.tab-content
+        #days.tab-pane.fade.in.active{role: 'tabpanel', 'aria-labelledby'=>'home-tab'}
+          %table.table.table-stripped
+            %thead
+              %tr
+                %th CLEC Provider
+                %th Last 2 Weeks
+                %th Last Week
+                %th Last 2 days
+                %th Yesterday
+                %th Today
+            %tbody
+              - @providers.each do |prov|
+                - today = prov[:data][:today].length > 0 ? prov[:data][:today][4].to_i.round() : 0
+                - yesterday = prov[:data][:yesterday].length > 0 ? prov[:data][:yesterday][4].to_i.round() : 0
+                - last_two_days = prov[:data][:last_two_days].length > 0 ? prov[:data][:last_two_days][4].to_i.round() : 0
+                - last_seven_days = prov[:data][:last_seven_days].length > 0 ? prov[:data][:last_seven_days][4].to_i.round() : 0
+                - last_fourteen_days = prov[:data][:last_fourteen_days].length > 0 ? prov[:data][:last_fourteen_days][4].to_i.round() : 0
+                %tr
+                  %td= prov[:title]
+                  %td
+                    - if last_fourteen_days > 0
+                      %label.label.label-info{style: 'width: 80px; display: block'}
+                        %i.fa.fa-arrow-up
+                        = last_fourteen_days
+                    - else
+                      %label.label.label-danger{style: 'width: 80px; display: block'}
+                        %i.fa.fa-arrow-down
+                        = last_fourteen_days
+                  %td
+                    - if last_seven_days > last_fourteen_days and last_seven_days != 0
+                      %label.label.label-info{style: 'width: 80px; display: block'}
+                        %i.fa.fa-arrow-up
+                        = last_seven_days
+                    - else
+                      %label.label.label-danger{style: 'width: 80px; display: block'}
+                        %i.fa.fa-arrow-down
+                        = last_seven_days
+                  %td
+                    - if last_two_days > last_seven_days and last_two_days != 0
+                      %label.label.label-info{style: 'width: 80px; display: block'}
+                        %i.fa.fa-arrow-up
+                        = last_two_days
+                    - else
+                      %label.label.label-danger{style: 'width: 80px; display: block'}
+                        %i.fa.fa-arrow-down
+                        = last_two_days
+                  %td
+                    - if yesterday > last_two_days and yesterday != 0
+                      %label.label.label-info{style: 'width: 80px; display: block'}
+                        %i.fa.fa-arrow-up
+                        = yesterday
+                    - else
+                      %label.label.label-danger{style: 'width: 80px; display: block'}
+                        %i.fa.fa-arrow-down
+                        = yesterday
+                  %td
+                    - if today > yesterday and today != 0
+                      %label.label.label-info{style: 'width: 80px; display: block'}
+                        %i.fa.fa-arrow-up
+                        = yesterday
+                    - else
+                      %label.label.label-danger{style: 'width: 80px; display: block'}
+                        %i.fa.fa-arrow-down
+                        = today
+
+          .pull-right
+            = paginate(@providers)
+          .clearfix
+
+- content_for :js do
+  :javascript
+    $(document).ready(function(){
+       window.ClecMinutes = new ClecMinutes()
+    });

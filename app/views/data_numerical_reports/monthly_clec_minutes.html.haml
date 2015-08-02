@@ -1,0 +1,84 @@
+%div.page-header
+  %h1
+    %i.fa.fa-clock-o
+    = "CLEC Minutes"
+
+%br
+.container
+  .row
+    .col-sm-12
+      %ul#clecTabs.nav.nav-tabs{role: 'tablist'}
+        %li{role: 'presentation'}
+          %a#home-tab{href: daily_clec_minutes_data_numerical_reports_path} Daily
+        %li{role: 'presentation'}
+          %a#weeks-tab{href: weekly_clec_minutes_data_numerical_reports_path} Weekly
+        %li.active{role: 'presentation'}
+          %a#weeks-tab{href: monthly_clec_minutes_data_numerical_reports_path} Monthly
+        %li.pull-right
+          =form_tag monthly_clec_minutes_data_numerical_reports_path, method: 'get', id: 'searchForm' do
+            = text_field_tag :query, params[:query], placeholder: 'Search CLEC'
+            = select_tag :per, options_for_select(['10', '20', '30'], params[:per])
+      .clearfix
+      %div#clecTabsContent.tab-content
+        #weeks.tab-pane.fade.in.active{role: 'tabpanel', 'aria-labelledby'=>'home-tab'}
+          %table.table.table-stripped
+            %thead
+              %tr
+                %th CLEC Provider
+                - @labels.reverse.each do |l|
+                  %th= l
+            %tbody
+              - @providers.each do |prov|
+                - month = prov[:data][:month].length > 0 ? prov[:data][:month][4].to_i.round() : 0
+                - month2 = prov[:data][:month2].length > 0 ? prov[:data][:month2][4].to_i.round() : 0
+                - month3 = prov[:data][:month3].length > 0 ? prov[:data][:month3][4].to_i.round() : 0
+                - month4 = prov[:data][:month4].length > 0 ? prov[:data][:month4][4].to_i.round() : 0
+                -#- month5 = prov[:data][:month5].length > 0 ? prov[:data][:month5][4].to_i.round() : 0
+                -#- month6 = prov[:data][:month6].length > 0 ? prov[:data][:month6][4].to_i.round() : 0
+                %tr
+                  %td= prov[:title]
+                  %td
+                    - if month > 0
+                      %label.label.label-info{style: 'width: 80px; display: block'}
+                        %i.fa.fa-arrow-up
+                        = month
+                    - else
+                      %label.label.label-danger{style: 'width: 80px; display: block'}
+                        %i.fa.fa-arrow-down
+                        = month
+                  %td
+                    - if month2 >= month and month2 != 0
+                      %label.label.label-info{style: 'width: 80px; display: block'}
+                        %i.fa.fa-arrow-up
+                        = month2
+                    - else
+                      %label.label.label-danger{style: 'width: 80px; display: block'}
+                        %i.fa.fa-arrow-down
+                        = month2
+                  %td
+                    - if month3 >= month2 and month3 != 0
+                      %label.label.label-info{style: 'width: 80px; display: block'}
+                        %i.fa.fa-arrow-up
+                        = month3
+                    - else
+                      %label.label.label-danger{style: 'width: 80px; display: block'}
+                        %i.fa.fa-arrow-down
+                        = month3
+                  %td
+                    - if month4 >= month3 and month4 != 0
+                      %label.label.label-info{style: 'width: 80px; display: block'}
+                        %i.fa.fa-arrow-up
+                        = month4
+                    - else
+                      %label.label.label-danger{style: 'width: 80px; display: block'}
+                        %i.fa.fa-arrow-down
+                        = month4
+          .pull-right
+            = paginate(@providers)
+          .clearfix
+
+- content_for :js do
+  :javascript
+    $(document).ready(function(){
+       window.ClecMinutes = new ClecMinutes()
+    });

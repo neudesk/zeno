@@ -1,0 +1,80 @@
+#new_extension.modal.fix-modal{"aria-hidden" => "true", role: "dialog"}
+  .modal-dialog
+    .modal-content
+      = simple_form_for @new_extension, html: {:novalidate=>false}, method: :post, multipart: true  do |f|
+        .modal-header
+          .modal_title
+            - if rca?
+              %h4= "Add Existing Stream"
+            - else
+              %h4= "New or Add Existing Stream"
+
+        .modal-body
+          .row-fluid
+
+            .form-group
+              %select.form-control.select-action
+                %option{:value=>'select'} SELECT FROM EXISTING MEDIA URL
+                %option{:value=>'add'} ADD NEW MEDIA URL
+              %input#formtype.select-media-url-form{:type=>'hidden', :name=>'formtype', :value=>'select'}
+              %input{:type=>'hidden', :name=>'gateway_id', :value=>params[:station_id]}
+            %hr
+            .select-from-existing-media-url
+              .form-group
+                %label.control-label Media URL
+                %input.select-media-url-form#media_url2{:name=>'media_url_select', :style=>'', type: 'hidden'}
+            .add-new-media-url.hide
+              .form-group
+                %label.control-label Media URL
+                %span.pull-right.hide#media_url_error{:style=>'color:red;font-size:12px'} Media URL already exists. Please select from existing.
+                / ^((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0-9\.\-]+)((?:\/[\+~%\/\.\w\-_]*)?\??(?:[\-\+=&;%@\.\w_]*)#?(?:[\.\!\/\\\w]*))?)$
+                = f.input :media_url, :label=>false, input_html: {class: "form-control new-media-url-form", type: "text", :data => {:validation => "custom", "validation-regexp" => '^(mms|http|https|rtmp|rtsp)\:\/\/[^\/\s]+(\/.*)?$'}, "data-validation-error-msg"=>"Please input valide media url"}
+              = f.input :title, input_html: {class: "form-control new-media-url-form" }, input_html: {class: "form-control new-media-url-form", "data-validation"=>"required"}
+              = f.input :country_id, as: :select, collection: DataGroupCountry.all.collect{ |x| [x.title, x.id]}, input_html: {class: ""}
+              = f.input :language_id, as: :select, collection: DataGroupLanguage.all.collect{ |x| [x.title, x.id]}, input_html: {class: ""}
+              = f.input :genre_id, as: :select, collection: DataGroupGenre.all.collect{ |x| [x.title, x.id]}, input_html: {class: ""}
+              = f.input :backup_media_url, input_html: {class: "form-control"}
+            .form-group
+              %label.control-label Channel Number
+              %span.pull-right.hide#channel_error{:style=>'color:red;font-size:12px'} Channel number already exists.
+              = f.input :extension, label: false, input_html: { class: "form-control", required: "required" }
+        .modal-footer
+          %input.hide{:type=>'reset'}
+          = link_to "Close", "#", class: "btn btn-danger min-button", "aria-hidden" => "true", "data-dismiss" => "modal"
+          = f.submit "Save", :class=>"btn btn-primary min-button disabled", :id => 'submit_extension'
+
+
+:javascript
+    $(document).ready(function(){
+        $.validate();
+        function saveDataContent(){
+            $.ajax({
+                async:true,
+                data:$("#new_data_content").serialize(),
+                dataType:"html",
+                success:function (data) {
+                  data = JSON.parse(data);
+
+                  if(data.response == 'Success') {
+                    $('.modal').modal('hide');
+                    $('.add-new-media-url').removeClass('hide');
+                    $('.select-from-existing-media-url').addClass('hide');
+                    $("#media_url2").select2("val", "");
+                    $('#new_data_content').trigger("reset");
+                  }
+                  console.log(data);
+                  window.location = window.location.pathname;
+               },
+               type:"POST", url: "/api/data_content_save"
+            });
+        }
+    
+        $("#new_data_content").bind("submit", function (event){
+            if($('#formtype').val() == 'add' && $('#media_url_error').hasClass('hide') == false){
+                saveDataContent();
+            }else{
+                saveDataContent();
+            }
+            return false;
+        });
+    });

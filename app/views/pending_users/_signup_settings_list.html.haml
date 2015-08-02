@@ -1,0 +1,26 @@
+.row
+  .col-sm-12
+    - if @settings.present?
+      %table#pendingUserTable.table.table-hover.table-striped.tablesorter
+        %thead
+          %tr
+            %th Settings Name
+            %th Value
+        %tbody
+          - @settings.each do |set|
+            %tr
+              %td
+                = set.name.gsub('_', ' ').titleize
+              %td
+                - if set.name == 'default_signup_did_provider'
+                  = select_tag set.name, options_from_collection_for_select(@providers, 'title', 'title', set.value), :prompt => 'Select Default Provider', :class => 'configField'
+                - else
+                  = text_field_tag set.name, set.value, :class => 'configField'
+                %span.preLoad.hide
+                  = image_tag 'loader.gif'
+                  = 'Updating, Please wait...'
+    - else
+      %p
+        = render "shared/no_records", msg: "No settings found yet."
+    .pagination_area.pull-right
+      = paginate @settings

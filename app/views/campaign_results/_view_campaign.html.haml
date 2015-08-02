@@ -1,0 +1,64 @@
+.modal-dialog
+  .modal-content
+    .modal-header
+      .modal_title
+        %h4= "View Campaign"
+    .modal-body
+      - campaign_status.each do |c|
+        .row
+          .col-sm-12
+            %h2
+              = "Campaign no: #{c[1]}"
+          .col-sm-12
+            %table.table.table-bordered
+              %thead
+                %tr
+                  %th.acenter Status
+                  %th Status Name
+                  %th.acenter Sent
+                  %th.acenter Not sent
+              %tbody
+                - c[0]["stats"]["statuses"]["total_stats"].each do |st|
+                  - status = GoAutoDialStatuses.find_by_status(st["status"])
+                  %tr
+                    %td.acenter= st["status"].to_s
+                    %td= status.present? ? status.status_name : "-"
+                    %td.acenter= st["status_yes"].to_s
+                    %td.acenter= st["status_no"].to_s
+              %tfoot
+                %tr
+                  %td{colspan: 2}
+                    %b= "Total: #{c[0]["stats"]["statuses"]["totalAll"]}"
+                  %td.acenter
+                    %b= c[0]["stats"]["statuses"]["totalY"].to_s
+                  %td.acenter
+                    %b= c[0]["stats"]["statuses"]["totalN"].to_s
+          .col-sm-12
+            .pull-right
+              = link_to "Show Time Zone", "#", class: "time_zones btn btn-primary", data: {id: c[1]}
+          .col-sm-12
+            %br
+            %table.table.table-bordered{:id => c[1], style: "display:none;"}
+              %thead
+                %tr
+                  %th.acenter Zone
+                  %th.acenter Local Time
+                  %th.acenter Sent
+                  %th.acenter Not sent
+              %tbody
+                - c[0]["stats"]["zones"]["total_zones"].each do |st|
+                  %tr
+                    %td.acenter= st["zone"].to_s
+                    %td.acenter= st["local_date"]
+                    %td.acenter= st["zone_yes"].to_s
+                    %td.acenter= st["zone_no"].to_s
+              %tfoot
+                %tr
+                  %td{colspan: 2}
+                    %b= " Total: #{c[0]["stats"]["zones"]["totalAll"].to_s}"
+                  %td.acenter
+                    %b= c[0]["stats"]["zones"]["totalY"].to_s
+                  %td.acenter
+                    %b= c[0]["stats"]["zones"]["totalN"].to_s
+    .modal-footer
+      = link_to "Close", "#", class: "btn btn-default", "aria-hidden" => "true", "data-dismiss" => "modal"

@@ -1,0 +1,35 @@
+- if params[:sort]== "ASC"
+  - sort = "DESC"
+  - css_class = "fa fa-angle-up"
+- else
+  - sort = "ASC"
+  - css_class = "fa fa-angle-down"
+  
+%tr
+  %th
+    = link_to "RCA", rca_minutes_data_numerical_reports_path(type: params[:type], sort_field: "rca", sort: sort)
+    %i{class: "params[:sort_field] == 'country' ? css_class : ''"}
+  - if %w{minutes}.include?(params[:type])
+    %th.acenter
+      = link_to rca_minutes_data_numerical_reports_path(type: params[:type], sort_field: "four_weeks", sort: sort) do
+        =  4.week.ago.at_beginning_of_week(:sunday).strftime("%b %e") + " - " + 4.week.ago.end_of_week(:sunday).strftime("%b %e")
+      %i{class: "params[:sort_field] == 'four_weeks' ? css_class : ''"}
+  %th.acenter
+    = link_to rca_minutes_data_numerical_reports_path(type: params[:type], sort_field: "three_weeks", sort: sort) do
+      =  3.week.ago.at_beginning_of_week(:sunday).strftime("%b %e") + " - " + 3.week.ago.end_of_week(:sunday).strftime("%b %e")
+    %i{class: "params[:sort_field] == 'three_weeks' ? css_class : ''"}
+
+  %th.acenter
+    = link_to rca_minutes_data_numerical_reports_path(type: params[:type], sort_field: "two_weeks", sort: sort) do
+      =  2.week.ago.at_beginning_of_week(:sunday).strftime("%b %e") + " - " + 2.week.ago.end_of_week(:sunday).strftime("%b %e")
+    %i{class: "params[:sort_field] == 'two_weeks' ? css_class : ''"}
+
+  %th.acenter
+    = link_to rca_minutes_data_numerical_reports_path(type: params[:type], sort_field: "one_week", sort: sort) do
+      =  1.week.ago.at_beginning_of_week(:sunday).strftime("%b %e") + " - " + 1.week.ago.end_of_week(:sunday).strftime("%b %e")
+    %i{class: "params[:sort_field] == 'one_week' ? css_class : ''"}
+
+  %th.acenter
+    = link_to rca_minutes_data_numerical_reports_path(type: params[:type], sort_field: "current_week", sort: sort) do
+      =  0.week.ago.at_beginning_of_week(:sunday).strftime("%b %e") + " - " + 0.week.ago.end_of_week(:sunday).strftime("%b %e")
+    %i{class: "params[:sort_field] == 'current_week' ? css_class : ''"}

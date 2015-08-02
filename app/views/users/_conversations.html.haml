@@ -1,0 +1,53 @@
+- if params[:message].present? || @conversation.present?
+  .message_body{style: "width:100%;float:left;"}
+    .bubble.right
+      .message-from
+        .profile_image{:style => "float:left;margin-right:10px;"}
+          %img{:alt => "", :src => "/assets/Profile2.png", :width => "40px", :height => "40px"}
+        %div{:style => "float:left;"}
+          - user = @conversation.conversation_message.author.id
+          - if @conversation.conversation_message.author.class.to_s == "Intercom::User"
+            %p{:style => "float:left"}
+              %b
+                = Intercom::User.find(:id =>@conversation.conversation_message.author.id.to_s).name 
+              wrote :
+          - else
+            %p{:style => "float:left"}
+              %b
+                = @admins.select{|a| a[0].to_i == @conversation.conversation_message.author.id.to_i}[0][1] 
+              wrote :
+
+          %p{:style => "font-size:10px;text-align: left;clear:both;"}
+            = DateTime.parse(@conversation.created_at.to_s).strftime("%H:%M %p, %Y-%m-%d")
+        %br
+        %br
+        %hr
+        %br
+        %p{:style => "text-align: left;"}
+          = ActionView::Base.full_sanitizer.sanitize(@conversation.conversation_message.body)
+      
+  - @conversation.conversation_parts.each do |conv|
+    .message_body{style: "width:100%;float:left;"}
+      .bubble{:class => user == conv.author.id ? "right" : "left"}
+        .message-from
+          .profile_image{:style => "float:left;margin-right:10px;"}
+            %img{:alt => "", :src => user == conv.author.id ? "/assets/Profile2.png" : "/assets/Profile1.png", :width => "40px", :height => "40px"}
+          %div{:style => "float:left;"}
+            - if conv.author.class.to_s == "Intercom::User"
+              %p
+                %b
+                  = Intercom::User.find(:id =>conv.author.id.to_s).name
+                wrote :
+            - else
+              %p
+                %b
+                  = @admins.select{|a| a[0].to_i == conv.author.id.to_i}[0][1]
+                wrote :
+            %p{:style => "font-size:10px;text-align: left;clear:both;"}
+              = DateTime.parse(conv.created_at.to_s).strftime("%H:%M %p, %Y-%m-%d")
+          %br
+          %br
+          %hr
+          %br
+          %p{:style => "text-align: left;"}
+            = ActionView::Base.full_sanitizer.sanitize(conv.body)

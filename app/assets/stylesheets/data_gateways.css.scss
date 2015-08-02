@@ -1,0 +1,58 @@
+.gateway_prompts {
+  .standard.gateway{
+    overflow: auto;
+    margin-bottom: 10px;
+
+    padding-top: 10px;
+    padding-left: 20px;
+    padding-bottom: 0px;
+  }
+
+  .standard.prompts{
+    a {
+      color: #11515E;
+    }
+    .table_prompts {
+      .title_field {
+        .player {
+          float:left;
+        }
+        .title {
+          padding-left: 4px;
+          padding-top: 2px;
+          float:left;
+          display:block;
+        }
+
+      }
+    }
+    .new_prompt_section {
+      padding-top: 10px;
+      padding-left: 10px;
+      padding-bottom: 10px;
+    }
+  }
+}
+
+.data_gateways {
+  .new_data_gateway {
+    .standard {
+      overflow: auto;
+      padding: 10px 20px 10px 20px;
+    }
+    
+  }
+}
+
+.new_entry_ways{
+  margin-top: 5px;
+}
+
+.fields {
+  .remove_new_entry_way_btn{
+    margin-top: 5px;
+  }
+}
+.top-20 {
+  margin-top: 20px;
+}

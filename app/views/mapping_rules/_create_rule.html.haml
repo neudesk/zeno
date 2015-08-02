@@ -1,0 +1,28 @@
+%div.modal.fade{:id => "createRuleModal", :role => "dialog", "aria-labelledby" => "createRuleModalLabel", "aria-hidden" => "true"}
+  %div.modal-dialog
+    %div.modal-content
+      %div.modal-header
+        %button.close{:type => "button", "data-dismiss" => "modal"}
+          %span{"aria-hidden" => "true"}
+            = "&times;".html_safe
+          %span.sr-only
+            = "Close"
+        %h4.modal-title{:id => "myModalLabel"}
+          = "Create Rule"
+      = form_tag mapping_rules_save_path, :method => :post do
+        %div.modal-body
+          %div{:style => "padding:30px;"}
+            .row
+              %div.col-md-6
+                %p Choose DID to Display
+                %span= select_tag "selected_entry_ids", options_from_collection_for_select(ReachoutTabListenerMinutesByGateway.where("did_title IS NOT NULL").select(:did_title).order(:did_title).uniq, 'did_title', 'did_title')
+              %div.col-md-6
+                %p Send to ANI
+                %span= select_tag "selected_ani_carrier_ids", options_from_collection_for_select(ReachoutTabListenerMinutesByGateway.where("carrier_title IS NOT NULL").select(:carrier_title).order(:carrier_title).uniq << ReachoutTabListenerMinutesByGateway.new(:carrier_title => "ALL OTHER CARRIER"), 'carrier_title', 'carrier_title') 
+                
+        %div.modal-footer
+          %button.btn.btn-default{:type => "button", "data-dismiss" => "modal"}
+            = "Cancel"
+          %button{"class" => "btn btn-submit btn-primary send"}
+            %i.fa.fa-plus
+            = "Add to rules"

@@ -1,0 +1,65 @@
+%div.row
+  %div.col-md-12
+    %div.page-header
+      %h1 DID Reports
+%hr
+
+= form_tag did_search_report_path, :method => 'get', :class => 'didFormFilter' do
+  %div.row
+    %div.col-md-12
+      .col-sm-3
+        %label{:for => 'provider'} CLEC / Provider
+        = select_tag "provider", options_for_select(@prov_list, @sel_provider.present? ? @sel_provider : nil), :prompt => 'All', class: 'select input-xlarge dataFilter'
+      .col-sm-3
+        %label{:for => 'station'} Stations
+        = select_tag "station", options_from_collection_for_select(@station, "id", "title", @sel_station.present? ? @sel_station : nil), :include_blank => true, class: 'select input-xlarge dataFilter'
+      .col-sm-3
+        %label{:for => 'country'} Country
+        = select_tag "country", options_from_collection_for_select(@country, "id", "title", @sel_country.present? ? @sel_country : nil), :include_blank => true, class: 'select input-xlarge dataFilter'
+      .col-sm-3
+        %label{:for => 'rca'} RCA
+        = select_tag "rca", options_from_collection_for_select(@rcas, "id", "title", @sel_rca.present? ? @sel_rca.id : nil), :include_blank => true, class: 'select input-xlarge dataFilter'
+  %br
+  %div.row
+    %div.col-md-4.col-md-offset-4
+      %button.btn.btn-primary.btn-block{:type => 'submit'}
+        Search
+%br
+%div.row
+  .col-md-12
+    .panel.panel-default
+      .panel-heading
+        .fa.fa-phone
+        CLEC Lists
+      .panel-body
+        %table.table.table-striped
+          %thead
+            %tr
+              %th
+                CLEC
+              %th
+                Total DIDs
+              %th
+                Used DIDs
+              %th
+                Remaining DIDs
+          %tbody
+            - @providers.each do |prov|
+              %tr
+                %td
+                  = prov[:title]
+                %td
+                  %span.label.label-info.col-md-4
+                    = prov[:total_did]
+                %td
+                  %span.label.label-danger.col-md-4
+                    = prov[:used_did]
+                %td
+                  %span.label.label-success.col-md-4
+                    = prov[:total_did].to_i - prov[:used_did].to_i
+
+%br
+%div.row
+  .col-md-12
+    .pull-right
+      = paginate(@providers)

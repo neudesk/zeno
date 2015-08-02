@@ -1,0 +1,14 @@
+-@stations_result.each do |station|
+  %tr.stationRow{'data-href' => "/reports?station_id=#{station[0]}", :style => 'cursor: pointer', :target=> '_blank'}
+    %td
+      =station[1]
+    %td{style: "width:60px; text-align: right"}
+      =station[2]
+    %td{style: "width:60px; text-align: right"}
+      =station[3]
+    %td{style: "width:200px;"}
+      .progress{style: "width: 100%; margin: 0px"}
+        .progress-bar.progress-bar-danger{style: "width: #{station[4]}%", tip: "Between 0 and 60 seconds"}
+        .progress-bar.progress-bar-warning{style: "width: #{station[5]}%", tip: "Between 60 and 900 seconds"}
+        - station6 = 100 - station[4].to_i - station[5].to_i
+        .progress-bar.progress-bar-success{style: "width: #{station6}%", tip: "Greater than 900 seconds"}

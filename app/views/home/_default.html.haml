@@ -1,0 +1,3 @@
+- cs.each_with_index  do |c, i|
+  %div{:id => "chart_#{i}", :style => "margin-bottom: 10px;" } 
+  = render_chart(c, "chart_#{i}")

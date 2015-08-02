@@ -1,0 +1,47 @@
+.row
+  .col-md-12
+    %div.page-header
+      %h1
+        %i.fa.fa-gears
+        = "Reachout Settings"
+        .btn-group.pull-right
+          = link_to "Rca", reachout_tab_settings_path(type: "rca"), class: "btn #{ params[:type] == 'brd' ? 'btn-info' : 'btn-default'}"
+          = link_to "Broadcast", reachout_tab_settings_path(type: "brd"), class: "btn #{ params[:type] == 'brd' ? 'btn-default' : 'btn-info'}"
+%br
+.row
+  .col-md-12
+    - if params[:type] == "brd"
+      = render "broadcasters"
+    - else
+      = render "rca"
+     
+.row
+  .col-md-6
+    %label
+      %i.fa.fa-upload
+      Upload default prompt
+    = render "default_prompt"
+  .col-md-6
+    %label
+      %i.fa.fa-upload
+      = "Upload DNC File"
+    = render "upload_dnc_file"
+
+.row
+  .col-md-6
+    = render "get_settings"
+  .col-md-6
+    = render "get_dnc_list"
+
+
+- content_for :js do
+  :javascript
+    $(document).ready(function(){
+      /* Javascript call to initialize for prompt field */
+      $("#prompt").fileinput({showCaption: false});
+      /* Javascript call to initialize for upload_datafile field */
+      $("#upload_datafile").fileinput({showCaption: false});
+      window.ReachoutTabSettings = new ReachoutTabSettings()
+    });
+
+

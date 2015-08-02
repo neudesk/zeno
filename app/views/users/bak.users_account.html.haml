@@ -1,0 +1,98 @@
+.slider
+  = render "shared/slides"
+.users.users_account
+  %ul.nav.nav-tabs
+    %li{:class => params.has_key?(:search) || params.has_key?(:page) ? '' : 'active'}
+      %a{"data-toggle" => "tab", :href => "#create"} Create Account
+    %li{:class => params.has_key?(:search) || params.has_key?(:page) ? 'active' : ''}
+      %a{"data-toggle" => "tab", :href => "#edit"} Existing Accounts
+
+  .tab-content
+    #create.tab-pane.create_user_section{:class => params.has_key?(:search) || params.has_key?(:page) ? '' : 'active'}
+      = simple_form_for @user, :url => users_account_users_path, :html => {:class => 'span7', :id => 'frm-new-account'}, :method => :post, :validate => true do |f|
+        = f.input :title, :as => :email, :placeholder => 'Title', :label => false, :input_html => {:autocomplete => "off"}
+        = f.input :email, :as => :email, :placeholder => 'Email', :label => false, :input_html => {:autocomplete => "off"}        
+        = f.input :password, :placeholder => 'Password', :label => false, :input_html => {:autocomplete => "off"}
+        = f.input :enabled, :as => :boolean, :inline_label => 'Enabled', :label => false, :input_html => {:checked => true}, :wrapper_html => {:class => 'clearfix'}
+        %span.radio-select= f.input :role, :collection => roles_for_select, :label_method => :first, :value_method => :last, :selected => @user.role, :wrapper_html => {:class => 'assign-box pull-left'}, :label => false, :validate => {:presence=>true}
+        %span.radio-select= f.input :group, :collection => [], :prompt => '--Assign a Group--', :wrapper_html => {:class => 'assign-box pull-left'}, :disabled => true, :label => false, :validate => {:presence=>true}
+        %a#btn-add-group.btn.icon-plus.disabled{:title => 'Create a new group'}
+        .new_group_section.clearfix
+          #new-group.new_group_input.controls.span3.collapse
+            = f.simple_fields_for :data_group_rcas do |g|
+              = g.input :title, :placeholder => 'RCA Group Title', :label => false, :input_html => {:id => 'txt-new-rca'}, :disabled => true
+            = f.simple_fields_for :data_group_3rdparties do |g|
+              = g.input :title, :placeholder => 'Third Party Group Title', :label => false, :input_html => {:id => 'txt-new-3rd-party'}, :disabled => true
+            = f.simple_fields_for :data_group_broadcasts do |g|
+              = g.input :title, :placeholder => 'Broadcast Group Title', :label => false, :input_html => {:id => 'txt-new-broadcast'}, :disabled => true
+        %span.radio-select= select_tag :country, countries_for_select, :prompt => '--Select Country--', :class => 'country_field', :disabled => true
+        .checklist
+          .partial_checklist.well.sample.hide{:"data-country-id" => ''}
+            %div List of Gateways/DIDs based off of Country
+        .save_section
+          = f.submit 'Save', :class => 'btn btn-primary pull-left'
+
+    #edit.tab-pane.edit_user_section{:class => params.has_key?(:search) || params.has_key?(:page) ? 'active' : ''}
+      = simple_form_for :search, :url => '#', :html => {:class => 'clearfix', :id => 'frm-filter-accounts'}, :method => 'get' do |f|
+        - role ||= params[:search][:role] if params[:search]
+        - key ||= params[:search][:keyword] if params[:search]
+        = f.input :role, :collection => roles_for_select, :prompt => '--All--', :label_method => :first, :value_method => :last, :wrapper_html => {:class => 'assign-box pull-left'}, :label => false, :selected => role
+        = f.input :keyword, :placeholder => "keyword", :label => false, :input_html => {:class => 'search-query', :value => key}, :wrapper_html => {:class => 'pull-left'}
+      .user_table_section
+        %table#tb-users.table.table-striped.table-hover.pretty
+          %thead
+            %tr
+              %th.id #
+              %th.title Title
+              %th.email Email
+              %th.phone Landline
+              %th.phone Cellphone
+              %th.edit -
+          %tbody
+            - @users.each_with_index do |u, idx|
+              %tr
+                %td.id= idx + 1
+                %td.title= u.title
+                %td.email= u.email
+                %td.phone= u.landline
+                %td.phone= u.cellphone
+                %td.edit
+                  %a.icon-edit{'data-toggle'=>"modal", 'data-id' => u.id, :href => '#ml-edit-account'}
+        = paginate @users
+
+      #ml-edit-account.modal.hide.fade{"aria-hidden" => "true", "aria-labelledby" => "myModalLabel", :role => "dialog", :tabindex => "-1"}
+        .modal-header
+          %button.close{"aria-hidden" => "true", "data-dismiss" => "modal", :type => "button"} ×
+          %h3#myModalLabel Edit Account
+        .modal-body
+          = simple_form_for @user, :url => users_account_users_path, :html => {:id => 'frm-edit-account'}, :method => :put, :validate => true do |f|
+            = f.input :title, :placeholder => 'Title', :label => false
+            = f.input :email, :as => :email, :placeholder => 'Email', :label => false, :validate => {:uniqueness => false}
+            = f.input :password, :placeholder => 'Password', :label => false, :input_html => {:autocomplete => "off"}
+            = f.input :enabled, :as => :boolean, :inline_label => 'Enabled', :label => false, wrapper_html: {class: "clearfix"}
+            = f.input :role, :collection => roles_for_select, :label_method => :first, :value_method => :last, :selected => :first, :wrapper_html => {:class => 'assign-box pull-left'}, :label => false, :validate => {:presence=>true}
+            = f.input :group, :collection => [], :prompt => '--Assign a Group--', :wrapper_html => {:class => 'assign-box pull-left'}, :disabled => true, :label => false, :validate => {:presence=>true}
+            %a#btn-add-group.btn.icon-plus.disabled{:title => 'Create a new group'}
+            .new_group_section.clearfix
+              #new-group.new_group_input.controls.span3.offset2.collapse
+                = f.simple_fields_for :data_group_rcas do |g|
+                  = g.input :title, :placeholder => 'RCA Group Title', :label => false, :input_html => {:id => 'txt-new-rca'}, :disabled => true
+                = f.simple_fields_for :data_group_3rdparties do |g|
+                  = g.input :title, :placeholder => 'Third Party Group Title', :label => false, :input_html => {:id => 'txt-new-3rd-party'}, :disabled => true
+                = f.simple_fields_for :data_group_broadcasts do |g|
+                  = g.input :title, :placeholder => 'Broadcast Group Title', :label => false, :input_html => {:id => 'txt-new-broadcast'}, :disabled => true
+            %span.radio-select= select_tag :country, countries_for_select, :prompt => '--Select Country--', :class => 'country_field', :disabled => true
+            .checklist
+              .partial_checklist.well.sample.hide{:"data-country-id" => ''}
+                %div List of Gateways/DIDs based off of Country
+
+        .modal-footer
+          %button.btn{"aria-hidden" => "true", "data-dismiss" => "modal"} Cancel
+          =link_to "Delete Account", user_path(:id => 0), method: "delete", class: "btn btn-danger", :id => 'users_delete_user', :confirm => "Are you sure?"
+          %button#btn-update.btn.btn-primary Save changes
+
+= content_for :js do
+  = javascript_tag do
+    :erb
+      var R_VALUES = <%=raw MyRadioHelper::Role::VALUES.to_json %>;
+      var RESET = <%= request.get? %>;

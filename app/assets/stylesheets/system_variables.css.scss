@@ -1,0 +1,31 @@
+// Place all the styles related to the system_variables controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+.system_variables_page {
+  .email_section {
+    padding: 35px 20px 10px 20px;
+    .save_section {
+      padding-top: 10px;
+    }
+
+    .email_form {
+      margin-bottom: 0px;
+    }
+  }
+
+  .email_section:after {
+    background-color: #F5F5F5;
+    border: 1px solid #CCCCCC;
+    border-radius: 0px 0 4px 0;
+    color: #9DA0A4;
+    content: "Email setting";
+    font-size: 12px;
+    font-weight: bold;
+    left: -21px;
+    padding: 3px 8px 3px;
+    position: relative;
+    top: -134px;
+
+  }
+}

@@ -1,0 +1,193 @@
+/*
+  =require twitter-bootstrap-static/bootstrap
+
+  Use Font Awesome icons (default)
+  To use Glyphicons sprites instead of Font Awesome, replace with "require twitter-bootstrap-static/sprites"
+  =require twitter-bootstrap-static/fontawesome
+  */
+
+
+/* Zeno CSS Start */
+input {
+  background: none repeat scroll 0 0 #E6E6E6 !important;
+  border: medium none !important;
+  border-radius: 5px 5px 5px 5px !important;
+  color: #333333 !important;
+
+  box-shadow: none !important;
+  
+
+}
+
+input.btn {
+  background: none repeat scroll 0 0 #31689E !important;
+  color: #FFFFFF !important;
+  text-shadow: 0 1px 3px #000000 !important;
+}
+
+
+
+input:focus {
+  border: 1px solid #868686 !important;
+}
+/*
+select {
+  background: none repeat scroll 0 0 #E6E6E6 !important;
+  border: medium none !important;
+  border-radius: 5px 5px 5px 5px !important;
+  color: #333333 !important;
+
+  box-shadow: none !important;
+  
+}
+*/
+span.radio-select {
+
+  background: url(dropdown-arrow.png) no-repeat scroll right center #E6E6E6;
+  border: medium none !important;
+  border-radius: 5px 5px 5px 5px !important;
+  color: #333333 !important;
+  overflow: hidden;
+  width: 201px;
+
+  display: inline-block;
+  vertical-align: middle;
+
+  margin-bottom: 5px;
+
+  select {
+    background: none repeat scroll 0 0 transparent;
+    border: 0 none;
+    border-radius: 0 0 0 0;
+    display: inline-block;
+    outline:none;
+    outline-offset: -2px;
+    vertical-align: middle;
+    margin-bottom: 0px;
+    box-sizing:border-box; 
+    -moz-box-sizing:border-box;
+
+    padding-right: 0px; /* Chrome fix */
+
+  }
+
+  select:focus {
+    line-height: 100px;
+  }
+
+}
+
+
+/* Zeno CSS End */
+
+
+input[type="email"]{
+  padding: 4px;
+}
+
+select {
+  line-height:24px
+}
+
+textarea, input[type="text"], input[type="password"], input[type="datetime"],
+input[type="datetime-local"], input[type="date"], input[type="month"],
+input[type="time"], input[type="week"], input[type="number"],
+input[type="email"], input[type="url"], input[type="search"],
+input[type="tel"], input[type="color"], .uneditable-input {
+[class^="icon-"], [class*="icon-"]{
+  display: inline-block;
+}
+  padding: 4px;
+}
+
+form[class*="span"] {
+  margin-left: 0px;
+  background-color: #FFFFFF;
+}
+
+form.well {
+  border-radius: 1px 1px 1px 1px;
+}
+
+#frm-change-account {
+  [class*="span"] {
+    margin-left: 0px;
+  }
+  .span3:not(.pull-right) {
+    border-right: 2px solid rgb(150,150,150);
+  }
+}
+
+#frm-new-account, #frm-edit-account {
+  .user_enabled label {
+    float: left;
+  }
+  .icon-plus {
+    padding: 6px 10px;
+    &:before{
+      margin-top: 7px;
+    }
+  }
+  .checkbox input[type="checkbox"] {
+    margin-top: 2px;
+  }
+  #new-group {
+    .control-group {
+      margin-bottom: 0;
+    }
+    input {
+      margin-top: 1px;
+      &:disabled {
+        display: none;
+      }
+    }
+  }
+  #btn-add-group {
+    cursor: pointer;
+    &.disabled {
+      cursor: not-allowed;
+    }
+  }
+  input[type=text], input[type=email], input[type=password] {
+    width: 210px;
+  }
+  .assign-box {
+    width: 220px;
+    margin-right: 10px;
+    margin-bottom: 0;
+  }
+  .partial_checklist {
+    max-height: 200px;
+    overflow-y: scroll;
+    input {
+      margin-right: 10px;
+    }
+  }
+}
+
+#frm-filter-accounts {
+  #search_keyword {
+    margin-left: 10px;
+  }
+}
+
+#tb-users {
+  margin-bottom: 0;
+  .id {
+    width: 50px;
+    text-align: center;
+  }
+  .title {
+    width: 200px;
+  }
+  .email {
+    width: 200px;
+  }
+  .phone {
+    width: 150px;
+  }
+  .edit {
+    width: 50px;
+    text-align: center;
+  }
+}

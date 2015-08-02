@@ -1,0 +1,5 @@
+- user = User.find(activity.parameters[:to]) rescue nil
+- if user
+  = "has logged in as "
+  - owner_title = "#{user.title} (#{user.email})"
+  = link_to owner_title, users_trackings_path(user: user.email, q: params[:q])

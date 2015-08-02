@@ -1,0 +1,49 @@
+.panel.panel-default
+  .panel-heading
+    .fa.fa-gears
+    Settings List
+  .panel-body
+    - if @settings.present?
+      %table.table.table-striped.settings_table
+        %thead
+          %tr
+            %th= "#"
+            %th= "Setting Name"
+            %th= "Value"
+        %tbody
+          - @settings.each_with_index do |s,index|
+            %tr
+              %td= index + 1
+              %td= s.name.gsub('_', ' ').titleize
+              %td.setting_value
+                - if s.name == 'primary_campaign_default_did_provider' or s.name == 'secondary_campaign_default_did_provider'
+                  = link_to "#", class: 'changeSched' do
+                    %strong
+                      = "#{s.value} "
+                      %i.fa.fa-pencil
+                  - if @scheduled_default_did.present?
+                    - config = @scheduled_default_did.select{|x| x.name == s.name}.first rescue []
+                    - sched = @scheduled_default_did.select{|x| x.name == 'default_did_provider_setting_schedule'}.first rescue []
+                  = select_tag s.name, options_from_collection_for_select(@mapped_providers, 'entryway_provider', 'entryway_provider', config.try(:value)), class: 'select did_config hide', data: {val: s.id}
+                  - if config
+                    %p.notice{class: "#{(config.try(:value) == s.value ? 'hide' : '')}"}
+                      = "#{config.try(:name).gsub('_', ' ').titleize} is set to change to "
+                      %strong{class: "#{config.try(:name)}"}= config.try(:value)
+                      %span{class: "default_did_provider_setting_schedule"}
+                        = " on #{sched.try(:value)}"
+                - if s.value.match(/\A[+-]?\d+?(_?\d+)*(\.\d+e?\d*)?\Z/)
+                  %input.num_value{type: "number", value: s.value, data: {val: s.id}}
+                - elsif s.name == "Call Time"
+                  .row
+                    .col-sm-6
+                      .call_time_setting
+                        %p Start Time
+                        %input.num_value#val1{type: "number", value: @val1, min: 0, max: 24, data: {val: s.id}}
+                    .col-sm-6
+                      .call_time_setting
+                        %p End Time
+                        %input.num_value#val2{type: "number", value: @val2, min: 0, max: 24, data: {val: s.id}}
+    - else
+      = render "shared/no_records", msg: "No settings found."
+= render "settings_modal"
+

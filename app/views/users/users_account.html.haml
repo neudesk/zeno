@@ -1,0 +1,96 @@
+.row
+  .col-sm-12
+    .page-header.main
+      - default_filter = params[:user].present? ? params[:user][:filter] : params[:filter] || 0
+      .pull-right.header-buttons
+        -if current_user.is_marketer?
+          = link_to new_user_path, class: "btn btn-primary btn-sm" do
+            %i.clip-user-plus
+            Create New
+      .pull-right.header-buttons.no-margin
+        = search_form_for @q, url: users_account_users_path(filter: default_filter), method: :post do |f|
+          .input-group.short-search
+            = f.text_field :title_or_email_or_sys_user_permission_title_or_tags_title_or_countries_title_cont, placeholder: "Enter Keyword Here", class: "form-control"
+            .input-group-btn
+              = f.submit "Search", class: "btn btn-default submit_search"
+      .pull-right.header-buttons.no-margin
+        - search_val = params[:q].present? ? params[:q][:title_or_email_or_sys_user_permission_title_or_tags_title_or_countries_title_cont] : ""
+        = simple_form_for @user, url: users_account_users_path(q: {"title_or_email_or_sys_user_permission_title_or_tags_title_or_countries_title_cont" => "#{search_val}"} ), method: :post do |f|
+          .input-group.input-group-sm.short-search
+            -if current_user.is_marketer?
+              = f.input :filter, label: false, as: :select, collection: roles_for_new_select_with_all, selected: default_filter, include_blank: false, input_html: {class: "without_css form-control"}
+      %div.page-header
+        %h1
+          %i.fa.fa-users
+          = "Users List"
+.clearfix
+%br
+.row
+  .col-sm-12
+    - if @users.present?
+      %table.table.table-hover.table-striped
+        %thead
+          %tr
+            %th.span2
+              = sort_link(@q, :title, "Title")
+            %th.hidden-xs
+              = sort_link(@q, :email, "Email Address")
+            %th.acenter.hidden-xs
+              = sort_link(@q, :sys_user_permission_title, "Role")
+            %th.acenter.hidden-sm.hidden-xs
+              = link_to "Tags", "#"
+            %th.acenter.hidden-sm.hidden-xs
+              = link_to "Countries", "#"
+            %th.acenter.hidden-sm.hidden-xs
+              = link_to "Station", "#"
+            %th
+
+        %tbody
+          - @users.each do |user|
+            %tr
+              %td
+                = user.title
+              %td.hidden-xs
+                = user.email
+              %td.acenter.hidden-xs
+                = html_role(user.role_name, user.permission_id)
+              %td.acenter.hidden-sm.hidden-xs
+                = displayable_tags(user.tags, 3)
+              %td.acenter.hidden-sm.hidden-xs
+                = displayable_countries(user.countries, 3)
+              %td.acenter.hidden-sm.hidden-xs
+                - if user.sys_user_resource_broadcasts.present?
+                  %span.label.label-info
+                    = user.stations.first.title.titleize if user.stations.present?
+              %td
+                .pull-right
+                  .btn-group
+                    - if (current_user.is_rca? || current_user.is_marketer? ) && current_user.is_intercom_admin?
+                      = link_to "#", class: "btn btn-primary btn-sm", id: "bubble", :tip => 'Send Message', :data => {:email => user.email, :name => user.title} do
+                        %i.fa.fa-comments-o
+                    - if current_user == user
+                      = link_to edit_account_path, class: "btn btn-success btn-sm", :tip => 'Edit' do
+                        %i.fa.fa-edit
+
+                      = link_to my_account_path, class: "btn btn-info btn-sm", :tip => 'View' do
+                        %i.fa.fa-arrows-alt
+                    - else
+                      = link_to edit_user_path(user, from: "index"), class: "btn btn-success btn-sm", :tip => 'Edit' do
+                        %i.fa.fa-edit
+
+                      = link_to user_path(user), class: "btn btn-info btn-sm", :tip => 'View' do
+                        %i.fa.fa-arrows-alt
+                    - if current_user.is_marketer?
+                      = link_to toggle_lock_user_path(user), :method => :put, :class => "btn btn-primary btn-sm", :tip => user.access_locked? ? 'Unlock this user?' : 'Lock this user?', :confirm => "Are you sure you want to #{user.access_locked? ? 'Unlock' : 'Lock'} this user?" do
+                        %i{:class => "#{user.access_locked? ? 'fa fa-lock' : 'fa fa-unlock'}"}
+                    - if current_user.is_marketer?
+                      =link_to user_path(:id => user.id), method: "delete", class: "btn btn-danger btn-sm", :id => 'users_delete_user', :confirm => "Are you sure you want to delete #{user.email}?" do
+                        %i.fa.fa-trash-o
+    - else
+      = render "shared/no_records", msg: "No users found."
+    .pagination_area.pull-right
+      = paginate @users
+= render partial: "send_message"
+  
+
+

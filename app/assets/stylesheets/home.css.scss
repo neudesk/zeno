@@ -1,0 +1,306 @@
+// Place all the styles related to the Home controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+#preloadOverlay {
+  position: relative;
+  z-index: 999;
+}
+#preloadOverlay > div {
+  width: 100%;
+  text-align: center;
+  position: absolute;
+  top: 0;
+  background: rgba(255,255,255,0.9);
+  padding: 5px;
+}
+.slides{
+  margin-left: -2px;
+
+
+  .search_form {
+    margin: 0px;
+    select {
+      margin-bottom: 0px;
+    }
+  }
+  .search {
+    margin: 0px;
+    padding-top: 14px;
+    padding-left: 0px;
+
+    //Input & select for search
+
+    input {
+      width: 280px;
+      height: 42px;
+      padding-left: 20px;
+    }
+
+    .radio-select {
+      width: 296px;
+      margin-left: 17px;
+      select {
+        width: 315px;
+        height: 50px;
+        line-height: 50px;
+        padding-top: 15px;
+        padding-bottom: 15px;
+        vertical-align: middle;
+      }
+    }
+
+  }
+  .linked_item {
+    color: #11515E;
+  }
+  .item{
+    background-color: #EEEEEE;
+    border: 2px solid #DDDDDD;
+    cursor: pointer;
+    height: 54px;
+    padding: 5px;
+    width: 117px;
+    cursor: pointer;
+    text-align: center;
+    &.more{
+      margin-top:10px;
+    }
+    &.active{
+      border: 2px solid #46FE45;
+    }
+  }
+  .arrow{
+    width: 25px;
+  }
+
+  .jcarousel-skin-tango .jcarousel-container-horizontal {
+    padding: 20px 40px;
+    width: auto;
+  }
+}
+
+.listeners{
+  margin-left: -2px;
+}
+.listeners .pagination
+{
+  float:right;
+}
+#map-home{
+  width:900px;
+  height: 440px;
+}
+#loading-image {
+  position: absolute;
+  top: 340px;
+}
+.marketer {
+  margin-top: 10px;
+  margin-bottom: 20px;
+  .defaults {
+    &.active{
+      a{
+      }
+    }
+    .countries {
+      .stations {
+        margin-left: 20px;
+        .channels {
+          margin-left: 40px;
+        }
+      }
+    }
+  }
+  .nav-tabs{
+    margin-bottom:0px;
+    border-bottom: none !important;
+    li.aggregate{
+      margin-left: 10px;
+    }
+
+  }
+  .nav-tabs > .active > a, .nav-tabs > .active > a:hover, .nav-tabs > .active > a:focus {
+    background-color: #F0F6F9 !important;
+  }
+  .nav-tabs > li > a:hover, .nav-tabs > li > a:focus{
+    border-top: 1px solid #DDDDDD;
+    border-left: 1px solid #DDDDDD;
+    border-right: 1px solid #DDDDDD;
+  }
+  .chart-content{
+    background: none repeat scroll 0 0 #F0F6F9;
+    border: 1px solid #DDDDDD;
+    box-shadow: 0 0 20px #D6CACA;
+    border-radius: 10px 10px 10px 10px;
+    padding: 20px 44px 37px;
+  }
+  .customs {
+    .countries {
+      .stations {
+        margin-left: 40px;
+        .channels {
+          margin-left: 40px;
+        }
+      }
+    }
+    #apply-custom{
+      margin-right:16px;
+    }
+    .ckb-custom {
+      width: 20px;
+      text-align: left;
+      height: 15px;
+      line-height: 15px;
+    }
+    .stations {
+      .customs {
+        .channels {
+          margin-left: 40px;
+        }
+      }
+    }
+
+    .channels {
+      .ckb-custom {
+        margin-right: 20px;
+      }
+    }
+  }
+
+  .place-chart {
+    margin-bottom: 10px;
+    width: 500px;
+  }
+  .mg-bottom {
+    margin-bottom: 10px;
+  }
+
+  .mg-bottom-font {
+    /*padding-bottom 10px;*/
+    font-weight: bold;
+    font-size: 13pt;
+  }
+
+  .width-ck {
+    width: 20px;
+  }
+
+  .chart-filter {
+    padding: 0 0 0px 16px;
+
+    select {
+      width: 100px;
+    }
+    .country-filter, .station-filter, .did-filter {
+      margin-right: 10px;
+    }
+  }
+  .day-filter {
+    select {
+      width: 120px;
+      margin-right:10px;
+    }
+  }
+}
+
+.dotted-line {
+  // border-bottom: 1px dotted;
+  // margin: 10px 0 15px;
+  background-image: url('common/bg_line.png');
+  background-position: 0 100%;
+  background-repeat: repeat-x;
+  height: 2px;
+}
+
+
+.home_page {
+  .number_of_listeners_section {
+    background: none repeat scroll 0 0 #E6E6E6 !important;
+    padding: 15px;
+    font-size: 11pt;
+    font-weight: bold;
+  }
+
+}
+.listeners_table th
+{
+  background-color: #31689E !important;
+}
+.listeners_table td
+{
+  border-top: none !important;
+}
+.table tbody{ background-color:#ffffff; }
+.table thead tr th	{
+  background-color: #f0f0f0;
+  font-size:12px;
+}
+.table tfoot tr th	{
+  background-color: #f0f0f0;
+  font-size:12px;
+}
+.table-condensed td {
+  font-size:12px;
+}
+
+.table-hover tbody tr:hover td {
+  background-color: #f0f0ff;
+  cursor:pointer;
+}
+.table-bordered td {
+  border-left: 1px solid #dddddd !important;
+  border-top: 1px solid #dddddd !important;
+}
+.boxShortcuts a > span {
+  font-size: 18px !important;
+  text-transform: uppercase;
+}
+#map_canvas {
+  width: 100%;
+  height: 500px;
+  position: relative
+}
+
+#placeholder_hourly, #placeholder_daily, #placeholder_weekly {
+  width: 100%;
+  height: 200px;
+}
+
+.map_info {
+  text-align: center;
+  .col-sm-12 {
+  }
+  strong {
+    font-size: 20px;
+  }
+  p {
+    font-size: 14px;
+  }
+}
+
+.map-icon {
+  font-size: 35px;
+}
+
+.green {
+  color: green;
+}
+
+.gray  {
+  color: gray;
+}
+
+.red {
+  color: red;
+}
+.stationRow:hover {
+  color: #59B2E5;
+  font-weight: bold;
+}
+.playerDimensions input {
+  height: 30px;
+}
+.swMain > ul li > a:before {
+  border-top: 0 !important;
+}

@@ -1,0 +1,44 @@
+.row#search_station
+  = simple_form_for @q, url: new_settings_path, method: :get do |f|
+    .col-sm-3
+      .input-group.input-group-sm
+        = f.input :title_cont, label: false, placeholder: "Enter Keyword Here", input_html: {class: "form-control search_by_station_name"}
+        .input-group-btn
+          = f.submit "Search", class: "btn btn-primary search_button"
+    .col-sm-2
+      = f.input :country_title_cont, label: false, as: :select, collection: current_user.station_countries.collect {|x| [x.title, x.title] }, prompt: "Filter by Country", input_html: {class: "submit_via_onchange"}
+    - if current_user.is_marketer?
+      .col-sm-2
+        = f.input :rca_group_title_cont, label: false, as: :select, include_blank: true, collection: DataGroupRca.all.collect {|x| [x.title, x.title] }, prompt: "Filter by RCA", input_html: {class: "submit_via_onchange"}
+        - if @station.present?
+          = hidden_field_tag :station_id, @station.id
+
+      .col-sm-2.col-sm-offset-1
+        = link_to "#new_station", class: "btn btn-sm btn-primary", data: {toggle: "modal"} do
+          = "Add New Station"
+      .col-sm-2
+        .pull-right.station_pagination
+          = text_field_tag :page, @page, size: 1
+          = "of #{@stations.total_pages}"
+  .col-sm-12
+    .page_left
+      = link_to_previous_page @stations, image_tag("left_arrow.png", width: 40, height: 40), params: params, tip: "Previous Page"
+    .page_right
+      = link_to_next_page @stations, image_tag("right_arrow.png", width: 40, height: 40), params: params, tip: "Next Page"
+    .row#station_list
+      - if @stations.present?
+        - @stations.each do |station|
+          - if @station.present? && station == @station
+            .station_box.col-lg-3.col-md-4.col-sm-6
+              .arrow.active
+                %i.fa.fa-chevron-down
+              .station_name.active
+                = station.title
+          - else
+            .station_box.col-lg-3.col-md-4.col-sm-6
+              .arrow
+                %i.fa.fa-chevron-right
+              .station_name
+                = link_to station.title, new_settings_path(shared_params(station.id))
+      - else 
+        = render "shared/no_records", msg: "No stations found."

@@ -1,0 +1,20 @@
+#new_phone.modal{"aria-hidden" => "true", role: "dialog"}
+  .modal-dialog
+    .modal-content
+      .modal-header
+        .modal_title
+          %h4= "Add Phone Number"
+      .modal-body
+        .row-fluid
+          .span12
+            = simple_form_for @station, url: add_phone_data_gateway_path(@station), html: {id: "new_phone_form"}, method: :post  do |f|
+              .form-inputs
+                = f.input :custom_entryways, as: :select, label: false, collection: [], include_blank: true
+      .modal-footer
+        = link_to "Cancel", "#", class: "btn btn-default", "aria-hidden" => "true", "data-dismiss" => "modal"
+        = link_to "Add Phone", "#", class: "btn btn-dark-grey form-submitter ajax-submit", data: {target: "new_phone_form"} 
+
+:javascript
+  $(document).ready(function(){
+    $('#custom_entryways').select2();
+  });

@@ -1,0 +1,2 @@
+module NewReportHelper
+end

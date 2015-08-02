@@ -1,0 +1,23 @@
+#new_prompt.modal
+  .modal-dialog
+    .modal-content
+      .modal-header.clearfix
+        .pull-left
+          .modal_title
+            %h4= "New Prompt"
+        .pull-right
+          #progress.hide
+            .progress.progress-striped
+              .progress-bar.progress-bar-danger{"role" => "progressbar", "aria-valuemin"=> "0", "aria-valuemax"=> "100"}
+              #percentage_container
+      .modal-body
+        .row-fluid
+          .span12
+            = simple_form_for @prompt, html: {method: :post, id: "new_prompt_form", :onsubmit => "return false", class: "form_progress_bar"} do |f|
+              .form-inputs
+                = f.input :title, input_html: {class: "form-control"}
+                = f.input :raw_audio, label: "Audio", as: :file, input_html: {class: "form-control"}
+                = f.input :gateway_id, as: :hidden, input_html: {value: @station.id}
+      .modal-footer
+        = link_to "Close", "#", class: "btn btn-default", "aria-hidden" => "true", "data-dismiss" => "modal"
+        = link_to "Send", "#", class: "btn btn-dark-grey form-submitter", data: {target: "new_prompt_form"}

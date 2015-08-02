@@ -1,0 +1,30 @@
+.modal-dialog
+  .modal-content
+    .modal-header
+      .modal_title
+        %h4= "ANI Mapping"
+    .modal-body
+      %table.table.table-bordered
+        %thead
+          %th.acenter NO
+          %th.acenter Provider
+          %th.acenter Displayed DID
+          %th.acenter Active Listeners
+        %tbody
+          - campaigns.each do |m|
+            %tr
+              %td.acenter= m.id
+              %td.acenter
+                / - if m.did_provider != "NO MAPPING"
+                /   = select_tag("did_provider_#{m.id.to_s}", options_from_collection_for_select(mapping_rules.select{|x| x.carrier_title == m.carrier_title }, :entryway_provider, :entryway_provider, selected: m.did_provider), data: {did: m.id}, class: 'did_provider form-control' )
+                / - else
+                %select.form-control{id: "did_provider_#{m.id.to_s}"} 
+                  %option= m.did_provider
+              %td.acenter
+                - if m.did_provider != "NO MAPPING"  
+                  = select_tag("did_" + m.id.to_s, options_for_select(dids.select{|x| x[0] == m.did_provider}.map{ |c| c[1]},:selected => m.did_e164),:data=> {:id=>m.id},:class => 'did form-control')
+                - else
+                  = select_tag("did_" + m.id.to_s, options_for_select(dids.map{ |c| c[1]},:selected => m.did_e164),:data=> {:id=>m.id},:class => 'did form-control')
+              %td.acenter= m.listeners_no
+    .modal-footer
+      = link_to "Close", "#", class: "btn btn-default", "aria-hidden" => "true", "data-dismiss" => "modal"

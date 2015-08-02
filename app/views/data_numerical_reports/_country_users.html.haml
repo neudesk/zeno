@@ -1,0 +1,15 @@
+%table.data_numerical_reports_table
+  %thead 
+    = render :partial => "data_numerical_reports/country_table_head"
+  %tbody
+  - @result.each do |country|
+    %tr{:class => cycle('odd', 'even')} 
+      %td.name
+        - type = params["type"].present? ? params["type"] : "percentage"
+        %a{:href =>("/data_numerical_reports/country_minutes?type=#{type}&country_id=#{country[1]}&page=#{params["page"]}" if params["country_id"].to_i != country[1]), :class =>[("active_country" if country[1] == params["country_id"].to_i)]}= country[0]
+      %td= country[2].present? ? country[2] : 0
+      %td= country[3].present? ? country[3] : 0
+      %td= country[4].present? ? country[4] : 0
+      %td= country[5].present? ? country[5] : 0
+      %td= country[6].present? ? country[6] : 0 
+

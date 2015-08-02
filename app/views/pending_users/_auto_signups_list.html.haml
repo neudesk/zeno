@@ -1,0 +1,50 @@
+.row
+  .col-sm-12
+    %div.pull-right
+      = form_tag auto_signups_pending_users_path, :method => :get do
+        .input-group.short-search
+          = text_field_tag :filter, params[:filter], :class => 'form-control'
+          .input-group-btn
+            = submit_tag 'Search', :class => 'btn btn-default submit_search'
+%br
+.row
+  .col-sm-12
+    - if @users.present?
+      %table#pendingUserTable.table.table-hover.table-striped.tablesorter
+        %thead
+          %tr
+            %th Name
+            %th Email Address
+            %th Station Name
+            %th Streaming URL
+            %th Station Website
+            %th Countries
+            %th Date Signed Up
+            %th
+        %tbody
+          - @users.each do |user|
+            %tr
+              %td.acenter
+                = user.name.titleize
+              %td
+                = user.email
+              %td
+                = user.signup_station_name
+              %td
+                = user.signup_streaming_url
+              %td
+                = user.signup_website
+              %td.acenter.hidden-xs
+                - user.countries.each do |c|
+                  %span.label.label-inverse
+                    = c.title
+              %td
+                = user.created_at
+              %td
+                .pull-right
+                  = link_to "View", user_path(user), class: "btn btn-primary view"
+    - else
+      %p
+        = render "shared/no_records", msg: "No pending users found."
+    .pagination_area.pull-right
+      = paginate @users

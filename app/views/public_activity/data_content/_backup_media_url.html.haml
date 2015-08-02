@@ -1,0 +1,10 @@
+updated content 
+- if activity.trackable
+  %span
+    = link_to activity.trackable.title, search_content_search_path(content_query: activity.trackable.title)
+    - if activity.parameters[:channel_no].present? && activity.parameters[:channel_no] != ""
+      = "(Extension no: " + activity.parameters[:channel_no] + ")"
+Back-Up URL from "#{activity.parameters[:old_backup]}" to "#{activity.parameters[:new_backup]}""
+- if activity.parameters[:channels]
+  on
+  %span= " Stations : " + activity.parameters[:channels] 

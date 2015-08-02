@@ -1,0 +1,3 @@
+%select.input-xlarge{:id => "data_entryway", :name => "data_entryway"}
+  -@dids.each do |did|
+    %option{:value => did.did_e164}=did.did_e164

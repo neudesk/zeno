@@ -1,0 +1,5 @@
+- if @stations_filter
+  - selected = @station.id if @station
+  = select_tag "station", options_from_collection_for_select(@stations_filter, 'id', 'title', selected), :prompt => "Station"
+- else
+  = select_tag "station", nil, :prompt => "Station", :disabled => true

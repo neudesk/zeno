@@ -1,0 +1,26 @@
+#editRuleModal.modal{"aria-hidden" => "true", role: "dialog"}
+  .modal-dialog
+    .modal-content
+      .modal-header
+        .modal_title
+          %h4= "Update Rule"
+      .modal-body
+        = simple_form_for @rule, url: update_rule_path, method: 'post', html: {id: "editRuleForm"}, multipart: true do |f|
+          = hidden_field_tag :id
+          %fieldset
+            = f.input :gateway_id, as: :select, collection: @gateways.collect { |x| [x.title, x.id]}, label: 'Station'
+            = f.input :entryway_provider_id, as: :select, collection: @providers.collect { |x| [x.title, x.id]}, label: 'CLEC Providers'
+            = f.input :new_entryway_provider_id, as: :select, collection: @reroute_clec.collect { |x| [x.title, x.id]}, label: 'Reroute CLEC'
+            = f.input :parent_carrier_id, as: :select, collection: @carriers.collect { |x| [x.title, x.id]}, label: 'Carriers'
+            = f.input :gateway_prompt_id, as: :select, collection: @promptlists.collect {|x| [x.title, x.id]}, label: 'Prompt'
+            .col-sm-6
+              %label
+                = f.check_box :hangup_after_play, class: 'icheck-me', data: {color: "blue", skin: "square"}
+                = 'Hang up after play'
+            .col-sm-6
+              %label  
+                = f.check_box :is_enabled, class: 'icheck-me', data: {color: "blue", skin: "square"}
+                = 'Active'            
+      .modal-footer
+        = link_to "Cancel", "#", class: "btn btn-default", "aria-hidden" => "true", "data-dismiss" => "modal"
+        = link_to "Update", "#", class: "btn btn-success submitRuleUpdate", data: {target: "#editRuleForm", type: 'rule', modal: '#editRuleModal'}

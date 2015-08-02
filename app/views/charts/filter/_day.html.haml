@@ -1,0 +1,1 @@
+= select_tag "day", options_for_select({"7 days" => "7", "24 hours" => "1", "7 days (by hours)" => "8", "30 days" => "30"}, @opt_selected.presence || '7'), "data-current-page" => params[:page]

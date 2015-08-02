@@ -1,0 +1,11 @@
+Update country
+- if activity.parameters[:old_country]
+  = activity.parameters[:old_country] != "" and activity.parameters[:old_country] != nil and activity.parameters[:old_country] != 0 ? raw("\"#{DataGroupCountry.find(activity.parameters[:old_country]).title}\"") : '""'
+- if activity.parameters[:new_country]
+  to
+  = activity.parameters[:new_country] != "" and activity.parameters[:new_country] != nil and activity.parameters[:new_country] != 0 ? raw("\"#{DataGroupCountry.find(activity.parameters[:new_country]).title}\"") : '""'
+
+- if activity.parameters[:gateway_id]
+  - gateway = DataGateway.find(activity.parameters[:gateway_id])
+  = "on station"
+  = link_to gateway.title, settings_station_path(gateway.id)

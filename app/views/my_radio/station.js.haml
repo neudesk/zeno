@@ -1,0 +1,9 @@
+$(".settings-tabs-content").empty().html("#{j(render('station', {}))}");
+$(".main-loading").hide();
+
+- flash.each do |key, value|
+  $(".ajax-alert").html("#{escape_javascript(flash[:notice])}"); 
+  $(".ajax-alert").show().delay(1000).fadeOut();
+
+:plain
+  window.myRadio = new MyRadio();

@@ -1,0 +1,10 @@
+.clearfix.chart-filter
+  .day-filter.pull-right
+    = render "charts/filter/day"
+%center
+  - series.each_with_index  do |c, i|
+    %div{:id => "chart_#{i}", :style => "margin-bottom: 10px;" }
+    = render_chart(c, "chart_#{i}")
+
+  = link_to "Default", "#", class: "btn btn-primary btn-aggregate btn-default"
+  = link_to "Custom", "#", class: "btn btn-primary btn-aggregate btn-custom"

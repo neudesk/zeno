@@ -1,0 +1,115 @@
+.row
+  = render "graph"
+  
+.row
+  .col-sm-6
+    %h3= "Current Top 3 Most Growth"
+    %table.table.table-striped.table-hover.table-bordered.table-with-labels
+      %thead
+        %tr
+          %th= "RCA"
+          %th.acenter=  "Last week"
+          %th.acenter=  "Current week"
+      %tbody
+        - @result_mini.last(3).sort{|a, b| b[3].to_i <=> a[3].to_i}.each do |res|
+          %tr
+            %td
+              - if params[:rca_id].present?
+                = link_to res[0], reports_path(station_id: res[1])
+              - else
+                = res[0]
+            %td.acenter
+              = res[2].present? ? format_decimal(res[2]) : 0
+            %td.acenter
+              = res[3].present? ? format_decimal(res[3]) : 0 
+                  
+  .col-sm-6
+    %h3= "Current Top 3 Most Drop"
+    %table.table.table-striped.table-hover.table-bordered.table-with-labels
+      %thead
+        %tr
+          %th= "RCA"
+          %th.acenter=  "Last week"
+          %th.acenter=  "Current week"
+      %tbody
+        - @result_mini.first(3).sort{|a, b| b[3].to_i <=> a[3].to_i}.each do |res|
+          %tr
+            %td
+              - if params[:rca_id].present?
+                = link_to res[0], reports_path(station_id: res[1])
+              - else
+                = res[0]
+            %td.acenter
+              = res[2].present? ? format_decimal(res[2]) : 0
+            %td.acenter
+              = res[3].present? ? format_decimal(res[3]) : 0 
+  .col-sm-12
+    %h3= "Weekly Minutes"
+    %table.table.table-striped.table-hover.table-bordered.table-with-labels
+      %thead
+        %tr
+          = render partial: "rca_table_head"
+      %tbody
+      - @result.each do |rca|
+        %tr
+          %td.name
+            = link_to rca[0], rca_minutes_data_numerical_reports_path(type: params["type"] || "percentage", rca_id: rca[1])
+          - if rca[2].to_i == 0
+            %td.acenter
+              %span.label.reporting.label-inverse= format_decimal(rca[2])
+          - else
+            %td.acenter
+              - if rca[2].to_i > 0                  
+                %span.label.reporting.label-success
+                  = format_decimal(rca[2])
+              - else
+                %span.label.reporting.label-danger
+                  = format_decimal(rca[2])
+
+          - if rca[2].to_i == rca[3].to_i
+            %td.acenter
+              %span.label.reporting.label-inverse= format_decimal(rca[3])
+          - else
+            %td.acenter
+              - if rca[2].to_i < rca[3].to_i
+                %span.label.reporting.label-success
+                  = format_decimal(rca[3])
+              - else
+                %span.label.reporting.label-danger
+                  = format_decimal(rca[3])
+
+          - if rca[3].to_i == rca[4].to_i
+            %td.acenter
+              %span.label.reporting.label-inverse= format_decimal(rca[4])
+          - else
+            %td.acenter
+              - if rca[3].to_i < rca[4].to_i
+                %span.label.reporting.label-success
+                  = format_decimal(rca[4])
+              - else
+                %span.label.reporting.label-danger
+                  = format_decimal(rca[4])
+
+          - if rca[4].to_i == rca[5].to_i
+            %td.acenter
+              %span.label.reporting.label-inverse= format_decimal(rca[5])
+          - else
+            %td.acenter
+              - if rca[4].to_i < rca[5].to_i
+                %span.label.reporting.label-success
+                  = format_decimal(rca[5])
+              - else
+                %span.label.reporting.label-danger
+                  = format_decimal(rca[5])
+
+          - if rca[5].to_i == rca[6].to_i
+            %td.acenter
+              %span.label.reporting.label-inverse= format_decimal(rca[6])
+          - else
+            %td.acenter
+              - if rca[5].to_i < rca[6].to_i
+                %span.label.reporting.label-success
+                  = format_decimal(rca[6])
+              - else
+                %span.label.reporting.label-danger
+                  = format_decimal(rca[6])

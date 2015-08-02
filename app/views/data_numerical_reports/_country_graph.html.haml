@@ -1,0 +1,8 @@
+- if params[:country_id].present?
+  .col-sm-6
+    %h3= "Weekly Graph"
+    #weekly_minutes_graph.graph{data: {labels: @weekly_labels, values: @weekly_values}}
+
+  .col-sm-6
+    %h3= "Last Week and Current Week Graph"
+    #compare_prev_weeks_graph.graph{data: {labels: @compare_labels, current_values: @compare_current_value, prev_values: @compare_prev_value}}

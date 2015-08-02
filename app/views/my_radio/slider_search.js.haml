@@ -1,0 +1,15 @@
+$(".slider").empty().html("#{j(render('slides', {selected_station_id: @station ? @station.id : nil, slider_search_enabled: true, query: params[:query], country_id: params[:country_id], rca_id: params[:rca_id]}))}");
+- stations_size = @stations.length
+- height = (stations_size <= 16)? 1 : (stations_size <= 32 ? 2 : 3)
+
+$(".main-loading").hide();
+
+:plain
+  $(document).ready(function(){
+    if(window.slider == null || window.slider == undefined){
+      window.slider = new Slider();
+    }else{
+      $(".main .slides").find('#mycarousel').jcarousel({scroll:6, animation: "slow"});
+    }
+    window.slider.setupPrevNextButtonsAligments(#{height});
+  });

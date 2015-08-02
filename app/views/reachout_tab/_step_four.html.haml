@@ -1,0 +1,62 @@
+%div{:id=>"step-4"}
+  .panel.panel-default
+    .panel-heading
+      .fa.fa-cogs
+      Phone List
+      .panel-tools
+        %a.btn-link.back-step{:href=>"#"}
+          %i.fa.fa-arrow-circle-left
+          Go Back
+    .panel-body
+      .alert.alert-success{:style => "display:none;"}
+        %button.close{:data=>{:dismiss=>"alert"}} &times;
+        %i.fa.fa-check-circle
+      .alert.alert-danger{:style => "display:none;"}
+        %button.close{:data=>{:dismiss=>"alert"}} &times;
+        %i.fa.fa-check-circle
+      .step_four_content{:style => "margin: 0 auto;width: 70%;min-height:200px;"}
+        .left
+          %label List to Send Campaign 
+          %br
+          %label Recording Audio
+          %br
+          %label Campaign Schedule 
+        .right
+          .check_boxes{:style => "height:74px;"}
+            %label.radio.inline.checkbox-inline{:for => "setopt-active-listeners", :id => "setopt-active-listeners_sum"}
+              %input.opt.square-red{:type =>"checkbox", :checked => true, :name => 'active_listeners', :disabled=>"disabled"}
+              %i.fa.fa-users
+              = "Active listeners : " + @listeners_length.to_s
+            %br
+            %label.radio.inline.checkbox-inline{:for => "setopt-uploaded-list-phone-numbers", :id => "setopt-uploaded-list-phone-numbers_sum", :style => "display:none;"}
+              %input.opt.square-green{:type =>"checkbox", :checked => true, :name => 'uploaded_listeners', :disabled=>"disabled"}
+              %i.fa.fa-save
+              -#// it should update the phone list count
+              = @uploaded_listeners.present? ? "Uploaded List of Phone Numbers : <span id='listenerCount'>#{@uploaded_listeners.length.to_s}</span>".html_safe : "Uploaded List of Phone Numbers : <span id='listenerCount_step4'>0</span>".html_safe
+          .file_name
+            %span.glyphicon.glyphicon-file
+            %span.file-caption-name
+          %br
+          .schedule
+            .start_time{:style =>"float:left"}
+              %p Start :  
+              %input#start_time{:type => "text", :readonly=>"true"}
+            .end_time{:style =>"float:left"}
+              %p End :  
+              %input#end_time{:type => "text", :readonly=>"true"}
+        .center{:style => "clear:both;float:left;width:100%;"}
+          %hr
+          %button#save_campaign.btn.btn-success.btn-block{:style => "width: 21%;margin: 0 auto;"}
+            %i.fa.fa-save
+            Save
+          #loading{:style=>"margin-top:10px;margin-bottom:10px;display:none;"}
+            %img{:src => "assets/loading.gif",:style => "width:30px;height:30px;"}
+            Just a moment
+        %br
+        %br
+        #campaign_settings
+
+  %a#finish_campaign.btn.next-step.btn-success.btn-block.disabled
+    Finish
+    %i.fa.fa-arrow-circle-right
+  .clearfix

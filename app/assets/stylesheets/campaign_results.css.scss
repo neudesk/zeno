@@ -1,0 +1,158 @@
+.panel-campaign {
+  margin-left: 2%;
+  margin-right: 2%;
+  .panel-body {
+    display: none;
+    #loader.loading {
+      display: block;
+    }
+
+    table tr td a i {
+      font-size: 12px;
+    }
+
+    .tooltip-inner {
+      text-align: left;
+      padding-left: 20px;
+      padding-right: 20px;
+    }
+  }
+  .panel-footer {
+    height: 50px;
+  }
+}
+
+#realtime_choices label, #daily_choices label, #weekly_choices label{
+  color: #525050;
+  text-align: left;
+  margin-left: 35px;
+}
+
+
+
+
+
+.campaign_gateways
+{
+  margin: 0px ;
+}
+.campaigns
+{
+  float: left;
+  width: 100%;
+}
+.campaign_gateways li
+{
+  list-style: none;
+}
+.campaign_gateways .campaign_list
+{
+  float:left;
+  background-color: #F3F7F8;
+  width:918px;
+  border-left: 1px Solid #569197;
+  padding-bottom: 5px;
+  line-height: 30px;
+  padding-left: 20px;
+  margin-bottom: 5px;
+  cursor: pointer;
+}
+
+.campaigns .cmp_table
+{
+  display: none;
+}
+.campaign_table
+{
+  width:100%;
+  border: 1px Solid #D8D8D8;
+  margin-top: 15px;
+  margin-bottom: 15px;
+  font-size: 12px;
+}
+.campaign_table th
+{
+  color:#555555;
+  text-align: center;
+  font-size: 12px;
+  border: 1px Solid #D8D8D8;
+  background-color: #F8F8F8;
+  padding: 10px 6px 10px 6px;
+
+}
+.campaign_table td
+{
+  color:#555555;
+  padding-left: 5px;
+  border: 1px Solid #D8D8D8;
+}
+.campaign_table tr.even
+{
+  background-color: #F8F8F8;
+}
+.campaign_table td.gateway_id
+{
+  text-align: center;
+}
+.campaign_table .span8
+{
+  width: 150px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  margin-right: 0px;
+  margin-left: 0px;
+}
+.show_campaign_status
+{
+  cursor: pointer;
+}
+.stats
+{
+  width:95%;
+  border: 1px Solid #D8D8D8;
+}
+.stats th
+{
+  color:#555555;
+  text-align: center;
+  font-size: 12px;
+}
+.stats td
+{
+  color:#555555;
+  padding-left: 10px;
+  border: 1px dotted #D8D8D8;
+}
+.stats tr.odd
+{
+  background-color: #EFFBEF;
+}
+.stats tr.even
+{
+  background-color: #E0F8E0;
+}
+#showSettingsModal
+{
+  width:800px;
+}
+#showSettingsModal .campaign_table td, #showSettingsModal .campaign_table th
+{
+  padding: 10px;
+}
+.daily_campaigns table
+{
+  width: 50%;
+  margin: 0 auto;
+}
+.daily_campaing_table_row td
+{
+  padding:10px;
+}
+
+.popover
+{
+  max-width: 400px !important;
+}
+
+
+

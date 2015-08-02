@@ -1,0 +1,12 @@
+moved content 
+- if activity.parameters[:content_id]  
+  - data_content = DataContent.find_by_id(activity.parameters[:content_id])
+  - if data_content.present?
+    %span= link_to data_content.title, data_content_path(data_content), :remote => 'true'
+    - if activity.parameters[:new_extension] 
+      ="(Extension no: " + activity.parameters[:old_extension].to_s + " to Extension no: " + activity.parameters[:new_extension].to_s + ")"
+on station
+- if activity.trackable
+  = link_to activity.trackable_title, settings_station_path(activity.trackable.id)
+- else
+  which has since been removed

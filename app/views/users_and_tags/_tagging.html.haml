@@ -1,0 +1,5 @@
+#filter-select.bottom-15.clearfix
+	.pull-left.data-taggings-filter.clearfix
+		= I18n.t("titles.pages.users_and_tags.labels.tag")
+		%span.radio-select= select_tag "data_tagging", options_for_select(@data_taggings, 1)
+= render "tagging_data"

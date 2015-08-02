@@ -1,0 +1,27 @@
+.row
+  .col-sm-12
+    .panel.panel-default.info-box.station-graph
+      .backgroundColor.blue
+        .clearfix
+          = link_to "See Station Statistics", reports_path(station_id: @station), class: "btn btn-primary btn-sm", tip: "Click to go to reporting page"
+        #settings_graph{style: "height:25px;margin-top: 20px;", data: {labels: @chart_labels, values: @chart_values}}
+        .row
+          .verticalChart.daily_minutes
+            - @chart.each_with_index do |day_chart, idx|
+              - if day_chart[1] == 0
+                - percentage = 0
+              - else
+                - percentage = (day_chart[1] / @max) * 100
+              - date = (Date.today - 7.days + idx.days).strftime("%b %d")
+              .singleBar{tip: "#{date}: #{format_decimal(day_chart[1])} minutes"}
+                .bar
+                  .value{style: "height: #{percentage}%"}
+                .title
+                  = day_chart[0]
+      .quarters
+        .quarter.q3
+          = @new_users
+          %span= "New Users since #{html_date(Date.today.beginning_of_month)}"
+        .quarter.q4
+          = @active_users
+          %span= "Active Users since #{html_date(Date.today.beginning_of_month)}"

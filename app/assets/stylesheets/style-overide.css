@@ -1,0 +1,74 @@
+#s2id_rca_id, #s2id_country_id {
+  margin-top: -3px;
+}
+
+.query-search-rca-id .select2-arrow > b,
+.query-search-country-id .select2-arrow > b {
+  margin-top: 4px;
+}
+
+.query-search-rca-id .select2-chosen,
+.query-search-country-id .select2-chosen {
+  font-family: 'Open Sans';
+  font-size: 14px;
+  padding-top: 2px;
+}
+
+/* =================================================================== */
+
+
+.item {
+  font-family: 'Open Sans';
+}
+.slider-group-search {
+  padding-top: 25px;
+  padding-bottom: 20px;
+}
+#SlideContainer, #SlideContainer > div, #inside_slider {
+  max-height: 470px !important;
+}
+.fix-modal {
+    font-family: 'Open Sans';
+    overflow: hidden;
+}
+
+.fix-modal .control-label {
+    font-size: 13px;
+}
+.modal-header .modal_title {
+    font-family: 'Open Sans';
+}
+
+
+.fix-modal .modal-dialog {
+    position: fixed;
+    left: 50%;
+}
+
+.fix-modal .modal-body {
+    overflow-y: auto;
+}
+
+select {
+    box-shadow: none !important;
+}
+
+.min-button {
+    min-width: 150px;
+}
+
+#s2id_media_url2 .select2-arrow b {
+    padding-top: 8px;
+}
+
+.select2-drop {
+    font-family: 'Open Sans';
+}
+
+#media_url2 {
+
+}
+
+.fix-modal .select2-input {
+    font-family: 'Open Sans';
+}

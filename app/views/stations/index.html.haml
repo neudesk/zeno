@@ -1,0 +1,55 @@
+.row
+  .col-sm-12
+    .page-header.main
+      .pull-right.header-buttons
+        = link_to new_station_path, class: "btn btn-primary btn-sm" do
+          %i.clip-user-plus
+          Create New
+      .pull-right.header-buttons.no-margin
+        = search_form_for @q, url: stations_path do |f|
+          .input-group.input-group-sm.short-search
+            = f.text_field :title_or_country_title_or_language_title_or_broadcaster_group_title_or_rca_group_title_cont, placeholder: "Enter Keyword Here", class: "form-control"
+            .input-group-btn
+              = f.submit "Search", class: "btn btn-default submit_search"
+      %h1
+        = "Station List"
+.row
+  .col-sm-12
+    - if @stations.present?
+      %table.table.table-hover.table-striped
+        %thead
+          %tr
+            %th
+              = sort_link(@q, :title, "Title")
+            %th.hidden-xs
+              = sort_link(@q, :country_title, "Country")
+            %th.hidden-xs
+              = sort_link(@q, :language_title, "Language")
+            %th.hidden-sm.hidden-xs
+              = sort_link(@q, :broadcaster_group_title, "BroadCaster Group")
+            %th.hidden-sm.hidden-xs
+              = sort_link(@q, :rca_group_title, "RCA Group")
+            %th
+        %tbody
+          - @stations.each do |station|
+            %tr
+              %td
+                = station.title
+              %td.hidden-xs
+                = station.country.try(:title)
+              %td.hidden-xs
+                = station.language.try(:title)
+              %td.hidden-sm.hidden-xs
+                = station.broadcaster_group.try(:title)
+              %td.hidden-sm.hidden-xs
+                = station.rca_group.try(:title)
+              %td
+                .pull-right
+                  = link_to station_path(station), class: "btn btn-green btn-sm" do
+                    %i.fa.fa-align-justify
+                    View
+    - else
+      = render "shared/no_records", msg: "No stations found."
+    .pagination_area.pull-right
+      = paginate @stations
+      

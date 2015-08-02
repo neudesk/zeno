@@ -1,0 +1,12 @@
+.marketer.charts
+  %ul.nav.nav-tabs
+    %li.aggregate
+      %a{:href => "#"} Aggregate
+    %li.default.active
+      %a{:href => "#"} Default
+    %li.custom
+      %a{:href => "#"} Custom
+  #content-charts.chart-content
+    = render "charts/common_default_charts", :series => @series, :level_name => "countries", :level => 1, data: @country_ids
+
+

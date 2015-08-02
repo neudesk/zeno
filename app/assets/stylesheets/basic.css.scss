@@ -1,0 +1,97 @@
+body{
+  background: #3A4F64;
+  font-family:Arial, Helvetica, sans-serif;
+}
+.no-message{
+  font-size: 18px;
+  font-style: italic;
+  text-align: center;
+}
+.container, .navbar-static-top .container, .navbar-fixed-top .container, .navbar-fixed-bottom .container {
+  width: 970px !important;
+}
+.navbar-fixed-top, .navbar-fixed-bottom, .navbar-static-top {
+    margin-left: 0px;
+    margin-right: 0px;
+}
+.navbar-fixed-top {
+  margin-bottom: 0px !important;
+}
+a:hover, a:focus{
+  text-decoration:none !important;
+}
+.navbar-inverse .nav .active > a, .navbar-inverse .nav .active > a:hover, .navbar-inverse .nav .active{
+  //background-color: #8193A9 !important;
+  color: white !important;
+}
+.navbar-inverse .brand, .navbar-inverse .nav > li > a {
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+  color: #999 !important;
+}
+.navbar-inverse .nav li.dropdown.open > .dropdown-toggle{
+  //background-color: #8193A9 !important;
+  font-weight: normal !important;
+  text-shadow: 0 0 0 !important;
+}
+.navbar-inverse .brand, .navbar-inverse .nav > li > a:hover{
+  //background-color: #8193A9 !important;
+  text-shadow: 0 0 0 !important;
+  color: white !important;
+};
+.table{
+  thead {
+    background-color: #E6E6E6;
+    border: 1px solid #9F9F9F !important;
+    th{
+      font-weight:normal !important;
+      border-top-color: #9F9F9F !important;
+      //color: #0088CC;
+    }
+  }
+  thead.blue-head {
+    background-color: #31689E;
+    color: #FFFFFF;
+  }
+
+  tbody {
+    td {
+      
+    }
+  }
+}
+.pagination {
+  //background-color: #CCCCCC;
+  border-radius: 0 0 5px 5px;
+  color: #FFFFFF;
+  display: block;
+  min-height: 25px;
+  padding: 3px 10px 5px;
+  text-align: right;
+  ul{
+    padding-top: 5px;
+  }
+}
+.main-loading{
+  min-height: 800px;
+  text-align:center;
+
+  position: absolute;
+  left: 50%;
+  top: 5%;
+  margin-left: -32px; /* -1 * image width / 2 */
+  margin-top: -32px;  /* -1 * image height / 2 */
+  display: block;
+
+  img{
+    margin-top: 400px;
+  }
+}
+
+.text-underline {
+  text-decoration: underline;
+}
+
+.alert {
+  margin-left: -5px;
+  width: 929px;
+}

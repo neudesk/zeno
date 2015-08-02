@@ -1,0 +1,57 @@
+.data_gateways.new_data_gateway
+  .row
+    %h1.page_heading Add New Station
+    .standard
+      = simple_nested_form_for(@station, :url => data_gateways_path) do |f|
+        .clearfix
+          .clearfix
+            = f.label :title, :class => "title_label pull-left more-margin-right"
+            = f.text_field :title, :class => "title_field pull-left", :required => true
+          .clearfix
+            = f.label :country, :class => "country_label pull-left more-margin-right"
+            = f.select :country_id, options_from_collection_for_select(DataGroupCountry.order(:title), 'id', 'title')
+          .clearfix
+            = f.label :language, :class => "language_label pull-left more-margin-right"
+            = f.select :language_id, options_from_collection_for_select(DataGroupLanguage.order(:title), 'id', 'title')
+          .clearfix
+            = f.label :broadcast, :class => "broad_cast_label pull-left more-margin-right"
+            = f.select :broadcast_id, options_from_collection_for_select(DataGroupBroadcast.order("trim(title)"), 'id', 'title'), :include_blank => true
+          .clearfix
+            = f.label :rca, :class => "rca_label pull-left more-margin-right"
+            = f.select :rca_id, options_from_collection_for_select(DataGroupRca.order("trim(title)"), 'id', 'title'), :include_blank => true
+          .clearfix
+            = f.label :website, :class => "rca_label pull-left more-margin-right"
+            = f.text_field :website, :class => "title_field pull-left"
+          .clearfix
+            = f.label :logo, :class => "rca_label pull-left more-margin-right"
+            = f.file_field :logo, :class => "pull-left"
+          .clearfix
+            = f.label :flag_broadcaster, 'Broadcaster?', :class => "rca_label pull-left more-margin-right"
+            = f.check_box :flag_broadcaster
+
+            
+
+        .new_entry_ways{style: "margin-top:10px;margin-bottom:10px"}
+          = f.simple_fields_for(:data_entryways, f.object.data_entryways.new) do |f_entry|
+            = f.label "Add Entryway", :class => "entryway_label"
+            .standard.new_entry_way
+              .clearfix
+                = f.label "DID e164", :class => "title_label pull-left"
+                = select_tag :'free_entryway_ids[]', options_from_collection_for_select(DataEntryway.where("gateway_id is null").order(:title), 'id', 'title'), {:class => "data_entryway_select"}
+              .clearfix
+                = f.label :'Third Party', :class => "3rd_party_label pull-left"
+                = select_tag :'3rdparty_ids[]', options_from_collection_for_select(DataGroup3rdparty.order("trim(title)"), 'id', 'title'), :include_blank => true
+
+            %p.remove_new_entry_way_btn= f_entry.link_to_remove "Remove This Entryway"
+        %p.add_new_language_btn= f.link_to_add "Add Another Entryway", :data_entryways, :class => "btn btn-small", style: "font-size:15px;"
+
+        .save_region.clearfix
+          = f.submit("Save", :class => "btn", style: "padding: 10px 20px")
+
+- content_for :js do
+  :erb
+    <script>
+      $(document).ready(function(){
+        window.DataGateways = new DataGateways
+      });
+    </script>

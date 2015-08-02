@@ -1,0 +1,15 @@
+.container#version4{style: "background: url('#{hostname}/embed/ghana_flag_02.jpg')"}
+  .row-fluid
+    .col-xs-12{style: "text-align:center !important"}
+      .contents
+        %p Listen to
+        %p.title= "GHANA RADIO"
+        %p.subtitle= "ON YOUR PHONE"
+        %p More than 40 stations to choose from
+        %p.buttons{style: "margin-top: 94px; align: center;"}
+          %a.bookmark{href: "#"}
+            %img{src: "#{hostname}/embed/bookmark3.png"}
+          %a.phonebook{href: "tel:7124322380"}
+            %img{src: "#{hostname}/embed/phonebook1.png"}
+          %a.download_quickplay{href: "#{hostname}/download?secret_code='#{SymmetricEncryption.encrypt(1)}'"}
+            %img{src: "#{hostname}/embed/quickplay1.jpg"}

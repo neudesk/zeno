@@ -1,0 +1,36 @@
+development:
+  adapter: mysql2
+  username: root
+  password: "abc"
+  database: zenoradio
+  charset: utf8
+
+staging:
+  adapter: mysql2
+<<<<<<< HEAD:config/database.yml
+  username: radio
+  password: radio
+=======
+  username: root
+  password: r
+>>>>>>> dev_new_layout:config/database.yml.save
+  database: zenoradio-v25
+  charset: utf8
+  port: 3306
+  host: database 
+
+production:
+  adapter: mysql
+  username: root
+  password: root
+  database: radio_prod
+  charset: utf8
+
+test: &test
+  adapter: mysql2
+  username: root
+  password: root
+  database: radio_test
+  charset: utf8
+cucumber:
+  <<: *test

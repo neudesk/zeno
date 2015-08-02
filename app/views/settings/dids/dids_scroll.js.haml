@@ -1,0 +1,12 @@
+$(".main-loading").hide();
+
+$(".did_section").find(".did_code_list").append("#{j(render('settings/did_elements', {entryways: @entryways}))}")
+
+$(".did_section").find(".did_code_list").data("page", #{@page})
+:plain
+  if($(".did_section").find('.edit_btn').is(":visible")) {
+    $(".selected_did_chk").hide();
+  }
+  else {
+    $(".selected_did_chk").show();
+  }

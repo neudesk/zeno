@@ -1,0 +1,62 @@
+@font-face {
+    font-family: "clearsans";
+    src: url("/fonts/clearsans.ttf") format("truetype");
+    font-weight: normal; font-style: normal;
+}
+
+* {
+    font-family: clearsans;
+}
+legend, .subHeadings {
+    color: #598fc2 !important;
+}
+label {
+    color: #1e2933 !important;
+}
+#iframeform .bigGreyInput {
+    background: #f6f6f6 !important;
+    border: 1px solid #e6e6e6 !important;
+    border-radius: 5px !important;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    color: #1e2933 !important;
+    display: block;
+    font: normal 16px/20px Arial, Helvetica, Verdana, sans-serif;
+    margin: 5px 0 0 0;
+    padding: 20px 10px !important;
+    width: 100% !important;
+}
+#iframeform fieldset {
+    margin-bottom: 40px;
+}
+#iframeform fieldset legend {
+    border-bottom: 2px solid #e6e6e6;
+    color: #0f3a55;
+    font: bold 25px/30px 'clearsans', Arial, Helvetica, Verdana, sans-serif;
+    margin: 0 0 30px 0;
+    padding: 0 0 5px 0;
+    width: 100%;
+    display: block;
+}
+#iframeform .submitbtn {
+    background: #31689e;
+    border: none;
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    color: #fff;
+    cursor: pointer;
+    display: block;
+    font: bold 24px/30px 'clearsans', Arial, Helvetica, Verdana, sans-serif;
+    margin: 20px auto;
+    padding: 30px 0;
+    text-align: center;
+    text-shadow: 0 1px 3px #000;
+    width: 200px;
+}
+#iframeform .subHeadings {
+    color: #333;
+    font: normal 26px/34px 'clearsans', Arial, Helvetica, Verdana, sans-serif;
+    margin: 40px 0 50px 0;
+    text-align: center;
+}

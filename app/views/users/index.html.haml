@@ -1,0 +1,18 @@
+.row.listeners
+  %h4.text-center Users Management
+  %table.table.table-striped.table-hover
+    %thead
+      %tr
+        %th Id
+        %th Email
+        %th Action
+    %tbody
+      - @users.each do |user|
+        %tr
+          %td= user.id
+          %td= user.email
+          %td
+            - if user.id != current_user.id
+              = link_to (user.access_locked? ? 'Unlock' : 'Lock'), toggle_lock_user_path(user), :method => :put
+= paginate @users
+

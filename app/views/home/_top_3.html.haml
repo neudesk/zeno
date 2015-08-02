@@ -1,0 +1,39 @@
+-if (current_user.is_rca?)
+  %div
+    %div.switcher
+      - if params["top_3_type"] == "minutes"
+        %a{:href => "/?top_3_type=minutes", :class =>"btn_active"} Minutes
+        %a{:href => "/?top_3_type=percentage", :class =>"btn"} Percentage
+      -elsif params["top_3_type"] == "percentage"
+        %a{:href => "?top_3_type=minutes", :class =>"btn"} Minutes
+        %a{:href => "/?top_3_type=percentage", :class =>"btn_active"} Percentage
+      -else
+        %a{:href => "?top_3_type=minutes", :class =>"btn"} Minutes
+        %a{:href => "/?top_3_type=percentage", :class =>"btn_active"} Percentage
+    %br
+    -if  @result.length > 5
+      %bottom
+        - if params[:top_3_type]== "minutes"
+          %div.left{:style=>"float:left;"}
+            %p= "Current Top 3 Most Growth"
+            =render :partial => "data_numerical_reports/top_3_minutes" ,:locals => {:result => @result.first(3)}
+            %br
+          %div.right{:style=>"float:left;"}
+            %p{:class => "drop"}= "Current Top 3 Most Drop"
+            =render :partial => "data_numerical_reports/top_3_minutes", :locals => {:result => @result.last(3).sort{|a, b| b[3].to_i <=> a[3].to_i}}
+        - else
+          %div.left{:style=>"float:left;"}
+            %p= "Current Top 3 Most Growth"
+            =render :partial => "data_numerical_reports/top_3_percentage" ,:locals => {:result => @result.last(3).sort{|a, b| a[3].to_i <=> b[3].to_i}}
+            %br
+          %div.left{:style=>"float:left;"}
+            %p{:class => "drop"}= "Current Top 3 Most Drop"
+            =render :partial => "data_numerical_reports/top_3_percentage", :locals => {:result => @result.first(3).sort{|a, b| b[3].to_i <=> a[3].to_i}}
+    -else
+      %bottom
+        -if params[:top_3_type]== "minutes"
+          %p= "Current Top 3 Most Growth"
+          =render :partial => "data_numerical_reports/top_3_minutes" ,:locals => {:result => @result.first(3)}
+        -else
+          %p= "Current Top 3 Most Growth"
+          =render :partial => "data_numerical_reports/top_3_percentage" ,:locals => {:result => @result.first(3)}

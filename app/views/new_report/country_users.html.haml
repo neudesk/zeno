@@ -1,0 +1,118 @@
+%div.page-header
+  %h1
+    %i.fa.fa-clock-o
+    = "Country Users"
+%br
+%div{role: "tabpanel"}
+  %p Note: Country with country users lower than 1000 is dropped.
+  %ul.nav.nav-tabs.tab-bricky.tab-blue.tab-padding.tab-space-3{role: "tablist"}
+    %li{role: "presentation"}
+      = link_to "RCA Minutes", new_rca_minutes_new_report_index_path
+    %li{role: "presentation"}
+      = link_to "Country Minutes", new_country_minutes_new_report_index_path
+    %li.active{role: "presentation"}
+      = link_to "Country Users", new_country_users_new_report_index_path
+  .tab-content
+    .tab-pane.active#minutes{role: "tabpanel"}
+      .row
+        .col-sm-6
+          %h4.page-header Current Top 3 Most Growth
+          %br
+          %table.table.table-striped.table-hover.table-bordered.table-with-labels
+            %thead
+              %tr
+                %th RCA
+                %th
+                  Last Week
+                  %a.pull-right
+                    = "#{@top_3_labels[1][0]} - #{@top_3_labels[1][1]}"
+                %th
+                  Current Week
+                  %a.pull-right
+                    = "#{@top_3_labels[2][0]} - #{@top_3_labels[2][1]}"
+            %tbody
+              - @top_3.each do |minutes|
+                %tr
+                  %td= minutes[0]
+                  %td= values_trend(minutes[1], minutes[2][0], minutes[2][1], show_previous=false)
+                  %td= values_trend(minutes[2][0], minutes[3][0], minutes[3][1], show_previous=false)
+        .col-sm-6
+          %h4.page-header Current Top 3 Most Drop
+          %br
+          %table.table.table-striped.table-hover.table-bordered.table-with-labels
+            %thead
+              %tr
+                %th Country
+                %th
+                  Last Week
+                  %a.pull-right
+                    = "#{@top_3_labels[1][0]} - #{@top_3_labels[1][1]}"
+                %th
+                  Current Week
+                  %a.pull-right
+                    = "#{@top_3_labels[2][0]} - #{@top_3_labels[2][1]}"
+            %tbody
+              - @bottom_3.each do |minutes|
+                %tr
+                  %td= minutes[0]
+                  %td= values_trend(minutes[1], minutes[2][0], minutes[2][1], show_previous=false)
+                  %td= values_trend(minutes[2][0], minutes[3][0], minutes[3][1], show_previous=false)
+      %br
+      .row
+        .col-sm-12
+          %h4.page-header Country Users
+          .row
+            = form_tag '', method: :get do
+              .col-md-2.col-md-offset-8
+                = select_tag :country_id, options_from_collection_for_select(@countries, 'id', 'title', params[:country_id]), prompt: 'Select Country', class: 'select', style: 'margin-top: 1px'
+              .col-md-2
+                %button.btn.btn-default{type: 'submit', style: 'margin-top: 3px'}
+                  %i.fa.fa-search
+                = link_to new_country_users_new_report_index_path,  class: 'btn btn-default', style: 'margin-top: 3px' do
+                  %i.fa.fa-refresh
+          %br
+          %table.table.table-striped.table-hover.table-bordered.table-with-labels
+            %thead
+              %tr
+                %th= report_sort_link(new_country_users_new_report_index_path, 'Country', '1', 'minutes')
+                %th
+                  = report_sort_link(new_country_users_new_report_index_path, "#{@week_labels[4][0]} - #{@week_labels[4][1]}", '3', 'minutes')
+                  %span.pull-right
+                    = report_sort_link(new_country_users_new_report_index_path, '%', '3', 'percent')
+                %th
+                  = report_sort_link(new_country_users_new_report_index_path, "#{@week_labels[3][0]} - #{@week_labels[3][1]}", '4', 'minutes')
+                  %span.pull-right
+                    = report_sort_link(new_country_users_new_report_index_path, '%', '4', 'percent')
+                %th
+                  = report_sort_link(new_country_users_new_report_index_path, "#{@week_labels[2][0]} - #{@week_labels[2][1]}", '5', 'minutes')
+                  %span.pull-right
+                    = report_sort_link(new_country_users_new_report_index_path, '%', '5', 'percent')
+                %th
+                  = report_sort_link(new_country_users_new_report_index_path, "#{@week_labels[1][0]} - #{@week_labels[1][1]}", '6', 'minutes')
+                  %span.pull-right
+                    = report_sort_link(new_country_users_new_report_index_path, '%', '6', 'percent')
+                %th
+                  = report_sort_link(new_country_users_new_report_index_path, 'Current Week', '8', 'minutes')
+                  %span.pull-right
+                    = report_sort_link(new_country_users_new_report_index_path, '%', '8', 'percent')
+            %tbody
+              - @users.each do |minutes|
+                %tr
+                  %td= minutes[1]
+                  %td= values_trend(minutes[2], minutes[3][0], minutes[3][1], show_previous=false)
+                  %td= values_trend(minutes[3][0], minutes[4][0], minutes[4][1], show_previous=false)
+                  %td= values_trend(minutes[4][0], minutes[5][0], minutes[5][1], show_previous=false)
+                  %td= values_trend(minutes[5][0], minutes[6][0], minutes[6][1], show_previous=false)
+                  %td= values_trend(minutes[7], minutes[8][0], minutes[8][1], show_previous=true,
+                                    from="#{@week_labels[0][0]} - #{@week_labels[0][1]}",
+                                    to="#{@week_labels[5][0]} - #{@week_labels[5][1]}")
+          -#.pull-right
+          -#  = paginate(@minutes)
+          -#.clearfix
+
+- content_for :js do
+  :javascript
+    $(document).ready(function(){
+      $('select[name="date[month]"], select[name="date[year]"]').select2()
+    });
+

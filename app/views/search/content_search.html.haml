@@ -1,0 +1,78 @@
+- if params[:content_query].present?
+  .row
+    .col-sm-12
+      = simple_form_for search_content_search_path, method: :get do
+        .pull-right
+          .input-group.input-group-sm.short-search
+            = text_field_tag :content_query, @content_query, placeholder: "Search content here...", class: "form-control"
+            .input-group-btn
+              = submit_tag "Search", class: "btn btn-primary submit_search"
+  %br
+  - if @contents.present?
+    .row
+      .col-sm-10.col-sm-offset-1
+        %h3
+          = "Search Result for \"#{@content_query}\""
+        %table.table.search-table.no-border
+          %tbody
+            - @contents.each_with_index do |content, idx|
+              %tr.header
+                %td= "##{content[0]}"
+                %td= content[1]
+                %td.hidden-sm.hidden-xs= simple_format(split_str(content[2], 95))
+                %td
+                  .pull-right
+                    .btn-group
+                      = link_to "#", class: "btn btn-primary btn-sm dropdown-toggle", data: {toggle: "dropdown"} do 
+                        = "Actions"
+                        %span.caret
+                      %ul.dropdown-menu.pull-right
+                        - if content[3].present?
+                          %li
+                            = link_to "Switch Streams", switch_data_content_path(content[0], query: @content_query), confirm: "Are you sure you want to switch the primary and the backup streams?"
+                        %li
+                          = link_to "Edit", edit_data_content_path(content[0], content_query: @content_query), remote: true
+                        %li
+                          = link_to "Delete", data_content_path(content[0], content_query: @content_query), method: :delete, confirm: "Are you sure you want to delete this content?"
+              - if content[4].present?
+                %tr
+                  %td{colspan: 3}
+                    .row-fluid
+                      .col-sm-8.col-sm-offset-2
+                        %table.table.table-striped.table-bordered.table-hover
+                          %thead
+                            %tr
+                              %td= "Station Name"
+                              %td.acenter= "Extension"
+                          %tbodys
+                            - gateways = content[4].split(',') rescue nil
+                            - channels = content[5].split(',') rescue nil
+                            - if gateways.present?
+                              - gateways.each_with_index do |gw, idx|
+                                %tr
+                                  %td
+                                    - gateway = DataGateway.find_by_id(gw)
+                                    %a{:href=>"/new_settings/station/#{gateway.try(:id)}"}
+                                      = gateway.try(:title)
+                                  %td.acenter
+                                    = channels[idx] if channels.present?
+              - else
+                %tr.separator
+                  %td{colspan: 3}
+    .pull-right              
+      -#= paginate @contents
+  - else
+    = render "shared/no_records", msg: "No content was found with the given keyword."
+
+  #edit_content_modal.modal{"aria-hidden" => "true", role: "dialog", tabindex: "-1"}
+- else
+  .google-like
+    = simple_form_for search_content_search_path, method: :get do
+      .row
+        .col-sm-8.col-sm-offset-2.col-xs-10.col-xs-offset-1
+          .form-fields
+            = text_field_tag :content_query, "", placeholder: "Search content or stream URL here..."
+      .row
+        .col-sm-2.col-sm-offset-5.col-xs-4.col-xs-offset-4
+          .form-actions
+            = submit_tag "Search", class: "btn btn-primary"

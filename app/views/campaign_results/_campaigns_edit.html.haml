@@ -1,0 +1,25 @@
+=hidden_field_tag "camapign_gateway_id", gateway_id
+%div{:style => "padding:30px;"}
+  %table.campaign_table
+    %thead
+      %th NO
+      %th Provider
+      %th Displayed DID
+      %th Active Listeners
+
+    %tbody
+      - campaigns.each do |m|
+        %tr{:class => cycle('odd', 'even')} 
+          %td= m.id
+          %td
+            - if m.did_provider != "NO MAPPING"
+              = select_tag("did_provider_"+m.id.to_s, options_from_collection_for_select(mapping_rules.select{|x| x.carrier_title == m.carrier_title },:entryway_provider, :entryway_provider, :selected => m.did_provider),:data=> {:did=>m.id},:class => 'did_provider')
+            - else
+              %select{:id => "did_provider_"+m.id.to_s} 
+                %option NO MAPPING
+          %td
+            - if m.did_provider != "NO MAPPING"  
+              = select_tag("did_" + m.id.to_s, options_for_select(dids.select{|x| x[0] == m.did_provider}.map{ |c| c[1]},:selected => m.did_e164),:data=> {:id=>m.id},:class => 'did')
+            - else
+              = select_tag("did_" + m.id.to_s, options_for_select(dids.map{ |c| c[1]},:selected => m.did_e164),:data=> {:id=>m.id},:class => 'did')
+          %td= m.listeners_no

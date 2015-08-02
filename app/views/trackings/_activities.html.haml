@@ -1,0 +1,19 @@
+.timeline
+  .spine
+  - activities.group_by {|x| x.created_at.strftime("%B %Y")}.each do | month_year, activity_set |
+    .date_separator
+      %span
+        = month_year
+    %ul.columns
+      - activity_set.each do |activity|
+        %li
+          .timeline_element{class: "#{html_class_for(activity)}"}
+            .timeline_title
+              = activity.created_at.localtime.to_s(:short)
+            .content
+              - owner_title = "#{activity.owner.title} (#{activity.owner.email})"
+              = link_to owner_title, users_trackings_path(user: activity.owner.email, q: params[:q])
+              = render_activity activity
+
+.timeline-bottom
+  = paginate(activities)

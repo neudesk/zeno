@@ -1,0 +1,12 @@
+$(".settings-tabs-content").empty().html("#{j(render('data_gateways/prompts', {}))}");
+$(".main-loading").hide();
+
+$(".modal-backdrop").remove();
+
+- flash.each do |key, value|
+  $(".ajax-alert").html("#{escape_javascript(flash[:notice])}"); 
+  $(".ajax-alert").show().delay(1000).fadeOut();
+
+$(".modal-backdrop").remove();
+:plain
+  window.prompts = new Prompts()

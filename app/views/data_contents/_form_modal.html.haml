@@ -1,0 +1,69 @@
+.modal-dialog
+  .modal-content
+    .modal-header
+      .pull-right
+        = link_to "#", "aria-hidden" => "true", "data-dismiss" => "modal" do
+          %i.clip-close-2
+      .modal_title
+        %h4= "Edit Content"
+    .modal-body
+      .row-fluid
+        .span12
+          = simple_form_for content, url: data_content_path(id: content, content_query: content_query), method: :put, html: {id: "edit_content_form", :multipart => true}  do |f|
+            .form-inputs
+              = f.input :title, input_html: {class: "form-control"}
+              = f.input :media_url, input_html: {class: "form-control"}, required: true
+              = f.input :backup_media_url, input_html: {class: "form-control"}
+              = f.input :media_type, as: :select, collection: PLAYER_TYPE.collect{|x| [x, x]}, input_html: {class: "without_search"}
+              - if current_user.is_marketer? || current_user.is_rca?
+                = hidden_field_tag "content_id", content.id
+                %input{:type =>"button", :class => "btn btn-primary btn-sm",:value => "Show Schedule", :id => "schedule_content_off", :style => "margin-right:10px;"}
+                %span Please indicate the content's ON-Air schedule.
+                .content_schedule{:style => "margin-top:25px;display:none;"}
+                  %label.start_label START
+                  %label.end_label STOP
+                  /%label.off_air_label OFF-AIR AUDIO
+                  - if @data_content_off_air.present?
+                    -@data_content_off_air.each_with_index do |off, index|
+                      .day{:style => "clear:both"}
+                        %label{:class => "day_label"}=  off.day == -1 ? "Default :" : @week_day[index - 1]
+                        = hidden_field_tag "day[]", index - 1 
+                        -if off.time_end.strftime("%H:%M") != off.time_start.strftime("%H:%M") && off.time_start.strftime("%H:%M") != "00:00" && off.time_end.strftime("%H:%M") != "00:00"
+                          = text_field_tag "time_start[]", (off.time_end + 1.minute).strftime("%H:%M"),:required => true, :class => "time_box required"
+                          - if off.time_start.strftime("%H:%M") != "00:01"
+                            = text_field_tag "time_end[]", (off.time_start - 1.minute).strftime("%H:%M"),:required => true, :class => "time_box required"
+                          - else
+                            = text_field_tag "time_end[]", "24:00",:required => true, :class => "time_box required"
+                          =# text_field_tag "stream_url[]" ,off.stream_url.present? ? off.stream_url : off.stream_file_name, :class => "stream_box #{"stream_box_"+ (index - 1).to_s}"
+                          =# file_field_tag "stream" + (index - 1).to_s, :class => "file_upload file_upload_" + (index - 1).to_s,:data =>{:id =>(index - 1).to_s}, :style =>"display:none;"
+                          /%input{:type =>"button", :id => (index - 1).to_s , :class => "btn btn-primary btn-sm upload",:value => "Upload"}
+                        - else
+                          = text_field_tag "time_start[]", "00:00",:required => true, :class => "time_box required"
+                          = text_field_tag "time_end[]", "00:00",:required => true, :class => "time_box required"
+                          =# text_field_tag "stream_url[]" ,off.stream_url.present? ? off.stream_url : off.stream_file_name , :class => "stream_box #{"stream_box_"+ (index - 1).to_s}"
+                          =# file_field_tag "stream" + (index - 1).to_s, :class => "file_upload file_upload_" + (index - 1).to_s, :data =>{:id =>(index - 1).to_s}, :style =>"display:none;"
+                          /%input{:type =>"button", :id => (index - 1).to_s, :class => "btn btn-primary btn-sm upload",:value => "Upload"}
+                        %br
+                  - else
+                    .day{:style => "clear:both"}
+                      %label{:class => "day_label"} Default
+                      = hidden_field_tag "day[]", "-1" 
+                      = text_field_tag "time_start[]", "00:00", :required => true,  :class => "time_box required"
+                      = text_field_tag "time_end[]", "24:00", :required => true, :class => "time_box required"
+                      =# text_field_tag "stream_url[]" ,nil, :class => "stream_box stream_box_-1"
+                      =# file_field_tag "stream-1", :class => "file_upload_-1 file_upload" ,:data =>{:id => "-1"}, :style =>"display:none;"
+                      /%input{:type =>"button", :id => "-1", :class => "btn btn-primary btn-sm upload" ,:value => "Upload"}
+                      %br
+                    -(0..6).each_with_index do |off, index|
+                      .day{:style => "clear:both"}
+                        %label{:class => "day_label"}= @week_day[index]
+                        = hidden_field_tag "day[]", index 
+                        = text_field_tag "time_start[]", "00:00", :required => true, :class => "time_box required"
+                        = text_field_tag "time_end[]", "00:00",:required => true, :class => "time_box required"
+                        =# text_field_tag "stream_url[]" ,nil , :class => "stream_box #{"stream_box_"+ index.to_s}"
+                        =# file_field_tag "stream" + index.to_s,:class => "file_upload file_upload_" + index.to_s, :data =>{:id =>index.to_s}, :style =>"display:none;"
+                        /%input{:type =>"button", :id => index.to_s, :class => "btn btn-primary btn-sm upload",:value => "Upload"}
+                        %br
+    .modal-footer
+      = link_to "Close", "#", class: "btn btn-default", "aria-hidden" => "true", "data-dismiss" => "modal"
+      = link_to "Send", "#", class: "btn btn-dark-grey", id: "submit_edit_content_form"

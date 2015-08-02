@@ -1,0 +1,7 @@
+- @entryways.each do |entryway| 
+  .did_code
+    = check_box_tag 'selected_dids[]', entryway.id, false, class: "selected_did_chk"
+    - if current_user.is_broadcaster?
+      %span.value= entryway.did_e164.include?('1700') ? "Widget" : entryway.did_e164
+    - else
+      %span.value= entryway.did_e164

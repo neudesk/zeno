@@ -1,0 +1,51 @@
+%div{:style => 'width: 1000px; margin: 0 auto'}
+  %div
+    %img{:src => 'http://dashboard.zenoradio.com/assets/layout/logo-be4b2a8b2ab82d4c488885a228700684.png'}
+  %br
+  %br
+  %div
+    = "Hello <strong>#{@user.name}</strong>, ".html_safe
+    %br
+    %br
+    %p
+      = "Thank you for signing up, Please follow this link <a href='#{@current_path}'>#{@current_path}</a> and update your password using your temporary password.".html_safe
+    %p
+      = "After logging in, Please click Settings on the navigation menu then update your station."
+    %br
+    %h4
+      Account Details
+    %table{:style => 'border: 1px solid #cccccc;'}
+      %thead
+        %tr
+          %th{:style => 'background: #686868; color: #ffffff;border: 1px solid #ddd;'}
+            Username/Email
+          %th{:style => 'background: #686868; color: #ffffff;border: 1px solid #ddd;'}
+            Temporary Password
+          %th{:style => 'background: #686868; color: #ffffff;border: 1px solid #ddd;'}
+            Company Name
+          %th{:style => 'background: #686868; color: #ffffff;border: 1px solid #ddd;'}
+            Station Name
+          %th{:style => 'background: #686868; color: #ffffff;border: 1px solid #ddd;'}
+            Streaming URL
+          %th{:style => 'background: #686868; color: #ffffff;border: 1px solid #ddd;'}
+            Station DID
+      %tbody
+        %tr
+          %td{:style => 'border: 1px solid #cccccc;'}
+            = @user.email
+          %td{:style => 'border: 1px solid #cccccc;'}
+            = GlobalSetting.find_by_name('default_signup_password').value
+          %td{:style => 'border: 1px solid #cccccc;'}
+            = @user.name
+          %td{:style => 'border: 1px solid #cccccc;'}
+            = @user.signup_station_name
+          %td{:style => 'border: 1px solid #cccccc;'}
+            = @user.signup_streaming_url
+          %td{:style => 'border: 1px solid #cccccc;'}
+            = @entryway.did_e164 if @entryway.present?
+    - if @note.present?
+      %br
+        %p= @note.html_safe
+    %br
+    %br
+    %p Should you have issues and questions, Please create a ticket by sending an email to rt@zenoradio.com.

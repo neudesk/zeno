@@ -1,0 +1,13 @@
+- data = data.to_i
+- if data == 0
+  %span.label.label-inverse.reporting
+    = "0%"
+- else
+  - if data < 0
+    %span.label.label-success.reporting
+      = data.abs.to_s + "%" 
+      %i.fa.fa-caret-up
+  - else
+    %span.label.label-danger.reporting
+      = data.abs.to_s + "%" 
+      %i.fa.fa-caret-down

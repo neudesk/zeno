@@ -1,0 +1,17 @@
+#new_station.modal{"aria-hidden" => "true", role: "dialog"}
+  .modal-dialog
+    .modal-content
+      .modal-header
+        .pull-right
+          = link_to "#", "aria-hidden" => "true", "data-dismiss" => "modal" do
+            %i.clip-close-2
+        .modal_title
+          %h4= "New Station"
+      .modal-body
+        .row-fluid
+          .span12#new_station_fields
+            = render "form", station: @new_station
+      .modal-footer
+        = link_to "Close", "#", class: "btn btn-default", "aria-hidden" => "true", "data-dismiss" => "modal"
+        = link_to "Add", "#", class: "btn btn-dark-grey form-submitter", data: {target: "new_station_form"}
+

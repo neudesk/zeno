@@ -1,0 +1,18 @@
+= simple_nested_form_for(@station, :url => data_gateway_update_station_dids_path(:id => @station), :multipart => true, :remote => true) do |f|
+  .modal-header
+    %button{type: "button", "class" => "close", "data-dismiss" => "modal", "aria-hidden" => "true"}="×"
+    %h4= "Assign DIDs to station"
+  .modal-body
+    .new_entry_ways{style: "margin-top:10px;margin-bottom:10px"}
+      = f.simple_fields_for(:data_entryways, f.object.data_entryways.new) do |f_entry|
+        = f.label "New Entryway", :class => "entryway_label"
+        .new_entry_way
+          .clearfix
+            %span.radio-select= select_tag "selected_entry_ids[]", options_from_collection_for_select(DataEntryway.where(:gateway_id => nil).order(:title), 'id', 'title')
+
+        %p.remove_new_entry_way_btn= f_entry.link_to_remove "Remove This Entryway"
+      %p.add_new_language_btn= f.link_to_add "Add New Entryway", :data_entryways, :class => "btn btn-small", style: "font-size:15px;"
+    = hidden_field_tag :data_gateway_id, @station_id
+  .modal-footer
+    %button{"class" => "btn", "data-dismiss" => "modal", "aria-hidden" => "true"}= "Close"
+    %button{"class" => "btn assign_did_btn btn-primary"}= "Save"

@@ -1,0 +1,31 @@
+#filter-select
+  - unless params[:page]
+    = render "charts/filter"
+
+.customs
+  - rand_id = rand(4343)
+  - series.each_with_index  do |c, i|
+    - l = level[data[i]]
+    - level_name_view = level_name[l.to_s]
+    - level_type_view = l
+    %div{:class => "#{level_name_view} #{level_name_view}_#{data[i]}", "data-level" => "#{level_name_view}_#{data[i]}"}
+      .pull-left.ckb-custom= check_box_tag("is_exist", "#{level_name_view}_#{data[i]}", false, :class => "check-status")
+      - unless level_type_view == 3
+        %div{:id => "#{data[i]}", "data-level-id" => "#{level_name_view}_#{data[i]}", :class => "custom open-charts #{level_name_view}_#{i} level_#{level_type_view} pull-left width-ck"}= link_to "", "#", :class => "icon-chevron-down"
+      / - else
+      /   %div{:id => "#{data[i]}", :class => "custom open-charts level_#{level_type_view} pull-left width-ck"}= link_to "", "#", :class => "icon-chevron-up"
+      
+      %div{:class => "pull-left place-chart", :id => "chart_#{i}_#{rand_id}" }
+      .clearfix
+      = render_chart(c, "chart_#{i}_#{rand_id}")
+      %div{:id => "level_2_station_#{data[i]}_#{i}", :class => "mg-bottom" }
+      %div{:id => "level_3_channel_#{data[i]}_#{i}", :class => "mg-bottom" } 
+  - if @countries
+    
+    %div{:id => "page_#{@countries.current_page}"}
+      = hidden_field_tag "page", @countries.current_page
+.mg-bottom
+  .clearfix= link_to "Add", "#", class: "btn btn-primary pull-right apply add hide"
+  .clearfix= link_to "Remove", "#", class: "btn btn-primary pull-right apply remove"
+#ajax-paginate-custom.mg-bottom-font
+  .pull-right= link_to_next_page @countries, '>>'

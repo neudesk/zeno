@@ -1,0 +1,5 @@
+updated welcome prompt
+%strong= activity.parameters[:prompt_title]
+on station
+- if activity.trackable
+	%strong= link_to activity.trackable_title, settings_station_path(activity.trackable.id)

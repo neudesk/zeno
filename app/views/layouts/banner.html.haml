@@ -1,0 +1,15 @@
+!!! 5
+%html
+  %head
+    %title= content_for?(:title) ? yield(:title) : "ZenoRadio"
+    = csrf_meta_tags
+    %script{src: "http://code.jquery.com/jquery-1.11.0.min.js"}
+    %script{src: "http://code.jquery.com/jquery-migrate-1.2.1.min.js"}
+    = javascript_include_tag "#{hostname}/embed/bookmarked.js"
+
+    %link{rel: "stylesheet", href: "http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css"}
+    %link{rel: "stylesheet", href: "#{hostname}/embed/banner.css"}
+    %link{rel: "stylesheet", href: "http://fonts.googleapis.com/css?family=Oswald", type: "text/css"}
+
+  %body
+    = yield

@@ -1,0 +1,57 @@
+.row
+  .col-sm-12
+    .pull-right.h3-button
+      = link_to "#new_extension", class: "btn btn-sm btn-default", tip: "Add new extension", id: "new_extension_button" do
+        %i.fa.fa-plus
+    %h3= "Existing Extensions"
+    - if @extensions.present?
+      %table.table.table-hover.table-striped
+        %thead
+          %tr
+            %th= "Stream Name"
+            %th.hidden-sm.hidden-xs= "Stream URL"
+            %th.hidden-sm.hidden-xs.acenter= "Backup URL"
+            %th.acenter="Channel"
+            - unless thirdparty?
+              %th
+        %tbody
+          - @extensions.each do |extension|
+            - @extension = extension
+            - if extension.content.present?
+              %tr
+                %td
+                  %a{tip: extension.content.title}
+                    = extension.content.title.truncate(21)
+                %td.hidden-sm.hidden-xs
+                  = link_to extension.data_content.media_url, dataurl: extension.data_content.media_url.chomp('/'), class: 'testExtension' do
+                    %i.fa.fa-play.pull-left
+                    - if extension.content.media_url.present?
+                      = simple_format(split_str(extension.content.try(:media_url), 50))
+                  .jPlayerHolder{style: 'display: none;'}
+                  .clearfix
+                %td.hidden-sm.hidden-xs.acenter= extension.content.backup_media_url? ? "Yes" : "No"
+                %td.acenter= extension.extension
+                - unless thirdparty?
+                  %td
+                    .pull-right
+                      .btn-group
+                        = link_to "#", class: "btn btn-primary btn-sm dropdown-toggle", data: {toggle: "dropdown"} do 
+                          = "Actions"
+                          %span.caret
+                        %ul.dropdown-menu.pull-right
+                          - if extension.try(:content).try(:backup_media_url).present?
+                            %li
+                              = link_to "Switch Streams", switch_data_gateway_conference_path(extension.id), confirm: "Are you sure you want to switch the primary and the backup streams?"
+                          %li
+                            = link_to "Edit", edit_data_gateway_conference_path(extension.id), remote: true
+                          %li
+                            = link_to "Delete", extension_path(extension.id), method: "delete", confirm: "Are you sure you want to delete this extension?"
+    - else
+      = render "shared/no_records", msg: "No extensions found."
+
+#jplayerHtml.hide
+  = render partial: "data_gateway_conferences/jplayer_backup"
+
+#edit_extension_modal.modal{"aria-hidden" => "true", role: "dialog", tabindex: "-1"}
+= render "new_extension_modal"
+

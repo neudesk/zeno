@@ -1,0 +1,15 @@
+.clock a:first-child {
+    padding-right: 8px;
+    font-size: 14px;
+    /*font-family: "Calibri", sans-serif !important;*/
+}
+.clock a:last-child {
+    padding-left: 8px;
+    font-size: 14px;
+    /*font-family: "Calibri", sans-serif !important;*/
+}
+.clock i.clip-clock {
+    margin-top: 11px !important;
+    margin-right: 0 !important;
+    font-size: 24px !important;
+}

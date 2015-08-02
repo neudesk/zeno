@@ -1,0 +1,57 @@
+-camapaign_status.each do |c|
+  %div{:style => "padding-left:30px;padding-right:30px;"}
+    %h5{:style => "margin-left:15px;"}
+      Campaign no :
+      = c[1]
+    %div 
+      %table.stats
+        %thead
+          %tr
+            %th Status
+            %th Status Name
+            %th Sent
+            %th Not sent
+        %tbody
+          - c[0]["stats"]["statuses"]["total_stats"].each do |st|
+            %tr{:class => cycle('odd', 'even')} 
+              %td= st["status"].to_s
+              - status = GoAutoDialStatuses.find_by_status(st["status"])
+              %td= status.present? ? status.status_name : "-"
+              %td= st["status_yes"].to_s
+              %td= st["status_no"].to_s
+        %tfoot
+          %tr
+            %td{:colspan => 2}
+              %b Total :
+              %b= c[0]["stats"]["statuses"]["totalAll"]
+            %td
+              %b= c[0]["stats"]["statuses"]["totalY"].to_s
+            %td
+              %b= c[0]["stats"]["statuses"]["totalN"].to_s
+    %br
+    %a{:class => "time_zones btn", :data => {:id => c[1]}} Show Time Zone
+    %div{:id => c[1], :style => "display:none;margin-top:15px;" } 
+      %table.stats
+        %thead
+          %tr
+            %th Zone
+            %th Local Time
+            %th Sent
+            %th Not sent
+        %tbody
+          - c[0]["stats"]["zones"]["total_zones"].each do |st|
+            %tr{:class => cycle('odd', 'even')} 
+              %td= st["zone"].to_s
+              %td= st["local_date"]
+              %td= st["zone_yes"].to_s
+              %td= st["zone_no"].to_s
+        %tfoot
+          %tr
+            %td{:colspan => 2}
+              %b Total :
+              %b= c[0]["stats"]["zones"]["totalAll"].to_s
+            %td
+              %b= c[0]["stats"]["zones"]["totalY"].to_s
+            %td
+              %b= c[0]["stats"]["zones"]["totalN"].to_s
+    %hr

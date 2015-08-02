@@ -1,0 +1,57 @@
+%div{:id=>"step-1", data: {hasnodefault: "#{@has_no_default}", activelisteners: @listeners_length}}
+  .panel.panel-default
+    .panel-heading
+      .fa.fa-cogs
+      Phone List
+    .panel-body
+      .step_one_content{:style => "min-height:200px;"}
+        %div.row
+          %div.control-group
+            %div.controls.col-md-6
+              %label.radio.inline.checkbox-inline{:for => "setopt-active-listeners", :id => "setopt-active-listeners"}
+                %input#active_listeners.opt.square-red{:type =>"checkbox", :checked => false, :name => 'active_listeners'}
+                %i.fa.fa-users
+                = "Active listeners : " + @listeners_length.to_s
+            %div.controls.col-md-6
+              %label.radio.inline.checkbox-inline{:for => "setopt-uploaded-list-phone-numbers", :id => "setopt-uploaded-list-phone-numbers"}
+                %input#uploaded_listeners.opt.square-green{:type =>"checkbox", :name => 'uploaded_listeners'}
+                %i.fa.fa-save
+                -#// it should update the phone list count
+                = @uploaded_listeners.present? ? "Uploaded List of Phone Numbers : <span id='listenerCount'>#{@uploaded_listeners.length.to_s}</span>".html_safe : "Uploaded List of Phone Numbers : <span id='listenerCount'>0</span>".html_safe
+        %div.row
+          %div.col-md-12
+            %div.phone_no
+              %div.btn-group.pull-right
+                - if upload_list_is_active
+                  %a.btn.btn-default.btn-xs.canDisable{"data-toggle" => "modal", "data-target" => "#uploadPhoneListModal"}
+                    %i.fa.fa-upload
+                    Upload Phone List
+                = link_to "<i class='fa fa-trash-o'></i> Remove phone numbers".html_safe, reachout_tab_destroy_uploaded_phones_path(@gateway_id), :method => :delete, :data => { confirm: 'Are you sure?' }, :class => "btn btn-default btn-xs"
+                %a.btn.btn-default.btn-xs.canDisable{"data-toggle" => "modal", "data-target" => "#add_phone"}
+                  %i.fa.fa-plus
+                  = "Add Phone Number"
+              %div.clearfix
+              %br
+              #campaigns.phones.well.well-sm{:style => 'background: #FFF'}
+                %div.search_phone_number
+                  %div.input-group
+                    = number_field_tag "reachout_tab_phone_txt_search",nil, :maxlength => 11, :placeholder => "Search", :class => 'form-control'
+                    %span.input-group-btn
+                      %a{:class => "btn btn-default", :id => "btn_search_no"}="Search"
+                  %br
+                %div{:class => "phone_list_loader", :style => "float:left;margin-left:10px;margin-top:7px;display:none;"}
+                  %img{:alt=>"Loader", :src=>"/assets/ajax/loader.gif"}
+                %ul{:style => "height: 50px;overflow-y: scroll;", :class => "reachout_tab_phone_list", :id => "phone_num_list"}
+                  - @uploaded_listeners.last(3000).each do |listeners|
+                    %li{:id => listeners.ani_e164.to_s}
+                      %span.label.label-info.phone_number
+                        =listeners.ani_e164.to_s
+                        %a{:class => "reachout_tab_phone_delete btn btn-xs", :data =>{:val => listeners.ani_e164.to_s}, :style => "color: #fff" }
+                          %i.fa.fa-trash-o
+        .alert.alert-danger.hide.no_default{role: "alert"}
+          %i.fa.fa-warning 
+          Sorry, creating a campaign requires a default CLEC, Please contact your RCA.
+  %button.btn.btn-blue.next-step.btn-block.canDisable
+    Next
+    %i.fa.fa-arrow-circle-right
+  .clearfix

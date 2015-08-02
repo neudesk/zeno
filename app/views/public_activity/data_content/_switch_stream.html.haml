@@ -1,0 +1,14 @@
+switched content 
+- if activity.trackable
+  %span= link_to activity.trackable.title, data_content_path(activity.trackable), :remote => 'true'
+  - if activity.parameters[:channel_no]
+    = "(Extension no: " + activity.parameters[:channel_no] + ")"
+  from Main URL "#{activity.parameters[:old_url]}" to Back-up URL "#{activity.parameters[:new_url]}" 
+  - if activity.parameters[:station]
+    on 
+    %span= activity.parameters[:station]
+  - elsif activity.parameters[:channels]
+    on 
+    %span= "Stations : " + activity.parameters[:channels] 
+- else
+  which has since been removed

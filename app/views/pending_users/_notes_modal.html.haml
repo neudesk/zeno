@@ -1,0 +1,26 @@
+#addNotes.modal{"aria-hidden" => "true", role: "dialog"}
+  .modal-dialog
+    .modal-content
+      .modal-header
+        .pull-right
+          = link_to "#", "aria-hidden" => "true", "data-dismiss" => "modal" do
+            %i.clip-close-2
+        .modal_title
+          %h4= "Update Notes"
+      .modal-body
+        .row-fluid
+          .span12
+            = form_tag '/pending_users/note/update/', :id => 'noteForm' do
+              = hidden_field_tag 'puser_id'
+              %fieldset
+                %div.control-group
+                  %label.control-label{:for => "notes_id"} Select Status
+                  %div.controls
+                    = select_tag 'status', options_for_select(['pending_info', 'pending_reply', 'pending_services']), :prompt => 'Please select status', :class => 'select statusSelections'
+                %div.control-group
+                  %label.control-label{:for => "textarea"} Notes
+                  %div.controls
+                    = text_area_tag 'note', nil, :cols => 68
+      .modal-footer
+        = link_to "Close", "#", class: "btn btn-default", "aria-hidden" => "true", "data-dismiss" => "modal"
+        = link_to "Update", "#", class: "btn btn-success addNoteSubmitter", data: {target: "noteForm"}

@@ -1,0 +1,163 @@
+.row{:id => 'stationList', :style => ""}
+  %div.col-md-12{:id => 'SlideContainer'}
+    %div
+      .row.slides.slider-group-search.margin-top-0
+        %div.col-md-3
+          %div.input-group
+            = text_field_tag :query, params[:query], :class => "form-control", :style=>'border-top-left-radius: 4px !important;border-bottom-left-radius: 4px !important;padding-left:12px;font-family:"Open Sans"', placeholder: "Enter your search here.."
+            .input-group-btn
+              %input.btn.btn-primary{:type => 'button', :value => 'Search', :id => 'searchStation'}
+
+        %div.col-md-3
+          %span.radio-select
+            = select_tag :country_id, options_from_collection_for_select(DataGroupCountry.get_tagged_countries_on_user(current_user).order(:title), 'id', 'title', params[:country_id]), :prompt => "Select country", :class=>'query-search-country-id select'
+
+        %div.col-md-3
+          - if current_user.is_marketer?
+            %span.radio-select
+              = select_tag :rca_id, options_from_collection_for_select(DataGroupRca.order(:title), 'id', 'title', params[:rca_id]), :prompt => "Select RCA", :class=>'query-search-rca-id select'
+
+        %div.col-md-3{:style=>'padding:0px'}
+          .col-md-6{:style=>'padding:0px'}
+            %a.btn.btn-primary{:href => new_report_index_path, :title => "All Stations"}
+              %i.fa.fa-list-alt
+              = "All Stations"
+
+          .pull-right.station_pagination{:style=>'width:90px'}
+            .input-group
+              %input#page.pull-right{:style=>'padding:4px 8px 4px 8px;width:55px; font-family:"Open Sans";border-radius:4px;border:1px solid #eee;', :value=>1}
+              .input-group-btn
+                %button.btn.btn-primary{:style=>'background:none;border:none'}
+                  %span
+                    = "of "
+                  %span#total_page
+                    = @total_page
+      %div.slider_content
+        %div.slider-loading
+        %span.prev#prev-slide
+        %span.next#next-slide
+        #inside_slider.animated
+          #no-data.alert.alert-warning
+            No stations Found
+.row
+  .col-sm-2.pull-right
+    %a.btn.btn-primary.btn-small#pullStationBtn
+      Station Lists
+  .col-sm-12
+    - if @current_station.present?
+      .row
+        .col-sm-1
+          %span.station_avatar
+            %span{:style=>"background: url(#{(@current_station.logo.exists? ? @current_station.logo.url(:xhdpi) : image_path('radio.png'))}) center center; background-size: 80px"}
+        .col-sm-3
+          %h3{style: 'border: 0px'}= @current_station.try(:title)
+%br
+.row
+  .col-sm-12
+    %div.page-header
+      %h1
+        %i.fa.fa-bar-chart
+        = "Reports"
+%br
+.row
+  .col-sm-12
+    %div{style: 'margin-top: 10px; margin-bottom: 10px'}
+      = form_tag '', method: 'get', class: 'reportFormFilter' do
+        .row
+          .col-sm-1{style: 'padding-right: 0px'}
+            = hidden_field_tag :station_id, params[:station_id]
+            = select_month(@dt, use_short_month: true)
+          .col-sm-1{style: 'padding-right: 0px'}
+            = select_year(@dt, start_year: @dt.year - 5, end_year: @now.year)
+          - if @current_station.present? and @entryways.present?
+            .col-sm-2{style: 'padding-right: 0px'}
+              = select_tag :did, options_from_collection_for_select(@entryways, "id", "title", params[:did]), prompt: 'ALL DID', class: 'select'
+          .col-sm-1{style: 'padding-right: 0px; margin-top: 3px'}
+            %button.btn.btn-default{type: 'submit'}
+              %i.fa.fa-search
+            = link_to new_report_index_path, class: 'btn btn-default' do
+              %i.fa.fa-refresh
+    %div{role: "tabpanel"}
+      %ul.nav.nav-tabs.tab-bricky.tab-blue.tab-padding.tab-space-3{role: "tablist"}
+        %li.active{role: "presentation"}
+          %a.graphSwitch{href: "#minutes", "aria-controls" => "minutes", role: "tab", "data-toggle" => "tab"} Minutes
+        %li{role: "presentation"}
+          %a{href: "#newUser", "aria-controls" => "newUser", role: "tab", "data-toggle" => "tab"} New User
+        %li{role: "presentation"}
+          %a.graphSwitch{href: "#activeUser", "aria-controls" => "activeUser", role: "tab", "data-toggle" => "tab"} Active User
+        %li{role: "presentation"}
+          %a.graphSwitch{href: "#sessions", "aria-controls" => "sessions", role: "tab", "data-toggle" => "tab"} Sessions
+      .tab-content
+        #newUser.active.graphSwitch.tab-pane{role: "tabpanel"}
+          .panel.panel-default
+            .panel-heading
+              %i.clip-grid-3
+              = "New User"
+            .panel-body.panel-graph
+              #new_users_graph.graph{data: {labels: @result.collect{|x| x[0][1].to_i}, values: @result.collect{|x| x[1].to_i}}}
+        #activeUser.active.graphSwitch.tab-pane{role: "tabpanel"}
+          .panel.panel-default
+            .panel-heading
+              %i.clip-grid-3
+              = "Active Users"
+            .panel-body
+              #active_users_graph.graph{data: {labels: @result.collect{|x| x[0][1].to_i}, values: @result.collect{|x| x[2].to_i}}}
+        #sessions.active.graphSwitch.tab-pane{role: "tabpanel"}
+          .panel.panel-default
+            .panel-heading
+              %i.clip-grid-3
+              = "Sessions"
+            .panel-body
+              #sessions_graph.graph{data: {labels: @result.collect{|x| x[0][1].to_i}, values: @result.collect{|x| x[3].to_i}}}
+        #minutes.active.tab-pane{role: "tabpanel"}
+          .panel.panel-default
+            .panel-heading
+              %i.clip-grid-3
+              = "Minutes"
+            .panel-body
+              #report_minutes_graph.graph{data: {labels: @result.collect{|x| x[0][1].to_i}, values: @result.collect{|x| x[4].to_i}}}
+
+
+.row
+  .col-sm-12
+    %h4 Graph Details
+    %table.table.table-striped.table-condensed.table-bordered
+      %thead
+        %tr
+          %th.acenter{colspan: '2'} Day
+          %th.acenter New Users
+          %th.acenter Active Users
+          %th.acenter Sessions
+          %th.acenter Minutes
+      %tbody
+        - @result.each do |res|
+          %tr
+            %td.acenter
+              = "#{res[0][0]} #{res[0][1]}"
+            %td.acenter
+              = "#{res[0][2]}"
+            %td.acenter
+              = number_with_delimiter(res[1].to_i, delimiter: ',')
+            %td.acenter
+              = number_with_delimiter(res[2].to_i, delimiter: ',')
+            %td.acenter
+              = number_with_delimiter(res[3].to_i, delimiter: ',')
+            %td.acenter
+              = number_with_delimiter(res[4].to_i, delimiter: ',')
+      %tfoot
+        %th.acenter{colspan: '2'}
+          %strong Total:
+          %th.acenter
+            = number_with_delimiter(@result.collect{|x| x[1].to_i}.inject{|sum, x|  sum + x}.to_i, delimiter: ',')
+          %th.acenter
+            = number_with_delimiter(@result.collect{|x| x[2].to_i}.inject{|sum, x|  sum + x}.to_i, delimiter: ',')
+          %th.acenter
+            = number_with_delimiter(@result.collect{|x| x[3].to_i}.inject{|sum, x|  sum + x}.to_i, delimiter: ',')
+          %th.acenter
+            = number_with_delimiter(@result.collect{|x| x[4].to_i}.inject{|sum, x|  sum + x}.to_i, delimiter: ',')
+
+- content_for :js do
+  :javascript
+    $(document).ready(function(){
+      window.NewReport = new NewReport()
+    });

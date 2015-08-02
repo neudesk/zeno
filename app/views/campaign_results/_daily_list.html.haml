@@ -1,0 +1,27 @@
+%table.campaign_table
+  %thead
+    %th List
+    %th Leads
+    %th Last Call
+    %th Created by
+    %th Days Since Last Called
+  %tbody
+    -campaigns.each do |campaign|
+      %tr.daily_campaing_table_row{:class => cycle('odd', 'even')}
+        %td{:title => campaign.title}
+          = campaign.title
+        %td
+          = campaign.leads
+        %td
+          = campaign.last_call.strftime("%Y-%m-%d %H:%M")
+        %td
+          = User.find_by_id(campaign.created_by).try(:title)
+        %td
+          = (Date.today - Date.parse(campaign.last_call.strftime("%Y-%m-%d"))).to_i
+%br
+%br
+.row
+  %col-sm-12
+    %div{:style => 'text-align: center'}
+      = paginate campaigns, :remote => true
+    %div.clearfix

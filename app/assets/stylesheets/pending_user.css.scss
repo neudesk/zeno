@@ -1,0 +1,59 @@
+// Place all the styles related to the PendingUser controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+#pending_user_country {
+//  padding: 21px;
+//  margin-top: 8px;
+//  border-radius: 4px;
+//  background: #f6f6f6 !important;
+//  border: 1px solid #e6e6e6 !important;
+//  max-width: 261px;
+}
+
+label.required:after {
+  content: " *";
+  color: red;
+}
+
+.media_player {
+  background: url('/assets/media.png') no-repeat center center;
+}
+.android_app {
+  background: url('/assets/android.png') no-repeat center center;
+}
+.free_streaming {
+  background: url('/assets/freestreaming.png') no-repeat center center;
+}
+.dial_in_service {
+  background: url('/assets/mobile.png') no-repeat center center;
+}
+.deviceBox {
+  display: block;
+  height: 60px;
+  width: 100%;
+  background-size: 60px 60px;
+  text-align: center;
+}
+th.header {
+  background-image: url(/assets/sorter/default.gif);
+  cursor: pointer;
+  font-weight: bold;
+  background-repeat: no-repeat;
+  background-position: center right;
+  padding-left: 20px;
+  border-right: 1px solid #dad9c7;
+  margin-left: -1px;
+}
+th.headerSortUp {
+  background-image: url(/assets/sorter/asc.gif);
+  background-color: #3399FF;
+}
+th.headerSortDown {
+  background-image: url(/assets/sorter/desc.gif);
+  background-color: #3399FF;
+}
+.label-warning-grey
+{
+  background-color: #C2C2C2;
+}

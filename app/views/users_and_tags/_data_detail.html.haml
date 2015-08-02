@@ -1,0 +1,6 @@
+#data-detail.clearfix
+	- @group_data.each do |d|
+		.group.bottom-15{:id => d.first, :class => "clearfix"}
+			.first.expand-data{:id => d.first, :class => "width-ck pull-left right-10"}= link_to "", "#", :class => "icon-chevron-down"
+			.second{:class => "pull-left"}= d.last
+		.child.clearfix{:id => "child_#{d.first}"}

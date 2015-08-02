@@ -1,0 +1,19 @@
+.panel.panel-default.panel-activities
+  .panel-heading
+    %i.clip-menu
+    = "Recent Activities"
+  .panel-body
+    .row
+      .col-sm-12
+        %ul
+          - if @activities.present?
+            - @activities.each do |activity|
+              - if activity.key != "data_gateway.update" && activity.key != "data_content.media_type"
+                - if activity.user_title.present?
+                  - user_data = activity.user_title.split('(')[0]
+                - else
+                  - user_data = User.find_by_id(activity.owner_id).present? ? User.find_by_id(activity.owner_id).title : ""
+                %li{:tip=> user_data + " " + strip_tags(render_activity(activity)) + " last #{activity.updated_at.in_time_zone('Eastern Time (US & Canada)').strftime('%B %d, %Y %H:%M')}" }
+                  = user_data
+                  = render_activity(activity).split("<")[0]
+          

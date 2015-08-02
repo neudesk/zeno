@@ -1,0 +1,124 @@
+// Place all the styles related to the users_and_tags controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+.extensions {
+  .new-station{
+    margin-bottom: -40px;
+    margin-right: 20px;
+  }
+
+  .table_content {
+    clear: both;
+  }
+
+
+  .data-tagging {
+    margin-top: 10px;
+    margin-bottom: 20px;
+
+    .collapsible-content {
+      .collapsible-content-menu {
+        margin-top: 10px;
+        border-top: 1px solid #DDDDDD;
+        border-left: 1px solid #DDDDDD;
+        border-right: 1px solid #DDDDDD;
+        border-bottom: 1px solid #DDDDDD;
+        padding: 5px;
+      }
+
+      .tabs-content{
+        margin-bottom: 10px;
+        //background: none repeat scroll 0 0 #F0F6F9;
+        border-left: 1px solid #DDDDDD;
+        border-right: 1px solid #DDDDDD;
+        border-bottom: 1px solid #DDDDDD;
+        //box-shadow: 0 0 20px #D6CACA;
+        //border-radius: 10px 10px 10px 10px;
+        padding: 20px 44px 37px;
+        #filter-select{
+          .radio-select {
+            width: 120px;
+            margin-bottom: 2px;
+            margin-left: 7px;
+          }
+        }
+      }
+    }
+
+    .nav-tabs{
+      margin-bottom:0px;
+      border-bottom: none !important;
+      li.content{
+        margin-left: 10px;
+      }
+    }
+    .nav-tabs > .active-tab > a, .nav-tabs > .active-tab > a:hover, .nav-tabs > .active-tab > a:focus {
+      background-color: #F0F6F9 !important;
+    }
+    .nav-tabs > li > a:hover, .nav-tabs > li > a:focus{
+      border-top: 1px solid #DDDDDD;
+      border-left: 1px solid #DDDDDD;
+      border-right: 1px solid #DDDDDD;
+    }
+    
+    .left-40{
+      margin-left: 40px;
+    }
+    .left-30{
+      margin-left: 30px;
+    }
+    .left-20{
+      margin-left: 20px;
+    }
+    .left-5{
+      margin-left: 5px;
+    }
+    .right-10{
+      margin-right: 10px;
+    }
+    .right-20{
+      margin-right: 20px;
+    }
+    .bottom-15{
+      margin-bottom: 15px;
+    }
+    .bottom-8{
+      margin-bottom: 8px;
+    }
+    .bottom-10{
+      margin-bottom: 10px;
+    }
+    .top-2{
+      margin-top: -2px;
+    }
+    .top-10{
+      margin-top: 10px;
+    }
+    .child-part{
+      max-height: 300px;
+      height: 100%;
+      overflow: auto;
+      .child-table{
+        width: 95%;
+        background-color: #E6E6E6;
+        border-spacing: 10px;
+        margin: 0px 20px 10px 20px;
+        .child-row{
+          width: 100%;
+          height: 30px;
+          .child-data{
+            width: 20%;
+          }
+        }
+        .child-header{
+          height: 10px;
+        }
+      }
+    }
+  }
+
+  
+
+
+}

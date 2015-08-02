@@ -1,0 +1,5 @@
+$("#addExistingContentModal").modal("show");
+$("#addExistingContentModal").parent(".add_existing_content_section").show();
+$("#addExistingContentModal").empty().html("#{j(render('form_add_existing_extension'))}");
+
+window.extension = new Extension({"ajax": "true"});

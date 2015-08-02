@@ -1,0 +1,113 @@
+- if user_signed_in?
+  %ul.nav{:style => "margin-top:17px;margin-right:0px;margin-left: 13px;"}
+
+    / For Settings
+    - unless current_user.is_thirdparty?
+      %li.dropdown.text-account{:class => params[:controller] == "settings" && params[:action] == "index" ? "active" : ""}
+        -#= link_to "Settings", settings_path
+        %a.dropdown-toggle{"data-toggle" => "dropdown", :href => settings_path, :style=>"padding:10px 10px"}
+          Settings
+          %b.caret
+        %ul.dropdown-menu
+          %li{:class => params[:controller] == "data_group" ? "active" : ""}
+            = link_to "Data Group", data_group_index_path
+
+    / For reports and graphs
+    %li.dropdown.text-account{:class => (params[:controller] == "graphs" || params[:controller] == "reports" || params[:controller] == "data_numerical_reports") ? "active" : ""}
+      %a.dropdown-toggle{"data-toggle" => "dropdown", :href => "#", :style=>"padding:10px 10px"}
+        Reporting
+        %b.caret
+      %ul.dropdown-menu
+        %li{:class => params[:controller] == "graphs" ? "active" : ""}
+          = link_to "Graphs", graphs_path
+        %li{:class => params[:controller] == "reports" ? "active" : ""}
+          = link_to "Reports", reports_path
+        %li{:class => params[:controller] == "session" ? "active" : ""}
+          = link_to "Sessions", session_index_path
+        - if current_user.is_marketer?
+          %hr
+          %li{:class => params[:action] == "rca_minutes" ? "active" : ""}
+            = link_to "RCA minutes", rca_minutes_data_numerical_reports_path
+          %li{:class => params[:action] == "country_minutes" ? "active" : ""}
+            = link_to "Country minutes", country_minutes_data_numerical_reports_path
+
+    - if reachout_tab_is_active
+      %li.dropdown{:class => (params[:controller] == "reachout_tab" || params[:controller] == "reachout_tab_settings" || params[:controller] == "campaign_results") ? "active" : "" }
+        %a.dropdown-toggle{"data-toggle" => "dropdown", :href => "#", :style=>"padding:10px 10px"}
+          Reachout
+          %b.caret
+        %ul.dropdown-menu
+          %li{:class => params[:controller] == "reachout_tab" ? "active" : ""}
+            = link_to "Reachout", reachout_tab_index_path
+          -if current_user.is_marketer?
+            %li{:class => params[:controller] == "reachout_tab_settings" ? "active" : ""}
+              = link_to "Reachout Settings", reachout_tab_settings_path
+          - if reachout_tab_is_active
+            %li{:class => params[:controller] == "campaign_results" ? "active" : ""}
+              = link_to "Campaign Statistics", campaign_results_index_path
+          - if current_user.is_marketer?
+            %li{:class => params[:controller] == "mapping_rules" ? "active" : ""}
+              = link_to "ANI Mapping Rules", mapping_rules_index_path
+          %li
+            %hr
+          - if current_user.is_marketer?
+            %li{:class => params[:controller] == "opt_in" ? "active" : ""}
+              = link_to "Opt-In", opt_in_index_path
+          - if current_user.is_marketer?
+            %li{:class => params[:controller] == "opt_in_settings" ? "active" : ""}
+              = link_to "Opt-In Settings", opt_in_settings_path
+          - if current_user.is_marketer?
+            %li{:class => params[:controller] == "opt_in_statistics" ? "active" : ""}
+              = link_to "Opt-In Statistics", opt_in_statistics_path
+
+    / For Tracking
+    - if current_user.is_marketer?
+      %li.dropdown{:class => params[:controller] == "tracking" ? "active" : ""}
+        %a.dropdown-toggle{"data-toggle" => "dropdown", :href => "#", :style=>"padding:10px 10px"}
+          Tracking
+          %b.caret
+        %ul.dropdown-menu
+          - if current_user.is_marketer?
+            %li{:class => params[:controller] == "tracking_users" && params[:action] == "index" ? "active" : ""}
+              = link_to "Users", tracking_users_path
+    
+    - if current_user.is_marketer? || current_user.is_rca?
+      %li.dropdown{:class => params[:controller] == "search" ? "active" : ""}
+        %a.dropdown-toggle{"data-toggle" => "dropdown", :href => "#", :style=>"padding:10px 10px"}
+          Search
+          %b.caret
+        %ul.dropdown-menu
+          %li{:class => params[:action] == "content_search" ? "active" : ""}
+            %a{:href => search_content_search_path} Content      
+
+
+    / For My Radio
+    / - if current_user.is_marketer? || current_user.is_rca? || current_user.is_broadcaster?
+    /   %li.dropdown{:class => params[:controller] == "my_radio" ? "active" : ""}
+    /     %a.dropdown-toggle{"data-toggle" => "dropdown", :href => "#", :style=>"padding:10px 10px"}
+    /       My Radio
+    /       %b.caret
+    /     %ul.dropdown-menu
+    /       %li{:class => params[:action] == "station" ? "active" : ""}
+    /         %a{:href => my_radio_station_path} Stations
+    /       %li.dropdown-submenu
+    /         %a{:href => "#", :tabindex => "-1"} Channels
+    /         %ul.dropdown-menu
+    /           %li
+    /             %a{:href => "#", :tabindex => "-1"} Language
+    /           %li
+    /             %a{:href => "#", :tabindex => "-1"} Genre
+    /       %li
+    /         %a{:href => "#"} Country
+    %li.dropdown{:class => params[:controller] == "users" ? "active" : ""}
+      %a.dropdown-toggle{"data-toggle" => "dropdown", :href => "#", :style=>"padding:10px 10px"}
+        My Account
+        %b.caret
+      %ul.dropdown-menu
+        %li{:class => params[:action] == "my_account" ? "active" : ""}
+          %a{:href => my_account_path} Your Account
+        - if current_user.is_marketer?
+          %li{:class => params[:action] == "users_account" ? "active" : ""}
+            %a{:href => users_account_users_path} Users Account
+          %li{:class => request.path == system_variables_path ? "active" : ""}
+            %a{:href => system_variables_path} System Variables

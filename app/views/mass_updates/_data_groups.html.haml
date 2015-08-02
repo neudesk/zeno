@@ -1,0 +1,26 @@
+.loaded
+  = form_tag("/mass_updates/data_groups", remote: true, method: :get) do
+    .row
+      .col-sm-4.col-sm-offset-2
+        = label_tag :group, "Role"
+        = select_tag :group, options_for_select(["RCA", "ThirdParty", "BroadCaster"], params[:group]), class: "select without_search submit_via_onchange"
+      .col-sm-4
+        = label_tag :country_id
+        = select_tag :country_id, options_from_collection_for_select(DataGroupCountry.all, "id", "title", params[:country_id]), class: "select submit_via_onchange"
+  %br
+  .row
+    - groups.each do |group|
+      .col-sm-6
+        .panel.panel-default
+          .panel-heading
+            %i.fa.fa-user
+            = group.title
+            .panel-tools
+              = form_tag("/mass_updates/data_group_objects?group_id=#{group.id}&group_class=#{group.class.to_s}&country_id=#{params[:country_id]}", remote: true, method: :get) do
+                = link_to "", "#", class: "btn btn-xs btn-link panel-collapse expand toggle_group_button"
+          .panel-body.fixed-height{id: "group_#{group.id}"}
+            = render "shared/loading"
+          .panel-footer.show-with-body.aright
+            = submit_tag "Assign", class: "btn btn-sm btn-primary submit_form_in_panel_body"
+.loading#data_groups_loader
+  = render "shared/loading"

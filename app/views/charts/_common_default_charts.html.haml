@@ -1,0 +1,23 @@
+.clearfix.chart-filter
+  .day-filter.pull-right
+    - if level_name == "countries"
+      = render "charts/filter/day"
+.defaults
+  - rand_id = rand(4343)
+  - series.each_with_index  do |c, i|
+    %div{:class => level_name, "data-level" => "#{level_name}_#{data[i]}"}
+      - unless level == 3
+        %div{:id => "#{data[i]}", :class => "default open-charts #{level_name}_#{i} level_#{level} pull-left width-ck" }= link_to "", "#", :class => "icon-chevron-down"
+      - else
+        %div{:id => "#{data[i]}", :class => "default open-charts level_#{level} pull-left width-ck" }= link_to "", "#", :class => "icon-chevron-up"
+
+      %div{:class => "pull-left place-chart", :id => "chart_#{i}_#{rand_id}" }
+      .clearfix
+      = render_chart(c, "chart_#{i}_#{rand_id}")
+      %div{:id => "level_2_station_#{data[i]}_#{i}", :class => "mg-bottom" }
+      %div{:id => "level_3_channel_#{data[i]}_#{i}", :class => "mg-bottom" }
+  - if level_name == "countries"
+    - if params[:action] == "index"
+      = paginate @countries
+    - else 
+      #ajax-paginate= paginate @countries

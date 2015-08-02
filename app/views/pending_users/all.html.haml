@@ -1,0 +1,14 @@
+.tabbable
+  %ul#myTab.nav.nav-tabs.tab-bricky.tab-blue.tab-padding.tab-space-3
+    %li
+      = link_to "Unprocessed", pending_users_path
+    %li.active
+      = link_to "Processed", all_pending_users_path
+  .tab-content
+    .tab-pane.in.active
+      = render "list"
+
+:javascript
+  $(document).ready(function(){
+    //$("#pendingUserTable").tablesorter();
+  });

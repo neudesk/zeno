@@ -1,0 +1,22 @@
+.row
+  .col-sm-12
+    .page-header.main
+      .pull-right.header-buttons
+        = link_to users_account_users_path, class: "btn btn-primary" do
+          %i.fa.fa-hand-o-left
+          Back
+      %h3
+        = "New User"
+
+.row
+  .col-sm-12
+    = simple_form_for @user, url: save_users_path, method: :post do |f|
+      = render "form", f: f
+
+- content_for :js do
+  :javascript
+    $(document).ready(function(){
+      window.user_group = new UserGroup();
+    })
+
+

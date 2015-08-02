@@ -1,0 +1,17 @@
+%div.row
+  %div.col-md-12
+    %div.page-header
+      %h1
+        %i.fa.fa-flask
+        Mapping
+    %br
+    #rules_table{:style=>"clear:both;padding-left:20px;"}
+      = render :partial => "rules_table"
+%br
+= render :partial => "create_rule"
+- content_for :js do
+  :javascript
+    $(document).ready(function(){
+      window.mapping_rules = new MappingRules()
+      $('#selected_entry_ids, #selected_ani_carrier_ids').select2();
+    })

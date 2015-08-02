@@ -1,0 +1,28 @@
+.row
+  .col-sm-12
+    .panel.panel-default
+      .panel-heading
+      .panel-body
+        .tabbable.panel-tabs
+          %ul.nav.nav-tabs
+            %li.active
+              %a{"data-toggle" => "tab", :href=> "#daily", :id => "daily_tab"}
+                Daily
+            %li
+              %a{"data-toggle" => "tab", :href=> "#weekly", :id=>"weekly_tab"}
+                Weekly
+            %li
+              %a{"data-toggle" => "tab", :href=> "#monthly", :id =>"monthly_tab"}
+                Monthly
+          .tab-content
+            #daily.tab-pane.active
+              %div{:class=>"flot-medium-container"}
+                #placeholder_daily{:class=>"flot-placeholder"}
+            #weekly.tab-pane
+              %div{:class=>"flot-medium-container"}
+                #placeholder_weekly{:class=>"flot-placeholder"}
+            #monthly.tab-pane
+              %div{:class=>"flot-medium-container"}
+                #placeholder_monthly{:class=>"flot-placeholder"}
+
+

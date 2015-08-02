@@ -1,0 +1,56 @@
+.col-sm-12
+  .panel.panel-default.panel-campaign{id: "0"}
+    .panel-heading
+      %i.clip-stats
+      Yesterday
+    .panel-body{:class => "campaigns_box campaigns_box_0"}
+      .loading
+        = render "shared/loading"
+      .daily_campaigns.loaded{id: "campaign-loaded-0"}
+    .panel-footer
+      .pull-right
+        = link_to "Show Details", campaign_results_daily_list_status_path(days: 0), remote: true, class: "btn btn-primary btn-sm toggle-campaign campaign_list"
+  .panel.panel-default.panel-campaign{id: "7"}
+    .panel-heading
+      %i.clip-stats
+      Past 7 days
+    .panel-body{:class => "campaigns_box campaigns_box_7"}
+      .loading
+        = render "shared/loading"
+      .daily_campaigns.loaded{id: "campaign-loaded-7"}
+    .panel-footer
+      .pull-right
+        = link_to "Show Details", campaign_results_daily_list_status_path(days: 7), remote: true, class: "btn btn-primary btn-sm toggle-campaign campaign_list"
+  .panel.panel-default.panel-campaign{id: "15"}
+    .panel-heading
+      %i.clip-stats
+      Past 15 days
+    .panel-body{:class => "campaigns_box campaigns_box_15"}
+      .loading
+        = render "shared/loading"
+      .daily_campaigns.loaded{id: "campaign-loaded-15"}
+    .panel-footer
+      .pull-right
+        = link_to "Show Details", campaign_results_daily_list_status_path(days: 15), remote: true, class: "btn btn-primary btn-sm toggle-campaign campaign_list"
+  .panel.panel-default.panel-campaign{id: "30"}
+    .panel-heading
+      %i.clip-stats
+      Past 30 days
+    .panel-body{:class => "campaigns_box campaigns_box_30"}
+      .loading
+        = render "shared/loading"
+      .daily_campaigns.loaded{id: "campaign-loaded-30"}
+    .panel-footer
+      .pull-right
+        = link_to "Show Details", campaign_results_daily_list_status_path(days: 30), remote: true, class: "btn btn-primary btn-sm toggle-campaign campaign_list"
+  .panel.panel-default.panel-campaign{id: "60"}
+    .panel-heading
+      %i.clip-stats
+      More than 60 days
+    .panel-body{:class => "campaigns_box campaigns_box_60"}
+      .loading
+        = render "shared/loading"
+      .daily_campaigns.loaded{id: "campaign-loaded-60"}
+    .panel-footer
+      .pull-right
+        = link_to "Show Details", campaign_results_daily_list_status_path(days: 60), remote: true, class: "btn btn-primary btn-sm toggle-campaign campaign_list"

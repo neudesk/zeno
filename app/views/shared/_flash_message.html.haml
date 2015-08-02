@@ -1,0 +1,8 @@
+.row#flash
+  .col-md-12
+    - flash.each do |name, msg|
+      - if msg.is_a?(String)
+        - unless name == :hash
+          %div{class: "alert alert-#{name == :notice ? "success" : "danger"}"}
+            %a.close{"data-dismiss" => "alert"} ×
+            = msg.html_safe

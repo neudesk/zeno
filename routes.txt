@@ -1,0 +1,318 @@
+Connecting to database specified by database.yml
+                                            api_station GET          /api/station(.:format)                                             api#station
+                                       api_all_stations GET          /api/all_stations(.:format)                                        api#all_stations
+                                            api_country GET          /api/country(.:format)                                             api#country
+                                          api_timestamp GET          /api/timestamp(.:format)                                           api#timestamp
+                                          api_countries GET          /api/countries(.:format)                                           api#countries
+                                  search_content_search GET          /search/content_search(.:format)                                   search#content_search
+                                    data_gateways_index GET          /data_gateways/index(.:format)                                     data_gateways#index
+                                          prompts_index GET          /prompts/index(.:format)                                           prompts#index
+                                           api_stations GET          /api/stations(.:format)                                            api#get_all_stations
+                                                        GET          /application/slider_content/:page(.:format)                        application#slider_content
+                                               download GET          /download(.:format)                                                download#download
+                                                banner1 GET          /banner1/:id(.:format)                                             banner#version1
+                                                banner2 GET          /banner2/:id(.:format)                                             banner#version2
+                                                banner3 GET          /banner3/:id(.:format)                                             banner#version3
+                                                banner4 GET          /banner4/:id(.:format)                                             banner#version4
+                                                banner5 GET          /banner5/:id(.:format)                                             banner#version5
+                                                banner6 GET          /banner6/:id(.:format)                                             banner#version6
+                                                banner7 GET          /banner7/:id(.:format)                                             banner#version7
+                                           edit_account GET          /edit_account(.:format)                                            users#edit_account
+                                         update_account POST         /update_account(.:format)                                          users#update_account
+                                                 logout GET          /logout(.:format)                                                  devise/sessions#destroy
+                                                  login GET          /login(.:format)                                                   devise/sessions#new
+                                       new_user_session GET          /users/sign_in(.:format)                                           sessions#new
+                                           user_session POST         /users/sign_in(.:format)                                           sessions#create
+                                   destroy_user_session GET          /users/sign_out(.:format)                                          sessions#destroy
+                                          user_password POST         /users/password(.:format)                                          devise/passwords#create
+                                      new_user_password GET          /users/password/new(.:format)                                      devise/passwords#new
+                                     edit_user_password GET          /users/password/edit(.:format)                                     devise/passwords#edit
+                                                        PUT          /users/password(.:format)                                          devise/passwords#update
+                                            user_unlock POST         /users/unlock(.:format)                                            devise/unlocks#create
+                                        new_user_unlock GET          /users/unlock/new(.:format)                                        devise/unlocks#new
+                                                        GET          /users/unlock(.:format)                                            devise/unlocks#show
+                                       toggle_lock_user PUT          /admin/users/:id/toggle_lock(.:format)                             users#toggle_lock
+                                              info_user GET          /admin/users/:id/info(.:format)                                    users#info
+                                                   user DELETE       /admin/users/:id(.:format)                                         users#destroy
+                                            switch_user POST         /admin/users/:id/switch(.:format)                                  users#switch
+                                                  users POST         /admin/users(.:format)                                             users#index
+                                             save_users POST         /admin/users/save(.:format)                                        users#save
+                                    users_account_users GET|POST|PUT /admin/users/users_account(.:format)                               users#users_account
+                                   users_account1_users GET|POST|PUT /admin/users/users_account1(.:format)                              users#users_account1
+                                   groups_options_users GET          /admin/users/groups_options(.:format)                              users#groups_options
+                               gateways_checklist_users GET          /admin/users/gateways_checklist(.:format)                          users#gateways_checklist
+                                       group_list_users GET          /admin/users/group_list(.:format)                                  users#group_list
+                                   reset_password_users GET          /admin/users/reset_password(.:format)                              users#reset_password
+                            submit_reset_password_users POST         /admin/users/submit_reset_password(.:format)                       users#submit_reset_password
+                                                        GET          /admin/users(.:format)                                             users#index
+                                                        POST         /admin/users(.:format)                                             users#create
+                                               new_user GET          /admin/users/new(.:format)                                         users#new
+                                              edit_user GET          /admin/users/:id/edit(.:format)                                    users#edit
+                                                        GET          /admin/users/:id(.:format)                                         users#show
+                                                        PUT          /admin/users/:id(.:format)                                         users#update
+                                               accounts POST         /admin/accounts(.:format)                                          accounts#create
+                                             my_account GET|PUT      /my_account(.:format)                                              users#my_account
+                                          conversations GET          /conversations(.:format)                                           users#conversations
+                                          write_message POST         /users/write_message(.:format)                                     users#write_message
+                                       reply_to_message POST         /users/reply_to_message(.:format)                                  users#reply_to_message
+                                users_get_conversations GET          /users/get_conversations(.:format)                                 users#get_conversations
+                                 users_get_message_list GET          /users/get_message_list(.:format)                                  users#get_message_list
+                                                   root              /                                                                  home#index
+                                        home_get_status GET          /home/get_status(.:format)                                         home#get_status
+                                      home_get_stations GET          /home/get_stations(.:format)                                       home#get_stations
+                              home_get_map_of_listeners GET          /home/get_map_of_listeners(.:format)                               home#get_map_of_listeners
+                                 home_get_total_minutes GET          /home/get_total_minutes(.:format)                                  home#get_total_minutes
+                                          session_index GET          /session/index(.:format)                                           session#index
+                                   session_get_sessions GET          /session/get_sessions(.:format)                                    session#get_sessions
+                                              maps_draw GET          /maps/draw(.:format)                                               maps#draw
+                                        track_customize PUT          /track_customize(.:format)                                         home#track_customize
+                                       charts_countries GET          /charts/countries(.:format)                                        charts#countries
+                                                        GET          /charts/:country_id/stations(.:format)                             charts#stations
+                                                        GET          /charts/:gateway_id/channels(.:format)                             charts#channels
+                                       charts_aggregate GET          /charts/aggregate(.:format)                                        charts#aggregate
+                                   load_data_for_select GET          /load_data_for_select(.:format)                                    charts#load_gateways_or_dids_for_select
+                                            load_custom GET          /load_custom(.:format)                                             charts#load_custom
+                                       my_radio_station GET          /my_radio/station(.:format)                                        my_radio#station
+                                                        PUT          /my_radio/station(.:format)                                        my_radio#update_station
+                                                prompts POST         /prompts(.:format)                                                 prompts#save
+                                      prompts_gsm_audio GET          /prompts/:id/gsm_audio.gsm(.:format)                               prompts#gsm_audio
+                                      prompts_mp3_audio GET          /prompts/:id/gsm_audio.mp3(.:format)                               prompts#mp3_audio
+                                      prompts_wav_audio GET          /prompts/:id/wav_audio.wav(.:format)                               prompts#wav_audio
+                                            edit_prompt GET          /prompts/:id/edit(.:format)                                        prompts#edit
+                                                 prompt PUT          /prompts/:id(.:format)                                             prompts#update
+                                                 prompt DELETE       /prompts/:id(.:format)                                             prompts#destroy
+                                        download_prompt GET          /prompts/download_prompt(.:format)                                 prompts#download_prompt
+                                  reachout_tab_settings GET          /reachout_tab_settings/index(.:format)                             reachout_tab_settings#index
+                     reachout_tab_settings_search_phone GET          /reachout_tab_settings/search_phone(.:format)                      reachout_tab_settings#search_phone
+                  reachout_tab_settings_upload_dnc_file POST         /reachout_tab_settings/upload_dnc_file(.:format)                   reachout_tab_settings#upload_dnc_file
+                      reachout_tab_settings_add_setting POST         /reachout_tab_settings/add_setting(.:format)                       reachout_tab_settings#add_setting
+                    reachout_tab_settings_add_call_time POST         /reachout_tab_settings/add_call_time(.:format)                     reachout_tab_settings#add_call_time
+               reachout_tab_settings_add_default_prompt POST         /reachout_tab_settings/add_default_prompt(.:format)                reachout_tab_settings#add_default_prompt
+                    reachout_tab_settings_add_phone_dnc POST         /reachout_tab_settings/add_phone_dnc(.:format)                     reachout_tab_settings#add_phone_dnc
+                           reachout_tab_settings_update PUT          /reachout_tab_settings/update_setting/:id(.:format)                reachout_tab_settings#update_setting
+             reachout_tab_settings_activate_broadcaster PUT          /reachout_tab_settings/activate_broadcaster(.:format)              reachout_tab_settings#activate_broadcaster
+                     reachout_tab_settings_activate_rca PUT          /reachout_tab_settings/activate_rca(.:format)                      reachout_tab_settings#activate_rca
+                                                        DELETE       /reachout_tab_settings/delete_phone_dnc/:id(.:format)              reachout_tab_settings#delete_phone_dnc
+                                    mapping_rules_index GET          /mapping_rules/index(.:format)                                     mapping_rules#index
+                                     mapping_rules_save POST         /mapping_rules/save(.:format)                                      mapping_rules#save
+                                   mapping_rules_delete DELETE       /mapping_rules/delete(.:format)                                    mapping_rules#delete
+                                 campaign_results_index GET          /campaign_results/index(.:format)                                  campaign_results#index
+                 campaign_results_get_campaigns_by_date GET          /campaign_results/get_campaigns_by_date(.:format)                  campaign_results#get_campaigns_by_date
+                   campaign_results_get_campaign_status GET          /campaign_results/get_campaign_status(.:format)                    campaign_results#get_campaign_status
+                      campaign_results_destroy_campaign DELETE       /campaign_results/destroy_campaign(.:format)                       campaign_results#destroy_campaign
+              campaign_results_get_campaigns_by_main_id GET          /campaign_results/get_campaigns_by_main_id(.:format)               campaign_results#get_campaigns_by_main_id
+                  campaign_results_get_dids_by_provider GET          /campaign_results/get_dids_by_provider(.:format)                   campaign_results#get_dids_by_provider
+                   campaign_results_update_campaign_did PUT          /campaign_results/update_campaign_did(.:format)                    campaign_results#update_campaign_did
+                campaign_results_get_campaigns_statuses GET          /campaign_results/get_campaigns_statuses(.:format)                 campaign_results#get_campaigns_statuses
+                                   download_phone_lists GET          /campaign_results/download_phone_lists/:id(.:format)               campaign_results#download_phone_lists
+                campaign_results_update_campaign_status PUT          /campaign_results/update_campaign_status(.:format)                 campaign_results#update_campaign_status
+                                      reachout_tab_save POST         /reachout_tab/save(.:format)                                       reachout_tab#save
+                          reachout_tab_upload_listeners POST         /reachout_tab/upload_listeners(.:format)                           reachout_tab#upload_listeners
+                          reachout_tab_destroy_campaign DELETE       /reachout_tab/destroy_campaign(.:format)                           reachout_tab#destroy_campaign
+                   reachout_tab_destroy_uploaded_phones DELETE       /reachout_tab/destroy_uploaded_phones/:id(.:format)                reachout_tab#destroy_uploaded_phones
+                                 reachout_tab_add_phone POST         /reachout_tab/add_phone(.:format)                                  reachout_tab#add_phone
+                              reachout_tab_search_phone GET          /reachout_tab/search_phone(.:format)                               reachout_tab#search_phone
+                             reachout_tab_destroy_phone DELETE       /reachout_tab/destroy_phone(.:format)                              reachout_tab#destroy_phone
+                                      reachout_tab_test GET          /reachout_tab/test(.:format)                                       reachout_tab#test
+                     data_gateways_check_channel_number GET          /data_gateways/check_channel_number(.:format)                      data_gateways#check_channel_number
+                                     create_station_dup GET          /new_settings/dup/:id(.:format)                                    data_gateways#create_dup
+                                       settings_station GET          /new_settings/station/:station_id(.:format)                        new_settings#station
+                                           detach_phone GET          /new_settings/detach/:phone_id(.:format)                           new_settings#detach_phone
+                                             data_group GET|POST     /new_settings/data_group(.:format)                                 new_settings#data_group
+                                      data_group_delete GET          /new_settings/data_group/:id/delete(.:format)                      new_settings#data_group_delete
+                                        save_data_group POST         /new_settings/save_data_group(.:format)                            new_settings#save_data_groups
+                                           data_tagging GET|POST     /new_settings/data_tagging(.:format)                               new_settings#data_tagging
+                                      save_data_tagging POST|GET     /new_settings/save_data_tagging(.:format)                          new_settings#save_data_tagging
+                                    delete_data_tagging POST|GET     /new_settings/delete_data_tagging(.:format)                        new_settings#delete_data_tagging
+                                    send_widget_request POST         /new_settings/send_request(.:format)                               new_settings#send_widget_request
+                                   view_campaign_result GET          /campaign_results/:id/view(.:format)                               campaign_results#view
+                                       campaign_results GET          /campaign_results(.:format)                                        campaign_results#index
+                                   edit_campaign_result GET          /campaign_results/:id/edit(.:format)                               campaign_results#edit
+                                        campaign_result GET          /campaign_results/:id(.:format)                                    campaign_results#show
+                                                        DELETE       /campaign_results/:id(.:format)                                    campaign_results#destroy
+                                          did_trackings GET          /trackings/did(.:format)                                           trackings#did
+                                        users_trackings GET          /trackings/users(.:format)                                         trackings#users
+                                     stations_trackings GET          /trackings/stations(.:format)                                      trackings#stations
+                                      country_trackings GET          /trackings/country(.:format)                                       trackings#country
+                                              trackings GET          /trackings(.:format)                                               trackings#index
+                                                        POST         /trackings(.:format)                                               trackings#create
+                                           new_tracking GET          /trackings/new(.:format)                                           trackings#new
+                                          edit_tracking GET          /trackings/:id/edit(.:format)                                      trackings#edit
+                                               tracking GET          /trackings/:id(.:format)                                           trackings#show
+                                                        PUT          /trackings/:id(.:format)                                           trackings#update
+                                                        DELETE       /trackings/:id(.:format)                                           trackings#destroy
+                               data_groups_mass_updates GET          /mass_updates/data_groups(.:format)                                mass_updates#data_groups
+                          save_data_groups_mass_updates GET          /mass_updates/save_data_groups(.:format)                           mass_updates#save_data_groups
+                        data_group_objects_mass_updates GET          /mass_updates/data_group_objects(.:format)                         mass_updates#data_group_objects
+                                                        POST         /mass_updates/save_data_groups(.:format)                           mass_updates#save_data_groups
+                                 data_tags_mass_updates GET          /mass_updates/data_tags(.:format)                                  mass_updates#data_tags
+                          data_tag_objects_mass_updates GET          /mass_updates/data_tag_objects(.:format)                           mass_updates#data_tag_objects
+                            save_data_tags_mass_updates GET          /mass_updates/save_data_tags(.:format)                             mass_updates#save_data_tags
+                                                        POST         /mass_updates/save_data_tags(.:format)                             mass_updates#save_data_tags
+                                           mass_updates GET          /mass_updates(.:format)                                            mass_updates#index
+                                                        POST         /mass_updates(.:format)                                            mass_updates#create
+                                        new_mass_update GET          /mass_updates/new(.:format)                                        mass_updates#new
+                                       edit_mass_update GET          /mass_updates/:id/edit(.:format)                                   mass_updates#edit
+                                            mass_update GET          /mass_updates/:id(.:format)                                        mass_updates#show
+                                                        PUT          /mass_updates/:id(.:format)                                        mass_updates#update
+                                                        DELETE       /mass_updates/:id(.:format)                                        mass_updates#destroy
+                                   data_gateway_prompts GET          /data_gateway_prompts(.:format)                                    data_gateway_prompts#index
+                                                        POST         /data_gateway_prompts(.:format)                                    data_gateway_prompts#create
+                                new_data_gateway_prompt GET          /data_gateway_prompts/new(.:format)                                data_gateway_prompts#new
+                               edit_data_gateway_prompt GET          /data_gateway_prompts/:id/edit(.:format)                           data_gateway_prompts#edit
+                                    data_gateway_prompt GET          /data_gateway_prompts/:id(.:format)                                data_gateway_prompts#show
+                                                        PUT          /data_gateway_prompts/:id(.:format)                                data_gateway_prompts#update
+                                                        DELETE       /data_gateway_prompts/:id(.:format)                                data_gateway_prompts#destroy
+                                     reachout_tab_index GET          /reachout_tab(.:format)                                            reachout_tab#index
+                                                        GET          /reachout_tab(.:format)                                            reachout_tab#index
+                                                        POST         /reachout_tab(.:format)                                            reachout_tab#create
+                                       new_reachout_tab GET          /reachout_tab/new(.:format)                                        reachout_tab#new
+                                      edit_reachout_tab GET          /reachout_tab/:id/edit(.:format)                                   reachout_tab#edit
+                                           reachout_tab GET          /reachout_tab/:id(.:format)                                        reachout_tab#show
+                                                        PUT          /reachout_tab/:id(.:format)                                        reachout_tab#update
+                                                        DELETE       /reachout_tab/:id(.:format)                                        reachout_tab#destroy
+                                           new_settings GET          /new_settings(.:format)                                            new_settings#index
+                                                        POST         /new_settings(.:format)                                            new_settings#create
+                                        new_new_setting GET          /new_settings/new(.:format)                                        new_settings#new
+                                       edit_new_setting GET          /new_settings/:id/edit(.:format)                                   new_settings#edit
+                                            new_setting GET          /new_settings/:id(.:format)                                        new_settings#show
+                                                        PUT          /new_settings/:id(.:format)                                        new_settings#update
+                                                        DELETE       /new_settings/:id(.:format)                                        new_settings#destroy
+                                                        GET          /new_settings(.:format)                                            new_settings#index
+                                                        POST         /new_settings(.:format)                                            new_settings#create
+                                                        GET          /new_settings/new(.:format)                                        new_settings#new
+                                                        GET          /new_settings/:id/edit(.:format)                                   new_settings#edit
+                                                        GET          /new_settings/:id(.:format)                                        new_settings#show
+                                                        PUT          /new_settings/:id(.:format)                                        new_settings#update
+                                                        DELETE       /new_settings/:id(.:format)                                        new_settings#destroy
+                                               stations GET          /stations(.:format)                                                stations#index
+                                                        POST         /stations(.:format)                                                stations#create
+                                            new_station GET          /stations/new(.:format)                                            stations#new
+                                           edit_station GET          /stations/:id/edit(.:format)                                       stations#edit
+                                                station GET          /stations/:id(.:format)                                            stations#show
+                                                        PUT          /stations/:id(.:format)                                            stations#update
+                                                        DELETE       /stations/:id(.:format)                                            stations#destroy
+                         switch_data_gateway_conference GET          /data_gateway_conferences/:id/switch(.:format)                     data_gateway_conferences#switch
+                               data_gateway_conferences GET          /data_gateway_conferences(.:format)                                data_gateway_conferences#index
+                                                        POST         /data_gateway_conferences(.:format)                                data_gateway_conferences#create
+                            new_data_gateway_conference GET          /data_gateway_conferences/new(.:format)                            data_gateway_conferences#new
+                           edit_data_gateway_conference GET          /data_gateway_conferences/:id/edit(.:format)                       data_gateway_conferences#edit
+                                data_gateway_conference GET          /data_gateway_conferences/:id(.:format)                            data_gateway_conferences#show
+                                                        PUT          /data_gateway_conferences/:id(.:format)                            data_gateway_conferences#update
+                                                        DELETE       /data_gateway_conferences/:id(.:format)                            data_gateway_conferences#destroy
+                                      all_pending_users GET          /pending_users/all(.:format)                                       pending_users#all
+                                     save_pending_users GET          /pending_users/save(.:format)                                      pending_users#save
+                                    ignore_pending_user POST         /pending_users/:id/ignore(.:format)                                pending_users#ignore
+                                 duplicate_pending_user POST         /pending_users/:id/duplicate(.:format)                             pending_users#duplicate
+                                  approved_pending_user POST         /pending_users/:id/approved(.:format)                              pending_users#approved
+                                          pending_users GET          /pending_users(.:format)                                           pending_users#index
+                                                        POST         /pending_users(.:format)                                           pending_users#create
+                                       new_pending_user GET          /pending_users/new(.:format)                                       pending_users#new
+                                      edit_pending_user GET          /pending_users/:id/edit(.:format)                                  pending_users#edit
+                                           pending_user GET          /pending_users/:id(.:format)                                       pending_users#show
+                                                        PUT          /pending_users/:id(.:format)                                       pending_users#update
+                                                        DELETE       /pending_users/:id(.:format)                                       pending_users#destroy
+                                         get_phone_list GET          /get_phone_list(.:format)                                          new_settings#list_phone_numbers
+                                                        GET          /pending_users/all_delete/:id(.:format)                            pending_users#all_delete
+                         destroy_processed_pending_user GET          /pending_users/delete_processed_pending_use/:id(.:format)          pending_users#destroy_processed_pending_user
+                                   indexda_opt_in_index GET          /opt_in/indexda(.:format)                                          opt_in#indexda
+                                           opt_in_index GET          /opt_in(.:format)                                                  opt_in#index
+                                        opt_in_settings GET          /opt_in_settings(.:format)                                         opt_in_settings#index
+                           search_phone_opt_in_settings GET          /opt_in_settings/search_phone(.:format)                            opt_in_settings#search_phone
+                           activate_rca_opt_in_settings PUT          /opt_in_settings/activate_rca(.:format)                            opt_in_settings#activate_rca
+                           activate_brd_opt_in_settings PUT          /opt_in_settings/activate_brd(.:format)                            opt_in_settings#activate_brd
+                       add_phone_opt_in_opt_in_settings POST         /opt_in_settings/add_phone_opt_in(.:format)                        opt_in_settings#add_phone_opt_in
+                     upload_opt_in_file_opt_in_settings POST         /opt_in_settings/upload_opt_in_file(.:format)                      opt_in_settings#upload_opt_in_file
+                                                        DELETE       /opt_in_settings/delete_phone_opt_in/:id(.:format)                 opt_in_settings#delete_phone_opt_in
+                destroy_uploaded_phones_opt_in_settings DELETE       /opt_in_settings/destroy_uploaded_phones(.:format)                 opt_in_settings#destroy_uploaded_phones
+                                                        GET          /opt_in_settings(.:format)                                         opt_in_settings#index
+                                      opt_in_statistics GET          /opt_in_statistics(.:format)                                       opt_in_statistics#index
+                                                        GET          /opt_in_statistics(.:format)                                       opt_in_statistics#index
+                     rca_minutes_data_numerical_reports GET          /data_numerical_reports/rca_minutes(.:format)                      data_numerical_reports#rca_minutes
+                 country_minutes_data_numerical_reports GET          /data_numerical_reports/country_minutes(.:format)                  data_numerical_reports#country_minutes
+                                 data_numerical_reports GET          /data_numerical_reports(.:format)                                  data_numerical_reports#index
+                                                        POST         /data_numerical_reports(.:format)                                  data_numerical_reports#create
+                              new_data_numerical_report GET          /data_numerical_reports/new(.:format)                              data_numerical_reports#new
+                             edit_data_numerical_report GET          /data_numerical_reports/:id/edit(.:format)                         data_numerical_reports#edit
+                                  data_numerical_report GET          /data_numerical_reports/:id(.:format)                              data_numerical_reports#show
+                                                        PUT          /data_numerical_reports/:id(.:format)                              data_numerical_reports#update
+                                                        DELETE       /data_numerical_reports/:id(.:format)                              data_numerical_reports#destroy
+                                 tagging_users_and_tags GET          /users_and_tags/tagging(.:format)                                  users_and_tags#tagging
+                              data_group_users_and_tags GET          /users_and_tags/data_group(.:format)                               users_and_tags#data_group
+                           group_content_users_and_tags GET          /users_and_tags/group_content(.:format)                            users_and_tags#group_content
+                         tagging_content_users_and_tags GET          /users_and_tags/tagging_content(.:format)                          users_and_tags#tagging_content
+                        group_child_data_users_and_tags GET          /users_and_tags/group_child_data(.:format)                         users_and_tags#group_child_data
+                            group_detail_users_and_tags GET          /users_and_tags/group_detail(.:format)                             users_and_tags#group_detail
+                             assign_data_users_and_tags PUT          /users_and_tags/assign_data(.:format)                              users_and_tags#assign_data
+                          assign_tagging_users_and_tags PUT          /users_and_tags/assign_tagging(.:format)                           users_and_tags#assign_tagging
+                      tagging_child_data_users_and_tags GET          /users_and_tags/tagging_child_data(.:format)                       users_and_tags#tagging_child_data
+                                         users_and_tags GET          /users_and_tags(.:format)                                          users_and_tags#index
+                                         chart_a_graphs GET          /graphs/chart_a(.:format)                                          graphs#chart_a
+                                  change_chart_c_graphs GET          /graphs/change_chart_c(.:format)                                   graphs#change_chart_c
+                                  change_chart_d_graphs GET          /graphs/change_chart_d(.:format)                                   graphs#change_chart_d
+                              change_total_chart_graphs GET          /graphs/change_total_chart(.:format)                               graphs#change_total_chart
+                                      user_chart_graphs GET          /graphs/user_chart(.:format)                                       graphs#user_chart
+                                   minutes_chart_graphs GET          /graphs/minutes_chart(.:format)                                    graphs#minutes_chart
+                                                 graphs GET          /graphs(.:format)                                                  graphs#index
+                                                        POST         /graphs(.:format)                                                  graphs#create
+                                              new_graph GET          /graphs/new(.:format)                                              graphs#new
+                                             edit_graph GET          /graphs/:id/edit(.:format)                                         graphs#edit
+                                                  graph GET          /graphs/:id(.:format)                                              graphs#show
+                                                        PUT          /graphs/:id(.:format)                                              graphs#update
+                                                        DELETE       /graphs/:id(.:format)                                              graphs#destroy
+                                     get_graphs_reports GET          /reports/get_graphs(.:format)                                      reports#get_graphs
+                                  render_graphs_reports GET          /reports/render_graphs(.:format)                                   reports#render_graphs
+                                                reports GET          /reports(.:format)                                                 reports#index
+                                                        POST         /reports(.:format)                                                 reports#create
+                                             new_report GET          /reports/new(.:format)                                             reports#new
+                                            edit_report GET          /reports/:id/edit(.:format)                                        reports#edit
+                                                 report GET          /reports/:id(.:format)                                             reports#show
+                                                        PUT          /reports/:id(.:format)                                             reports#update
+                                                        DELETE       /reports/:id(.:format)                                             reports#destroy
+                                             did_report GET          /reports/did/index(.:format)                                       reports#did_reports
+                                      did_search_report GET          /reports/did/search(.:format)                                      reports#did_search_reports
+                               search_stream_extensions GET          /extensions/search_stream(.:format)                                extensions#search_stream
+                                get_contents_extensions GET          /extensions/get_contents(.:format)                                 extensions#get_contents
+                                     content_extensions GET          /extensions/content(.:format)                                      extensions#content
+                        edit_gateway_content_extensions GET          /extensions/gateway_content/:gateway_content_id/edit(.:format)     extensions#edit_gateway_content
+                      update_gateway_content_extensions PUT          /extensions/gateway_content/:gateway_content_id/update(.:format)   extensions#update_gateway_content
+                add_existing_gateway_content_extensions GET          /extensions/gateway_contents/new(.:format)                         extensions#add_existing_gateway_content
+               save_existing_gateway_content_extensions POST         /extensions/gateway_contents/create(.:format)                      extensions#save_existing_gateway_content
+                                             extensions GET          /extensions(.:format)                                              extensions#index
+                                              extension DELETE       /extensions/:id(.:format)                                          extensions#destroy
+                          request_content_data_gateways POST         /data_gateways/request_content(.:format)                           data_gateways#request_content
+                            update_station_data_gateway PUT          /data_gateways/:id/update_station(.:format)                        data_gateways#update_station
+                             update_prompt_data_gateway PUT          /data_gateways/:id/update_prompt(.:format)                         data_gateways#update_prompt
+                             manage_phones_data_gateway POST         /data_gateways/:id/manage_phones(.:format)                         data_gateways#manage_phones
+                                 add_phone_data_gateway POST         /data_gateways/:id/add_phone(.:format)                             data_gateways#add_phone
+                          create_extension_data_gateway POST         /data_gateways/:id/create_extension(.:format)                      data_gateways#create_extension
+                               data_gateway_assign_dids GET          /data_gateways/:data_gateway_id/assign_dids(.:format)              settings#assign_dids
+                       data_gateway_update_station_dids PUT          /data_gateways/:data_gateway_id/update_station_dids(.:format)      settings#update_station_dids
+                     data_gateway_unassign_station_dids PUT          /data_gateways/:data_gateway_id/unassign_station_dids(.:format)    settings#unassign_station_dids
+                               data_gateway_dids_scroll GET          /data_gateways/:data_gateway_id/dids_scroll(.:format)              settings#dids_scroll
+                                          data_gateways POST         /data_gateways(.:format)                                           data_gateways#create
+                                       new_data_gateway GET          /data_gateways/new(.:format)                                       data_gateways#new
+                                      edit_data_gateway GET          /data_gateways/:id/edit(.:format)                                  data_gateways#edit
+                                           data_gateway PUT          /data_gateways/:id(.:format)                                       data_gateways#update
+                                                        DELETE       /data_gateways/:id(.:format)                                       data_gateways#destroy
+                                                 update PUT          /update(.:format)                                                  setting#update_email
+                          update_email_system_variables PUT          /system_variables/update_email(.:format)                           system_variables#update_email
+                                  save_system_variables POST         /system_variables/save(.:format)                                   system_variables#save
+                                       system_variables GET          /system_variables(.:format)                                        system_variables#index
+                                        system_variable PUT          /system_variables/:id(.:format)                                    system_variables#update
+                                               settings GET          /settings(.:format)                                                settings#index
+                                                setting PUT          /settings/:id(.:format)                                            settings#update
+                               suggestion_data_contents POST         /data_contents/suggestion(.:format)                                data_contents#suggestion
+                                    switch_data_content GET          /data_contents/:id/switch(.:format)                                data_contents#switch
+                                          data_contents GET          /data_contents(.:format)                                           data_contents#index
+                                                        POST         /data_contents(.:format)                                           data_contents#create
+                                       new_data_content GET          /data_contents/new(.:format)                                       data_contents#new
+                                      edit_data_content GET          /data_contents/:id/edit(.:format)                                  data_contents#edit
+                                           data_content GET          /data_contents/:id(.:format)                                       data_contents#show
+                                                        PUT          /data_contents/:id(.:format)                                       data_contents#update
+                                                        DELETE       /data_contents/:id(.:format)                                       data_contents#destroy
+               new_settings_station_api_check_media_url GET          /new_settings/station/api/check_media_url(.:format)                api#check_media_url
+new_settings_station_data_gateways_check_channel_number GET          /new_settings/station/data_gateways/check_channel_number(.:format) data_gateways#check_channel_number
+                                  api_data_content_save POST         /api/data_content_save(.:format)                                   api#data_content_save
+                                   api_select_media_url GET          /api/select_media_url(.:format)                                    api#select_media_url
+                               data_delete_gateway_logo GET          /station/delete/logo/:station_id(.:format)                         data_gateways#delete_logo

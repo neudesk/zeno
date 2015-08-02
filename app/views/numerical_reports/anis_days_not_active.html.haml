@@ -1,0 +1,63 @@
+.slider
+  = render "shared/slides"
+.anis_day_not_active_page
+  .row.anis-day-not-active{:class => params[:action]}
+    %h1.page_heading ANIs day not active
+    .standard.no-borders
+      = form_tag anis_days_not_active_numerical_reports_path, :method => :get, :style => "margin-bottom:0px" do |f|
+        .clearfix
+          .sec_con.pull-left.anis
+            %label.pull-left.anis NoCallDays
+            %p.pull-left.anis= number_field_tag :nocalldays, params[:nocalldays], :style => "width:50px"
+          .sec_con.pull-left.anis
+            %label.pull-left.anis CallDays
+            %p.pull-left.anis= number_field_tag :calldays, params[:calldays], :style => "width:50px"
+          .sec_con.pull-left.anis
+            %label.pull-left.anis CallMinutes
+            %p.pull-left.anis= number_field_tag :callminutes, params[:callminutes], :style => "width:50px"
+          .sec_con.pull-left.anis
+            %p.pull-left.select-category-type.anis
+              %span.radio-select= select_tag :category_type, options_for_select([["DID", 1], ["Country", 2], ["Station", 3]], params[:category_type] || 1)
+          .sec_con.pull-left.anis
+            %p.pull-left.anis.select-did.category-value{:style => @category_type.to_i == 1 ? "display: block" : "display: none"}
+              %span.radio-select= select_tag :did, options_for_select([["All", ""]] + @dids.uniq, params[:did])
+            %p.pull-left.anis.select-country.category-value{:style =>  @category_type.to_i == 2 ? "display: block" : "display: none"}
+              %span.radio-select= select_tag :country_id, options_for_select( [["All", ""]] + @countries.uniq, params[:country_id])
+            %p.pull-left.anis.select-station.category-value{:style =>  @category_type.to_i == 3 ? "display: block" : "display: none"}
+              %span.radio-select= select_tag :gateway_id, options_for_select( [["All", ""]] + @gateways, params[:gateway_id])
+
+          .sec_con.pull-left.anis
+            %label.pull-left.anis Limit
+            %p.pull-left.anis= number_field_tag :per_page, params[:per_page] || 10,  :style => "width:50px"
+          .sec_con.pull-left.anis
+            %p.pull-left.anis= submit_tag "View", :class => "btn", :style => "padding: 5px 8px"
+      .clearfix
+        .sec_con.pull-left.anis{:style => "padding-top:0px"}
+          %label.pull-left.anis Total Minutes
+          %p.pull-left.anis{:style => "color:red;font-size:130%;margin-top:3px;margin-left:5px"}= (@total_minutes.to_f/60).round(2)
+        .sec_con.pull-left.anis{:style => "padding-top:0px"}
+          %label.pull-left.anis Total Count
+          %p.pull-left.anis{:style => "color:red;font-size:130%;margin-top:3px;margin-left:5px"}= @reports.total_count
+      %table.table.table-striped.table-hover{:style=>"padding:5px"}
+        %thead
+          %tr
+            %th ANI
+            %th DID
+            %th Carrier
+            %th Minutes
+        %tbody
+          - @reports.each do |report|
+            %tr
+              %td{:style => "width:300px"}= report.ani
+              %td{:style => "width:150px"}= report.did
+              %td= report.carrier
+              %td.algin-right{:style => "width:50px"}= (report.minutes.to_f/60).round(2)
+      .clearfix.download
+        = link_to "Download", download_numerical_reports_path(format: 'csv'),:class => "btn", :style => "padding: 10px"
+      = paginate @reports
+
+- content_for :js do
+  :javascript
+    $(document).ready(function(){
+      window.numericalReport = new NumericalReport()
+    });

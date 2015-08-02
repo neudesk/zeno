@@ -1,0 +1,220 @@
+
+- if (current_user.is_rca? || current_user.is_marketer? ) && current_user.is_intercom_admin?
+  .space12{:style => "margin: 0 auto;width: 270px;margin-top: 10px;"}
+    .btn-group.btn-group-lg
+      %a.btn.btn-default.active{:href=>"/my_account"} User Info
+      %a.btn.btn-default{:href=>"/conversations"} Conversation
+.row
+  .col-sm-12
+    .page-header.main
+      .pull-right
+        = link_to edit_account_path, class: "btn btn-primary btn-lg", style: "margin-top: -12px;" do
+          %i.fa.fa-edit
+          Edit
+      %h3
+        = "Users Info"
+      %progress{:max => 100, :value => @user.profile_percent, :align => "right"}
+      %span.h4 #{@user.profile_percent}% of Profile Completed
+        
+      
+        
+
+.row
+  .col-sm-5
+    .user-left
+      %table.table.table-condensed.table-hover
+        %thead
+          %tr
+            %th{colspan: 2}
+              = "Account Information"
+        %tbody
+          %tr
+            %td.col-sm-4
+              = "Company/Name"
+            %td.col-sm-8
+              = @user.name
+          %tr
+            %td= "Title/Contact Name"
+            %td= @user.title
+          %tr
+            %td= "Email"
+            %td= @user.email
+          %tr
+            %td= "Role"
+            %td= html_role(@user.role_name, @user.permission_id)
+          %tr
+            %td= "Status"
+            %td= display_status(@user.enabled? ? "enabled" : "disabled")
+          %tr
+            %td
+            %td
+
+      %table.table.table-condensed.table-hover
+        %thead
+          %tr
+            %th{colspan: 2}
+              = "Contact Information"
+        %tbody
+          %tr
+            %td.col-sm-3
+              %i.clip-phone-4
+              = "Landline"
+            %td.col-sm-9
+              = @user.landline
+          %tr
+            %td
+              %i.fa.fa-mobile
+              = "Cellphone"
+            %td= @user.cellphone
+          %tr
+            %td
+              %i.fa.fa-map-marker
+              = "Address"
+            %td= @user.address
+          %tr
+            %td
+              %i.clip-earth-2
+              = "City"
+            %td= @user.city
+          %tr
+            %td
+              %i.fa.fa-globe
+              = "State"
+            %td= @user.state
+          %tr
+            %td
+              %i.fa.fa-qrcode
+              = "Zip Code"
+            %td= @user.zip_code
+          %tr
+            %td
+              %i.fa.fa-flag
+              = "Country"
+            %td= @user.country
+          %tr
+            %td
+              %i.fa.fa-facebook-square
+              = "Facebook"
+            %td= @user.signup_facebook
+          %tr
+            %td
+              %i.fa.fa-twitter-square
+              = "Twitter"
+            %td= @user.signup_twitter
+          %tr
+            %td
+            %td
+
+  .col-sm-7
+    %ul.activities
+      %li
+        %i.clip-user-3.circle-icon.circle-green
+        %span.desc= "RCA: #{@user.signup_rca}"
+      %li
+        %i.clip-cube-2.circle-icon.circle-bricky
+        %span.desc= "Affiliate: #{@user.signup_affiliate}"
+      %li
+        %i.clip-clock-2.circle-icon.circle-teal
+        %span.desc= "Member Since: #{html_date(@user.created_at)}"
+    %br/
+    %table.table.table-condensed.table-hover
+      %thead
+        %tr
+          %th{colspan: 2}
+            = "Station Information"
+      %tbody
+        %tr
+          %td.col-sm-3
+            = "Station Name"
+          %td.col-sm-9
+            = @user.signup_station_name
+        %tr
+          %td= "Streaming URL"
+          %td= @user.signup_streaming_url
+        %tr
+          %td= "Website"
+          %td= @user.signup_website
+        %tr
+          %td= "Language"
+          %td= @user.signup_language
+        %tr
+          %td= "Genre"
+          %td= @user.signup_genre
+        %tr
+          %td= "On-Air Schedule"
+          %td= @user.signup_on_air_schedule
+        %tr
+          %td
+          %td
+
+    %table.table.table-condensed.table-hover
+      %thead
+        %tr
+          %th{colspan: 2}
+            = "Keywords"
+      %tbody
+        %tr
+          %td= "Tags"
+          %td= displayable_tags(@user.tags)
+        %tr
+          %td= "Countries"
+          %td= displayable_countries(@user.countries)
+
+    -#- if current_user.is_marketer?
+    -#  %table.table.table-condensed.table-hover
+    -#    %thead
+    -#      %tr
+    -#        %th{colspan: 2}
+    -#          = "Signup Configs"
+    -#    %tbody
+    -#      %tr
+    -#        %td= "Default DID Provider"
+    -#        %td
+    -#          = select_tag "provider", options_from_collection_for_select(DataEntrywayProvider.select([:id, :title]).order('title'), "id", "title", @sel_provider), prompt: "Select Provider"
+
+- if params[:new_user].present?
+  = render "shared/intercom", user: @user
+:javascript
+  // function to initiate EasyPieChart
+  $(document).ready(function(){
+    select = $('select[name="provider"]')
+    $('body').on('change', select, function(){
+      $.ajax({
+        url: '/my_account/update_default_provider?provider='+select.val(),
+        type: 'get'
+      }).done(function(){
+        alert('Default DID provider for signup has been set!')
+      });
+    });
+  });
+  var runEasyPieChart = function () {
+      if (isIE8 || isIE9) {
+          if (!Function.prototype.bind) {
+              Function.prototype.bind = function (oThis) {
+                  if (typeof this !== "function") {
+                      // closest thing possible to the ECMAScript 5 internal IsCallable function
+                      throw new TypeError("Function.prototype.bind - what is trying to be bound is not callable");
+                  }
+                  var aArgs = Array.prototype.slice.call(arguments, 1),
+                      fToBind = this,
+                      fNOP = function () {}, fBound = function () {
+                          return fToBind.apply(this instanceof fNOP && oThis ? this : oThis, aArgs.concat(Array.prototype.slice.call(arguments)));
+                      };
+                  fNOP.prototype = this.prototype;
+                  fBound.prototype = new fNOP();
+                  return fBound;
+              };
+          }
+      }
+      $('.easy-pie-chart .bounce').easyPieChart({
+          animate: 1000,
+          size: 70
+      });
+      $('.easy-pie-chart .cpu').easyPieChart({
+          animate: 1000,
+          lineWidth: 3,
+          barColor: '#35aa47',
+          size: 70
+          
+      });
+  };

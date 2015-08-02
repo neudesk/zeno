@@ -1,0 +1,193 @@
+%div.modal.fade{:id => "mediaPlayerModal", :role => "dialog", 'aria-labelledby' => "mediaPlayerModalLabel",  'aria-hidden' => "true"}
+  %div.modal-dialog
+    %div.modal-content{:style => 'width: 900px; margin-left: -150px'}
+      %div.modal-header
+        %h4.modal-title{:id => "mediaPlayerModalLabel"}
+          Media Player Request Form
+      %div.modal-body
+        = form_for @station_tool, :url => send_widget_request_path, :method => 'post', :id => 'sendRequestForm' do |f|
+          = hidden_field_tag 'station_id', params[:station_id]
+          = f.hidden_field :tool_type , :value => 'media_player'
+          %div.swMain{:id=>"wizard"}
+            %ul
+              %li
+                %a{:href=>"#step-1"}
+                  %label.stepNumber
+                    1
+                  %span.stepDesc
+                    Step 1
+                    %br
+                    %small
+                      Choose Player Type
+              %li
+                %a{:href=>"#step-2"}
+                  %label.stepNumber
+                    2
+                  %span.stepDesc
+                    Step 2
+                    %br
+                    %small
+                      Station Info
+              %li.customFields.hide
+                %a{:href=>"#step-3"}
+                  %label.stepNumber
+                    3
+                  %span.stepDesc
+                    Step 3
+                    %br
+                    %small
+                      Player Info
+            %div{:id=>"step-1"}
+              %div.controls
+                %label.control-label
+                  Type of Media Player Request
+                %br
+                %label.playerType.radio{:for => "opt_0", :style => 'font-size: 14px; text-transform: uppercase'}
+                  = f.radio_button :is_customized, 0, :checked => true, :id => 'opt_0', :style => 'transform: scale(1.5); margin-right: 5px', :data => {:target => '.customFields'}
+                  Default
+              %div.controls
+                %label.playerType.radio{:for => "opt_00", :style => 'font-size: 14px; text-transform: uppercase'}
+                  = f.radio_button :is_customized, 1, :checked => false, :id => 'opt_00', :style => 'transform: scale(1.5); margin-right: 5px', :data => {:target => '.customFields', :val => '1'}
+                  Customized
+              %button.btn.btn-blue.next-step.btn-primary.pull-right
+                Next
+                %i.fa.fa-arrow-circle-right
+              .clearfix
+            %div{:id=>"step-2"}
+              .row
+                %div.col-md-5
+                  %div.controls
+                    %label.radio{:for => "opt_1", :style => 'font-size: 14px; text-transform: uppercase'}
+                      = f.radio_button :channeling_type, 'single', :checked => false, :id => 'opt_1', :style => 'transform: scale(1.5); margin-right: 5px', :data => {:target => '.autoChannel'}
+                      Single Channel
+                  %div.controls
+                    %label.radio{:for => "opt_2", :style => 'font-size: 14px; text-transform: uppercase'}
+                      = f.radio_button :channeling_type, 'multi', :checked => true, :id => 'opt_2', :style => 'transform: scale(1.5); margin-right: 5px', :data => {:target => '.autoChannel', :val => 'multi'}
+                      Multiple Channels
+                  %br
+                  %div.control-group
+                    %label.control-label{:for => "station_display_name_id"}
+                      Station Name Display
+                    %div.controls
+                      = f.text_field :station_name, :placeholder => 'Station Name Display', :class => 'input-xlarge', "data-validation" => "required", :value => @station.title
+                  %div.control-group
+                    %label.control-label{:for => "phone_number_display"}
+                      Phone Number on Display
+                    %div.controls
+                      = f.text_field :phone_number_display, :placeholder =>'Phone Number on Display', :class => 'input-xlarge', "data-validation" => "length", "data-validation-length" => "min11"
+                  -#%br
+                  -#%div.control-group
+                  -#  %label.control-label{:for => "media_player_did_id"}
+                  -#    Media Player DID
+                  -#  %div.controls
+                  -#    = f.text_field :did, :placeholder =>'Media Player DID', :class => 'input-xlarge', "data-validation" => "length", "data-validation-length" => "min11"
+                %div.col-md-7
+                  %div.customFields.hide
+                    %div.controls
+                      %label.radio{:for => "opt_3", :style => 'font-size: 14px; text-transform: uppercase'}
+                        = f.radio_button :is_auto_play, '0', :checked => true, :id => 'opt_3', :style => 'transform: scale(1.5); margin-right: 5px'
+                        Manual Start
+                    %div.controls
+                      %label.radio{:for => "opt_4", :style => 'font-size: 14px; text-transform: uppercase'}
+                        = f.radio_button :is_auto_play, '1', :checked => false, :id => 'opt_4', :style => 'transform: scale(1.5); margin-right: 5px'
+                        Auto-play
+                    %br
+                    %div.autoChannel
+                      %label
+                        Optional: Auto-Play Start Channel
+                        %small
+                          For Multi-Channel Stations Only
+                      %div.controls
+                        %label.radio{:for => "opt_3", :style => 'font-size: 14px; text-transform: uppercase'}
+                          = f.radio_button :channel_to_auto_play, '1', :checked => false, :id => 'opt_3', :style => 'transform: scale(1.5); margin-right: 5px'
+                          1
+                      %div.controls
+                        %label.radio{:for => "opt_4", :style => 'font-size: 14px; text-transform: uppercase'}
+                          = f.radio_button :channel_to_auto_play, '2', :checked => false, :id => 'opt_4', :style => 'transform: scale(1.5); margin-right: 5px'
+                          2
+                      %div.controls
+                        %label.radio{:for => "opt_3", :style => 'font-size: 14px; text-transform: uppercase'}
+                          = f.radio_button :channel_to_auto_play, '3', :checked => false, :id => 'opt_3', :style => 'transform: scale(1.5); margin-right: 5px'
+                          3
+                      %div.controls
+                        %label.radio{:for => "opt_4", :style => 'font-size: 14px; text-transform: uppercase'}
+                          = f.radio_button :channel_to_auto_play, '4', :checked => false, :id => 'opt_4', :style => 'transform: scale(1.5); margin-right: 5px'
+                          4
+                      %div.controls
+                        %label.radio{:for => "opt_5", :style => 'font-size: 14px; text-transform: uppercase'}
+                          = f.radio_button :channel_to_auto_play, '5', :checked => false, :id => 'opt_5', :style => 'transform: scale(1.5); margin-right: 5px'
+                          5
+                      %div.controls
+                        %label.radio{:for => "opt_6", :style => 'font-size: 14px; text-transform: uppercase'}
+                          = f.radio_button :channel_to_auto_play, '6', :checked => false, :id => 'opt_6', :style => 'transform: scale(1.5); margin-right: 5px'
+                          other
+                          %input.otherChannel{:value => nil, :data => {:radiotarget => 'opt_6'}}
+              %br
+              .row
+                .col-md-12
+                  %button.btn.btn-blue.next-step.btn-primary.hide.pull-right
+                    Next
+                    %i.fa.fa-arrow-circle-right
+                  %button.btn.btn-success.pull-right{:type => 'submit'}
+                    Finish
+                    %i.fa.fa-check-circle
+                  %a.btn.btn-default.pull-left.back-step{:href=>"#"}
+                    %i.fa.fa-arrow-circle-left
+                    Go Back
+                  .clearfix
+            %div.customFields{:id=>"step-3"}
+              .row
+                .col-md-5
+                  %div.control-group
+                    %label.control-label{:for => "player_dimensions_id"}
+                      Width Dimensions
+                      %small
+                        Width (Default: 200)
+                    %div.controls.playerDimensions
+                      = f.text_field :player_width, :class => 'input-xlarge bfh-number', :data => {:max => "800", :min => '30'}, :style => 'width: 100%'
+                  %div.control-group
+                    %label.control-label{:for => "player_dimensions_id"}
+                      Height Dimensions
+                      %small
+                        Height (Default: 250)
+                    %div.controls.playerDimensions
+                      = f.text_field :player_height, :class => 'input-xlarge bfh-number', :data => {:max => "800", :min => '60'}, :style => 'width: 100%'
+                  %div.control-group
+                    %label.control-label{:for => "volume_percentage_id"}
+                      Volume Percentage
+                      %small
+                        Volume 1 - 100% (Default: 50%)
+                    %div.controls
+                      %div.bfh-slider{:data => {:name => "station_tool[player_volume]", :min => "1", :max => "100", :value => 50}}
+                  %div.control-group
+                    %label.control-label{:for => "volume_percentage_id"}
+                      Background Image
+                    %br
+                    %div.fileinput.fileinput-new{:data => {:provides => "fileinput"}, :style => 'position: relative;'}
+                      %div.fileinput-preview.thumbnail{:data => {:trigger => "fileinput"}, :style => "max-width: 250px; min-height: 10px; border: 0"}
+                      %div
+                        %span.btn.btn-default.btn-file
+                          %span.fileinput-new Select image
+                          %span.fileinput-exists Change
+                          = f.file_field :background, :accept => 'image/png,image/gif,image/jpeg'
+                        %a.btn.btn-default.fileinput-exists{:href => '#', :data => {:dismiss => "fileinput"}} Remove
+                    -#%div.controls
+                    -#  = f.file_field :background, :accept => 'image/png,image/gif,image/jpeg'
+                .col-md-7
+                  %div.control-group
+                    %label.control-label{:for => "textarea"}
+                      Additional Info
+                    %div.controls
+                      = f.text_area :additional_info
+                  %br
+              .row
+                .col-md-12
+                  %button.btn.btn-success.pull-right{:type => 'submit'}
+                    Finish
+                    %i.fa.fa-check-circle
+                  %a.btn.btn-default.pull-left.back-step{:href=>"#"}
+                    %i.fa.fa-arrow-circle-left
+                    Go Back
+                  .clearfix
+      %div.modal-footer
+        = link_to "Close", "#", class: "btn btn-default", "aria-hidden" => "true", "data-dismiss" => "modal"

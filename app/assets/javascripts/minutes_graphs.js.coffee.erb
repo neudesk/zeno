@@ -1,0 +1,436 @@
+class window.MinutesGraph
+    constructor: ->
+        hourlyInterval(15000)
+        $.ajax({
+            url: "/graphs/get_hourly_minutes"
+            type: 'GET'
+            success: (res) ->
+                $('#placeholder_hourly').html('')
+                runHourlyChart(res["today"], res["yesterday"], res["one_week"])
+            error: (res) ->
+                return
+            complete: (res) ->
+        })
+        $('#hourly_tab').bind "click", (e) ->
+            $('.tab-pane').removeClass('active')
+            $("#hourly").addClass('active')
+        $('#daily_tab').bind "click", (e) ->
+            $('.tab-pane').removeClass('active')
+            $("#daily").addClass('active')
+            if !($('#placeholder_daily').text().length > 0)
+                $.ajax({
+                    url: "/graphs/get_daily_minutes"
+                    type: 'GET'
+                    success: (res) ->
+                        $('#placeholder_daily').html('')
+                        runDailyChart(res["one_week"], res["current_week"])
+                    error: (res) ->
+                        return
+                    complete: (res) ->
+                })
+
+        $('#weekly_tab').bind "click", (e) ->
+            $('.tab-pane').removeClass('active')
+            $("#weekly").addClass('active')
+            if !($('#placeholder_weekly').text().length > 0)
+                $.ajax({
+                    url: "/graphs/get_weekly_minutes"
+                    type: 'GET'
+                    success: (res) ->
+                        $('#placeholder_weekly').html('')
+                        runWeeklyChart(res)
+                    error: (res) ->
+                        return
+                    complete: (res) ->
+                })
+
+
+    # function to initiate Hourly Chart
+    runHourlyChart = (today, yesterday, one_week) ->
+        weekday = new Array(7);
+        weekday[0] = "Sun";
+        weekday[1] = "Mon";
+        weekday[2] = "Tue";
+        weekday[3] = "Wed";
+        weekday[4] = "Thu";
+        weekday[5] = "Fri";
+        weekday[6] = "Sat";
+        d = new Date();
+        datasets = {"today": {data: today, label: "Today"}, "yesterday": {data: yesterday, label: "Yesterday"}, "one_week": {data: one_week, label: "Last Week " + weekday[d.getDay()]}}
+        i = 0
+        $.each datasets, (key, val) ->
+            val.color = i
+            ++i
+            return
+
+        choiceContainer = $("#choices")
+        $.each datasets, (key, val) ->
+            color = ["#2FABE9", "#FA5833", "#FABB3D"]
+            if(key != 'yesterday')
+                choiceContainer.append "<div style='clear:both;'><input type='checkbox', name='" + key + "' checked='checked' id='id" + key + "'></input><div style='width:4px;float:left;margin-top:5px;height:0;border:5px solid " + color[val.color] + ";overflow:hidden'></div>" + "<label for='id" + key + "'>" + val.label + "</label></div>"
+            else
+                choiceContainer.append "<div style='clear:both;'><input type='checkbox', name='" + key + "' id='id" + key + "'></input><div style='width:4px;float:left;margin-top:5px;height:0;border:5px solid " + color[val.color] + ";overflow:hidden'></div>" + "<label for='id" + key + "'>" + val.label + "</label></div>"
+            return
+
+        choiceContainer.find("input").iCheck(
+            checkboxClass: "icheckbox_square-grey"
+            radioClass: "iradio_square-grey"
+            increaseArea: "10%"
+        ).on "ifClicked", (event) ->
+            $(this).iCheck "toggle"
+            plotAccordingToChoices(choiceContainer, datasets)
+            return
+
+        plotAccordingToChoices(choiceContainer, datasets)
+        $("#placeholder_hourly").bind "plothover", (event, pos, item) ->
+            $("#x").text pos.x.toFixed(2)
+            $("#y").text pos.y.toFixed(2)
+            if item
+                unless previousPoint is item.dataIndex
+                    previousPoint = item.dataIndex
+                    $("#tooltip").remove()
+                    x = item.datapoint[0].toFixed(0)
+                    y = item.datapoint[1].toFixed(0)
+                    i = 0
+                    result = 0
+                    while i <= x
+                        result += item.series['data'][i][1]
+                        i++
+                    if x == 0
+                        result = item.series['data'][0][1]
+
+                    if x < 12
+                        $.showTooltip item.pageX, item.pageY, item.series.label + " at " + x + " AM : " + y + "<br/>" + "Total " + item.series.label + " at " + x + " AM : " + result
+                    else if x > 12
+                        $.showTooltip item.pageX, item.pageY, item.series.label + " at " + (x - 12) + " PM : " + y + "<br/>" + "Total " + item.series.label + " at " + (x - 12) + " PM : " + result
+                    else if parseInt(x) == 12
+                        $.showTooltip item.pageX, item.pageY, item.series.label + " at " + x + " PM : " + y + "<br/>" + "Total " + item.series.label + " at " + x + " PM : " + result
+            else
+                $("#tooltip").remove()
+                previousPoint = null
+            return
+        return
+
+    # insert checkboxes
+    plotAccordingToChoices = (choiceContainer, datasets) ->
+        data = []
+        choiceContainer.find("input:checked").each ->
+            key = $(this).attr("name")
+            data.push datasets[key]  if key and datasets[key]
+        if data.length > 0
+            $.plot "#placeholder_hourly", data,
+                legend:
+                    show: false
+                series:
+                    lines:
+                        show: true
+                        lineWidth: 2
+                        fill: true
+                        fillColor:
+                            colors: [
+                                {opacity: 0.03},
+                                {opacity: 0.01}
+                            ]
+                    points:
+                        show: true
+                    shadowSize: 2
+                grid:
+                    hoverable: true
+                    clickable: true
+                    tickColor: "#eee"
+                    borderWidth: 0
+                colors: ["#2FABE9", "#FA5833", "#FABB3D"]
+                xaxis:
+                    ticks: [
+                        [0, '0 AM'],
+                        [2, '2 AM'],
+                        [4, '4 AM'],
+                        [6, '6 AM'],
+                        [8, '8 AM'],
+                        [10, '10 AM'],
+                        [12, '12 PM'],
+                        [14, '2 PM'],
+                        [16, '4 PM'],
+                        [18, '6 PM'],
+                        [20, '8 PM'],
+                        [22, '10 PM']
+                    ]
+        return
+
+# function to initiate Daily Chart
+runDailyChart = (one_week, current_week) ->
+    d = new Date();
+    datasets = {"one_week": {data: one_week, label: "Last Week"}, "current_week": {data: current_week, label: "Current Week"}}
+
+    i = 0
+    $.each datasets, (key, val) ->
+        val.color = i
+        ++i
+        return
+
+
+    choiceContainer = $("#daily_choices")
+    $.each datasets, (key, val) ->
+        color = ["#FABB3D", "#2F9CD7"]
+        choiceContainer.append "<div style='clear:both;'><input type='checkbox' name='" + key + "' checked='checked' id='id" + key + "'></input><div style='width:4px;float:left;margin-top:5px;height:0;border:5px solid " + color[val.color] + ";overflow:hidden'></div>" + "<label for='id" + key + "'>" + val.label + "</label></div>"
+        return
+
+    choiceContainer.find("input").iCheck(
+        checkboxClass: "icheckbox_square-grey"
+        radioClass: "iradio_square-grey"
+        increaseArea: "10%"
+    ).on "ifClicked", (event) ->
+        $(this).iCheck "toggle"
+        plotAccordingToChoices(choiceContainer, datasets)
+        return
+
+    plotAccordingToChoices(choiceContainer, datasets)
+    $("#placeholder_daily").bind "plothover", (event, pos, item) ->
+        $("#x").text pos.x.toFixed(2)
+        $("#y").text pos.y.toFixed(2)
+        if item
+            unless previousPoint is item.dataIndex
+                previousPoint = item.dataIndex
+                $("#tooltip").remove()
+                x = item.datapoint[0].toFixed(0)
+                y = item.datapoint[1].toFixed(0)
+                i = 0
+                result = 0
+                while i < x
+                    result += item.series['data'][i][1]
+                    i++
+                if x == 0
+                    result = item.series['data'][0][1]
+                if item.series.label == "Last Week"
+                    $.showTooltip item.pageX, item.pageY, one_week[item.dataIndex][2] + " : " + y + "<br/>" + "Total until " + one_week[item.dataIndex][2] + " : " + result
+                else
+                    $.showTooltip item.pageX, item.pageY, current_week[item.dataIndex][2] + " : " + y + "<br/>" + "Total until " + current_week[item.dataIndex][2] + " : " + result
+        else
+            $("#tooltip").remove()
+            previousPoint = null
+        return
+    return
+
+hourlyDataSet = (today, yesterday, one_week) ->
+    d = new Date()
+    weekday = new Array(7);
+    weekday[0] = "Sun";
+    weekday[1] = "Mon";
+    weekday[2] = "Tue";
+    weekday[3] = "Wed";
+    weekday[4] = "Thu";
+    weekday[5] = "Fri";
+    weekday[6] = "Sat";
+    datasets = {"today": {data: today, label: "Today"}, "yesterday": {data: yesterday, label: "Yesterday"}, "one_week": {data: one_week, label: "Last Week " + weekday[d.getDay()]}}
+    return datasets
+
+requestHourlyDataSet = () ->
+    response = null
+    $.ajax({
+        url: "/graphs/get_hourly_minutes"
+        type: 'GET'
+        async: false
+        success: (res) ->
+            $('#placeholder_hourly').html('')
+            response = hourlyDataSet(res["today"], res["yesterday"], res["one_week"])
+        error: (res) ->
+            return
+        complete: (res) ->
+    })
+    return response
+updateHourlyHoverPlot = () ->
+    $("#placeholder_hourly").bind "plothover", (event, pos, item) ->
+        $("#x").text pos.x.toFixed(2)
+        $("#y").text pos.y.toFixed(2)
+        if item
+            unless previousPoint is item.dataIndex
+                previousPoint = item.dataIndex
+                $("#tooltip").remove()
+                x = item.datapoint[0].toFixed(0)
+                y = item.datapoint[1].toFixed(0)
+                i = 0
+                result = 0
+                while i <= x
+                    result += item.series['data'][i][1]
+                    i++
+                if x == 0
+                    result = item.series['data'][0][1]
+
+                if x < 12
+                    $.showTooltip item.pageX, item.pageY, item.series.label + " at " + x + " AM : " + y + "<br/>" + "Total " + item.series.label + " at " + x + " AM : " + result
+                else if x > 12
+                    $.showTooltip item.pageX, item.pageY, item.series.label + " at " + (x - 12) + " PM : " + y + "<br/>" + "Total " + item.series.label + " at " + (x - 12) + " PM : " + result
+                else if parseInt(x) == 12
+                    $.showTooltip item.pageX, item.pageY, item.series.label + " at " + x + " PM : " + y + "<br/>" + "Total " + item.series.label + " at " + x + " PM : " + result
+        else
+            $("#tooltip").remove()
+            previousPoint = null
+        return
+    return
+updateHourlyPlot = () ->
+    datasets = requestHourlyDataSet()
+    plotHourlyAccordingToChoices($("#choices"), datasets)
+    updateHourlyHoverPlot()
+    return
+
+hourlyInterval = (interval) ->
+    setInterval(updateHourlyPlot, interval)
+    return
+
+plotHourlyAccordingToChoices = (choiceContainer, datasets) ->
+    data = []
+    choiceContainer.find("input:checked").each ->
+        key = $(this).attr("name")
+        data.push datasets[key]  if key and datasets[key]
+    if data.length > 0
+        $.plot "#placeholder_hourly", data,
+            legend:
+                show: false
+            series:
+                lines:
+                    show: true
+                    lineWidth: 2
+                    fill: true
+                    fillColor:
+                        colors: [
+                            {opacity: 0.03},
+                            {opacity: 0.01}
+                        ]
+                points:
+                    show: true
+                shadowSize: 2
+            grid:
+                hoverable: true
+                clickable: true
+                tickColor: "#eee"
+                borderWidth: 0
+#                ["#2FABE9", "#FA5833", "#FABB3D"]
+            colors: ["#2FABE9", "#FABB3D", "#FA5833"]
+            xaxis:
+                ticks: [
+                    [0, '0 AM'],
+                    [2, '2 AM'],
+                    [4, '4 AM'],
+                    [6, '6 AM'],
+                    [8, '8 AM'],
+                    [10, '10 AM'],
+                    [12, '12 PM'],
+                    [14, '2 PM'],
+                    [16, '4 PM'],
+                    [18, '6 PM'],
+                    [20, '8 PM'],
+                    [22, '10 PM']
+                ]
+    return
+
+# insert checkboxes
+plotAccordingToChoices = (choiceContainer, datasets) ->
+    data = []
+    weekday = [];
+    weekday["Sun"] = "Sunday";
+    weekday["Mon"] = "Monday";
+    weekday["Tue"] = "Tuesday";
+    weekday["Wed"] = "Wednesday";
+    weekday["Thu"] = "Thursday";
+    weekday["Fri"] = "Friday";
+    weekday["Sat"] = "Saturday";
+    choiceContainer.find("input:checked").each ->
+        key = $(this).attr("name")
+        data.push datasets[key]  if key and datasets[key]
+    xaxisdata = []
+    if(data.length == 2)
+        xaxisdata = data[1]
+    else
+        xaxisdata = data[0]
+    if data.length > 0
+        data.reverse()
+        $.plot "#placeholder_daily", data,
+            legend:
+                show: false
+            series:
+                bars:
+                    show: true
+                    lineWidth: 17
+                    fill: true
+                    fillColor:
+                        colors: [
+                            {opacity: 1},
+                            {opacity: 1}
+                        ]
+                points:
+                    show: false
+                shadowSize: 2
+            bars:
+                align: "left"
+                barWidth: 0.1
+                order: 1
+                show: 1
+            grid:
+                hoverable: true
+                clickable: true
+                tickColor: "#eee"
+                borderWidth: 0
+            colors: ["#FABB3D", "#2F9CD7"]
+
+            xaxis:
+                autoscaleMargin: 0.1
+                tickLength: 0
+                ticks: [
+                    [1, weekday[xaxisdata.data[6][2].split(" ")[0]]],
+                    [2, weekday[xaxisdata.data[5][2].split(" ")[0]]],
+                    [3, weekday[xaxisdata.data[4][2].split(" ")[0]]],
+                    [4, weekday[xaxisdata.data[3][2].split(" ")[0]]],
+                    [5, weekday[xaxisdata.data[2][2].split(" ")[0]]],
+                    [6, weekday[xaxisdata.data[1][2].split(" ")[0]]],
+                    [7, weekday[xaxisdata.data[0][2].split(" ")[0]]]
+                ]
+                mode: "weekday"
+
+    return
+    previousPoint = null
+
+# function to initiate Weekly Chart
+runWeeklyChart = (minutes) ->
+    plot = $.plot($("#placeholder_weekly"), [
+                {data: minutes, label: "Minutes"}
+            ],
+        series:
+            lines:
+                show: true
+                lineWidth: 2
+                fill: true
+                fillColor:
+                    colors: [
+                        {opacity: 0.05},
+                        {opacity: 0.01}
+                    ]
+            points:
+                show: true
+            shadowSize: 2
+        grid:
+            hoverable: true
+            clickable: true
+            tickColor: "#eee"
+            borderWidth: 0
+        colors: ["#52e136", "#37b7f3"]
+        xaxis:
+            mode: "categories",
+            tickLength: 0
+    )
+    previousPoint = null
+    $("#placeholder_weekly").bind "plothover", (event, pos, item) ->
+        $("#x").text pos.x.toFixed(2)
+        $("#y").text pos.y.toFixed(2)
+        if item
+            unless previousPoint is item.dataIndex
+                previousPoint = item.dataIndex
+                $("#tooltip").remove()
+                x = item.datapoint[0].toFixed(0)
+                y = item.datapoint[1].toFixed(0)
+                $.showTooltip item.pageX, item.pageY, item.series.label + " : " + y
+        else
+            $("#tooltip").remove()
+            previousPoint = null
+        return
+    return
+

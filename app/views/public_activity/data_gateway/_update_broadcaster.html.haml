@@ -1,0 +1,18 @@
+- old_brd = DataGroupBroadcast.find(activity.parameters[:old_broadcaster]).title rescue "which has been deleted"
+- new_brd = DataGroupBroadcast.find(activity.parameters[:old_broadcaster]).title rescue "which has been deleted"
+
+- if activity.parameters[:old_broadcaster].present? && activity.parameters[:new_broadcaster]
+  removed broadcaster
+  - if activity.parameters[:old_broadcaster]
+    = activity.parameters[:old_broadcaster] != "" and activity.parameters[:old_broadcaster] != nil ? raw("\"#{new_brd}\"") : '""'
+  - if activity.parameters[:gateway_id]
+    = "on station #{DataGateway.find(activity.parameters[:gateway_id]).title}"
+- else 
+  updated broadcaster
+  - if activity.parameters[:old_broadcaster]
+    = activity.parameters[:old_broadcaster] != "" and activity.parameters[:old_broadcaster] != nil ? raw("\"#{old_brd}\"") : '""'
+  - if activity.parameters[:new_broadcaster]
+    = activity.parameters[:new_broadcaster] != "" and activity.parameters[:new_broadcaster] != nil ? raw("\"#{new_brd}\"") : '""'
+
+  - if activity.parameters[:gateway_id]
+    = "on station #{DataGateway.find(activity.parameters[:gateway_id]).title}"

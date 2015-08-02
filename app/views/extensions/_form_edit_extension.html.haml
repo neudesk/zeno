@@ -1,0 +1,30 @@
+= simple_nested_form_for(@dataGatewayConference, :url => update_gateway_content_extensions_path(:gateway_content_id => @dataGatewayConference.id), :remote => true) do |f|
+  .modal-header
+    %button{:type => "button", "class" => "close", "data-dismiss" => "modal", "aria-hidden" => "true"}="×"
+    %h4= "Edit Extension"
+  .modal-body
+    = f.fields_for :data_content, f.object.data_content do |c|
+      .stream-title
+        %label Content Name
+        %span= c.text_field :title, disabled: (current_user.is_marketer? ? nil: true)
+        = image_tag("loading.gif", class: "hide loading")
+      .url-title
+        %label URL       
+        %span= c.text_field :media_url, disabled: ((current_user.is_marketer? || current_user.is_broadcaster? || current_user.is_rca?) ? nil: true)
+        = image_tag("loading.gif", class: "hide loading")        
+      .backup-url-title
+        %label Backup URL
+        %span= c.text_field :backup_media_url, disabled: ((current_user.is_marketer? || current_user.is_broadcaster? || current_user.is_rca?) ? nil: true)
+        -if (current_user.is_marketer? || current_user.is_broadcaster? || current_user.is_rca? ) && f.object.data_content.media_url.present? && f.object.data_content.backup_media_url.present?
+          %span{"class" => "btn", "id" => "switch_streams", "style" => "margin-top: -12px" }="Switch Streams"
+      -if !current_user.is_broadcaster?
+        .media-type
+          %label Media Type              
+          %span= c.select :media_type, options_for_select(PLAYER_TYPE, f.object.data_content.media_type), {}, disabled: (current_user.is_marketer? ? nil: true)
+    .channel-number
+      %label Extension Number
+      = f.text_field :extension, placeholder: "Please type your channel number", class: "text-change text-length", "data-error-class" => "channel-error", "data-text-error" => "Channel Number"
+      %p.text-error.channel-error.hide.message-info.error-in-add{:style => "font-style:italic"}
+  .modal-footer
+    %button{"class" => "btn btn-cancel", "data-dismiss" => "modal", "aria-hidden" => "true"}= "Close"
+    %button{"class" => "btn btn-primary btn-submit"}= "Update"

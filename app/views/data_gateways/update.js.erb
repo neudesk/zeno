@@ -1,0 +1,15 @@
+if (<%=@gateway.errors.empty?%>)
+{
+  $("p.text-success", extension.addExtensionSection).show()
+  extension.existedExtension.hide()
+  extension.newExtension.hide()
+  extension.searchButton.show()
+  extension.resetButton.hide()
+  extension.mediaUrl.val("")
+}
+else{
+  $("p.text-error", extension.addExtensionSection).show()
+  extension.resetButton.click()
+}
+
+setTimeout("$('.message-info').fadeOut()", 1500)

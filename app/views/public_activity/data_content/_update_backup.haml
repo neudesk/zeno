@@ -1,0 +1,5 @@
+updated backup url of content
+%span
+  - if activity.trackable.present?
+    = link_to activity.trackable.title, search_content_search_path(content_query: activity.trackable.title)
+from  "#{activity.parameters[:old_backup]}" to  "#{activity.parameters[:new_backup]}"

@@ -1,0 +1,25 @@
+#newCarrierPromptModal.modal{"aria-hidden" => "true", role: "dialog"}
+  .modal-dialog
+    .modal-content
+      .modal-header
+        .modal_title
+          %h4= "Create New Carrier Prompt"
+      .modal-body
+        = simple_form_for @prompt, url: {action: 'create'}, html: {id: "newCarrierPromptForm"}, method: :post  do |f|
+          = hidden_field_tag :creation_type, 'prompt'
+          %p
+            %strong Note:
+            = "The ID defined below should not be changed unless needed. <br />Please change the default gateway prompt handler with caution.<br /> The ID defined below is the dafault gateway where you upload the prompt.".html_safe
+          .input-group
+            .groupinput
+              = f.input :gateway_id, input_html: {class: "form-control", disabled: true, value: @prompt_handler_gateway_id}, label: 'Default Prompt Handler'
+            .input-group-btn
+              %a.btn.btn-success.promptHandlerBtn{style: 'margin-top: 27px'}
+                %span.fa.fa-gear
+              }
+          = select_tag :gateway_prompt_handler_id, options_from_collection_for_select(@gateways, 'id', 'title', @prompt_handler_gateway_id), prompt: 'Select default prompt handler gateway.', label: false, class: 'select hide'
+          = f.input :title, input_html: {class: "form-control"}
+          = f.input :raw_audio, label: "Audio", as: :file, input_html: {class: "form-control"}
+      .modal-footer
+        = link_to "Cancel", "#", class: "btn btn-default", "aria-hidden" => "true", "data-dismiss" => "modal"
+        = link_to "Create", "#", class: "btn btn-success modalBtn", data: {target: "#newCarrierPromptForm", type: 'prompt', modal: '#newCarrierPromptModal'}

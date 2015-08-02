@@ -1,0 +1,163 @@
+.row
+  .col-sm-12
+    %div.page-header
+      %h1
+        %i.fa.fa-tachometer
+        = "Campaign Call Status and History"
+%br
+%br
+= render partial: "campaign_analytics"
+%br
+%br
+.row
+  .col-md-9
+    = form_tag new_campaign_results_path, method: 'get' do
+      .col-md-3
+        %label.control-label Scheduled Start Date
+        .input-daterange.input-group#data_filter{style: 'margin-top: 3px'}
+          = text_field_tag 'start', params[:start], class: 'form-control'
+          %span.input-group-addon to
+          = text_field_tag 'end', params[:end], class: 'form-control'
+      .col-md-3
+        %label.control-label Search by Station or Creator
+        = text_field_tag 'query', params[:query], class: 'form-control'
+      -#.control-group.col-md-3
+      -#  %label.control-label Station
+      -#  .controls
+      -#    = select_tag 'filter_gateway', options_from_collection_for_select(@gateways, 'id', 'title', params[:filter_gateway]), include_blank: true, class: 'select'
+      -#.control-group.col-md-3
+      -#  %label.control-label Created By
+      -#  .controls
+      -#    = select_tag 'filter_creator', options_for_select(@creator.map {|x| [x[1], x[0]] if x.present?}, params[:filter_creator]), include_blank: true, class: 'select'
+      .control-group.col-md-2
+        .controls{style: 'margin-top: 30px'}
+          %button.btn.btn-default{type: 'submit'}
+            %i.fa.fa-search
+          = link_to new_campaign_results_path, class: 'btn btn-default' do
+            %i.fa.fa-refresh
+  - if current_user.is_marketer?
+    .col-md-3
+      .space12.pull-right{style: 'margin-top: 30px'}
+        .btn-group
+          %a.btn.btn-default{:href => "/campaign_results/campaigns", :class => params[:daily_status].present? ? "" : "active" }
+            Campaign View
+          %a.btn.btn-default.hidden-xs{:href => "/campaign_results?daily_status=true", :class => params[:daily_status].present? ? "active" : "" }
+            Summary View
+
+.row
+  .col-sm-12
+    .panel.panel-default
+      .panel-heading
+        %i.clip-stats
+        Campaign Results
+      .panel-body
+        %table.table.table-striped.table-bordered
+          %thead
+            %th= "Station Name"
+            %th= "Created by"
+            %th.acenter= "Date Created"
+            %th.acenter= "Schedule"
+            %th.acenter Call progress
+            %th.acenter Status
+            %th
+          %tbody
+            - if @campaigns.present?
+              - sched = nil
+              - station_name = nil
+              - @campaigns.each do |campaign|
+                - unless sched == campaign.schedule_start_date and station_name == campaign.data_gateway.try(:title)
+                  - sched = campaign.schedule_start_date
+                  - station_name = campaign.data_gateway.try(:title)
+                  %tr
+                    %td
+                      = campaign.data_gateway.try(:title)
+                    %td
+                      = campaign.creator.try(:title)
+                    %td.acenter.date-size
+                      = html_datetime(campaign.created_at.localtime)
+                    %td.acenter.date-size
+                      = html_datetime(campaign.schedule_start_date)
+                    %td.acenter
+                      %div{class: "progress progress_#{campaign.id}", data: {progress: campaign.id}}
+                        .progress-bar.progress-bar-danger{style: "width: 0%", "data-toggle"=>"tooltip"}
+                        .progress-bar.progress-bar-warning{style: "width: 0%", "data-toggle"=>"tooltip"}
+                        .progress-bar.progress-bar-success{style: "width: 0%", "data-toggle"=>"tooltip"}
+                    %td.acenter
+                      = display_status(campaign.status)
+                    %td
+                      .btn-group
+                        %a.btn.btn-primary.dropdown-toggle{:data => {:toggle => "dropdown"}}
+                          Actions
+                          %span.caret
+                        %ul.dropdown-menu{:role => "menu"}
+                          %li{:role => "presentation"}
+                            = link_to "#", class: 'viewCampaign', tip: "View Campaign #{campaign.id}", "data-campaign" => "#{campaign.id}", "data-gateway" => "#{campaign.data_gateway.try(&:id)}", "data-toggle" => "modal", "data-target" => "#viewCampaignModal" do
+                              %i.fa.fa-share
+                              View
+                          - if current_user.is_marketer?
+                            %li{:role => "presentation"}
+                              = link_to "#", class: 'viewCampaign', tip: "ANI Mapping View", "data-campaign" => "#{campaign.id}", "data-gateway" => "#{campaign.data_gateway.try(&:id)}", "data-toggle" => "modal", "data-target" => "#editCampaignModal" do
+                                %i.fa.fa-edit
+                                ANI Mapping
+                          - if current_user.is_marketer?
+                            %li{:role => "presentation"}
+                              = link_to download_phone_lists_path(campaign), tip: "Download Campaign Phone List", :class => "resend_camapign" do
+                                %i.fa.fa-download
+                                Download
+                          %li{:role => "presentation"}
+                            = link_to reachout_tab_index_path(:gateway_id => campaign.gateway_id, :campaign_id => campaign.id), tip: "Re-Send Campaign for not called listeners",  :class => "resend_camapign" do
+                              %i.fa.fa-mail-reply
+                              Re-Send Campaign
+                          %li.divider{:role => "presentation"}
+                          %li{:role => "presentation"}
+                            = link_to campaign_result_path(campaign), tip: "Delete Campaign", method: :delete, confirm: "Are you sure you want to delete this campaign?" do
+                              %i.fa.fa-times
+                              Delete
+                          - if campaign.dpaste_link.present?
+                            %li{:role => "presentation"}
+                              = link_to campaign.dpaste_link, tip: "Show Campaign Logs", target: '__blank' do
+                                %i.fa.fa-newspaper-o
+                                Logs
+                          - else
+                            %li{:role => "presentation"}
+                              %a{tip: "Script is still running, Please wait"}
+                                %i.fa.fa-newspaper-o
+                                Logs
+            - else
+              %tr
+                %td{colspan: '7'}
+                  No record to display
+        .pull-right
+          = paginate @campaigns
+
+#viewCampaignModal.modal.fade.modal.fade{tabindex: "-1", role: "dialog", "aria-labelledby"=>"myModalLabel", "aria-hidden"=>"true"}
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %h4= "View Campaign"
+        %label.pull-right
+          Show Time Zones
+          %input.toggleZones{:type =>"checkbox", :checked => false, :name => 'toggle'}
+        .clearfix
+      .modal-body
+        %img.loader{alt: "Loader", src: "/assets/loader.gif", style: "width: 30px; margin: 0 auto; display: block;"}
+      .modal-footer
+        = link_to "Close", "#", class: "btn btn-default", "aria-hidden" => "true", "data-dismiss" => "modal"
+#editCampaignModal.modal.fade.modal.fade{tabindex: "-1", role: "dialog", "aria-labelledby"=>"myModalLabel", "aria-hidden"=>"true"}
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %h4= "ANI Mapping"
+      .modal-body
+        %img.loader{alt: "Loader", src: "/assets/loader.gif", style: "width: 30px; margin: 0 auto; display: block;"}
+      .modal-footer
+        = link_to "Close", "#", class: "btn btn-default", "aria-hidden" => "true", "data-dismiss" => "modal"
+#modalHandler
+#edit_campaign_modal.modal
+
+- content_for :js do
+  :javascript
+    $(document).ready(function(){
+      //window.campaign_results = new CampaignResults();
+      window.new_campaign_results = new NewCampaignResults();
+    })

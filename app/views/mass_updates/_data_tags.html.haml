@@ -1,0 +1,23 @@
+.loaded
+  = form_tag("/mass_updates/data_tags", remote: true, method: :get) do
+    .row
+      .col-sm-4.col-sm-offset-2
+        = label_tag :tag, "Tag"
+        = select_tag :tag, options_for_select(["Country", "Language", "Genre"], params[:tag]), class: "select without_search submit_via_onchange"
+  %br
+  .row
+    - objects.each do |object|
+      .col-sm-6
+        .panel.panel-default
+          .panel-heading
+            %i.fa.fa-user
+            = object.title
+            .panel-tools
+              = form_tag("/mass_updates/data_tag_objects?object_id=#{object.id}&object_class=#{object.class.to_s}", remote: true, method: :get) do
+                = link_to "", "#", class: "btn btn-xs btn-link panel-collapse expand toggle_group_button"
+          .panel-body.fixed-height{id: "object_#{object.id}"}
+            = render "shared/loading"
+          .panel-footer.show-with-body.aright
+            = submit_tag "Assign", class: "btn btn-sm btn-primary submit_form_in_panel_body"
+.loading#data_groups_loader
+  = render "shared/loading"

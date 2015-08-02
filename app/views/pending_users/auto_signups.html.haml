@@ -1,0 +1,24 @@
+%div.page-header
+  %h1
+    %i.fa.fa-question-circle
+    Sign-ups Tracking Page
+%br
+.tabbable
+  %ul#myTab.nav.nav-tabs.tab-bricky.tab-blue.tab-padding.tab-space-3
+    %li
+      = link_to "Unprocessed", pending_users_path
+    %li
+      = link_to "Processed", all_pending_users_path
+    %li.active
+      = link_to "Auto Sign-ups", auto_signups_pending_users_path
+    %li
+      = link_to signup_settings_pending_users_path do
+        %i.fa.fa-gears
+  .tab-content
+    .tab-pane.in.active
+      = render "auto_signups_list"
+
+:javascript
+  $(document).ready(function(){
+    $("#pendingUserTable").tablesorter();
+  });

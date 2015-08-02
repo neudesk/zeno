@@ -1,0 +1,10 @@
+updated Station name
+- if activity.parameters[:old_station_name]
+  '
+  = activity.parameters[:old_station_name]
+  '
+to
+- if activity.parameters[:new_station_name]
+  - gateway = DataGateway.find_by_id(activity.parameters[:gateway_id]) rescue nil
+  - if gateway.present?
+    = link_to gateway.title, settings_station_path(gateway.id)

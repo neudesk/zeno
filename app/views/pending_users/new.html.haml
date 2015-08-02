@@ -1,0 +1,94 @@
+= simple_form_for @user do |f|
+  .row
+    .col-xs-12
+      #iframeform
+        %p.subHeadings
+          = signup_local(:header)
+        = hidden_field_tag :local, params[:local]
+        %ul.nav.nav-bar.pull-right
+          -#%li.pull-left
+          -#  = select_tag :local, options_for_select([['English', 'en'], ['Spain', 'sp'], ['Arabic', 'ar'], ['French', 'fr']], params[:local]), class: 'select'
+        .clearfix
+        = simple_form_for @user, url: save_users_path(local: params[:local]), method: :post do |f|
+          - if params[:affiliate].present?
+            = f.hidden_field :affiliate, value: params[:affiliate]
+          - else
+            = f.hidden_field :affiliate
+          %fieldset
+            %legend= signup_local(:accountinfo)
+            .row
+              .col-xs-4
+                %label{:class => 'required control-label'}
+                  = signup_local(:email)
+                = f.input :email, label: false, input_html: {class: "input-large bigGreyInput", :value => params[:email].present? ? params[:email] : @user.email, :data => {:validation => "email"}}
+              .col-xs-4
+                %label{:class => 'required control-label'}
+                  = signup_local(:company_name)
+                = f.input :company_name, label: false, input_html: {class: "input-large bigGreyInput", :data => {:validation => "required"}}
+              .col-xs-4
+                = f.label :landline, label: "#{signup_local(:landline)}", class: "control-label"
+                = f.input :landline, input_html: {class: "input-large bigGreyInput"}, label: false
+          %fieldset
+            %legend= signup_local(:stationinfo)
+            .row
+              .col-xs-4
+                %label{:class => 'required control-label'}
+                  = signup_local(:station_name)
+                = f.input :station_name, label: false, input_html: {class: "bigGreyInput", :value => params[:station_name].present? ? params[:station_name] : @user.station_name}
+              .col-xs-4
+                %label{:class => 'control-label'}
+                  = signup_local(:website)
+                = f.input :website, label: false, input_html: {class: "bigGreyInput"}
+              .col-xs-4
+                %label{:class => 'required control-label'}
+                  = signup_local(:country)
+                %div
+                  = f.select "country", options_from_collection_for_select(DataGroupCountry.order('title'), "title", "title"), { :include_blank=>true }, { :class => 'bigGreyInput', :required => true, :data => {:validation => "required"} }
+                  -#= f.input :country, label: false, as: :select, collection: DataGroupCountry.order('title').collect { |x| [x.title, x.title]}
+            %br
+            .row
+              .col-xs-6.col-xs-offset-3.acenter
+                %label.control-label= "#{signup_local(:streaming_url)}"
+                = text_field_tag :streaming_url, params[:streaming_url].present? ? params[:streaming_url] : "", class: "bigGreyInput streamUrl #{params[:streaming_url].present? ? nil : 'hide'}"
+                %div.selectOpt
+                  %label{:for => 'has_stream_yes', :style => 'padding-right: 10px'}
+                    = radio_button_tag 'has_stream', 'yes', params[:streaming_url].present? ? true : false
+                    = signup_local(:bool_yes)
+                  %label{:for => 'has_stream_no'}
+                    = radio_button_tag 'has_stream', 'no', params[:streaming_url].present? ? false : true
+                    = signup_local(:bool_no)
+            %fieldset
+              %legend
+                = signup_local(:select_stream)
+              .row
+                .col-md-3.col-md-offset-3{:style => 'text-align: center'}
+                  %label
+                    = image_tag('monitor.png')
+                    %br
+                    %br
+                    = check_box_tag "service_type[]", 'free_streaming', params[:streaming_url].present? ? false : true, :class => 'square-teal'
+                    = signup_local(:free_streaming)
+                .col-md-3{:style => 'text-align: center'}
+                  %label
+                    = image_tag('mobile2.png')
+                    %br
+                    %br
+                    = check_box_tag "service_type[]", 'dial_in_service', true, :class => 'square-teal'
+                    = signup_local(:dial_in_service)
+              %br
+              %br
+              .row
+                .col-xs-12
+                  %label{:class => 'required control-label'}
+                  Indicates a required field.
+            .row
+              = f.submit "#{signup_local(:btn_text)}", class: "btn btn-primary btn-lg submitbtn", :style => 'padding: 10px; background: #54b273'
+
+:javascript
+  $(document).ready(function(){
+    $.validate();
+    $('select[name="local"]').on('change', function(){
+      window.location = '/pending_users/new?local=' + $(this).val()
+    })
+  });
+

@@ -1,0 +1,13 @@
+#newCarrierModal.modal{"aria-hidden" => "true", role: "dialog"}
+  .modal-dialog
+    .modal-content
+      .modal-header
+        .modal_title
+          %h4= "Create New Carrier"
+      .modal-body
+        = simple_form_for @carrier, url: {action: 'create'}, html: {id: "newCarrierForm"}, method: :post  do |f|
+          = hidden_field_tag :creation_type, 'carrier'
+          = f.input :title, input_html: {class: "form-control"}, placeholder: 'Input telecom carrier name here. i.e. Sprint Telecom', label: 'Carrier Name'
+      .modal-footer
+        = link_to "Cancel", "#", class: "btn btn-default", "aria-hidden" => "true", "data-dismiss" => "modal"
+        = link_to "Create", "#", class: "btn btn-success modalBtn", data: {target: "#newCarrierForm", type: 'carrier', modal: '#newCarrierModal'}

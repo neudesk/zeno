@@ -1,0 +1,27 @@
+.main-login.col-sm-4.col-sm-offset-4
+  .logo
+    %img{:src => '/assets/big_logo.png'}
+  .box-login
+    %h3 Sign in to your account
+    = render "shared/flash_message"
+    %p
+      Please enter your email and password to log in.
+    = simple_form_for(resource, :as => resource_name, :url => session_path(resource_name), class: "form-login") do |f|
+      %fieldset
+        .form-group
+          %span.input-icon
+            = f.input :email, label: false, placeholder: "Email Address", input_html: {class: "form-control"}
+        .form-group.form-actions
+          %span.input-icon
+            = f.input :password, label: false, placeholder: "Password", input_html: {class: "form-control password"}
+            = link_to "I forgot my password", new_password_path(resource_name), class: "forgot"
+        .form-actions
+          %label.checkbox-inline{for: "remember"}
+            = f.check_box :remember_me, class: "icheck-me", data: {color: "blue", skin: "square"}
+            Keep me signed in
+          = button_tag(type: "submit", class: "btn btn-bricky pull-right") do
+            = "Login"
+            %i.fa.fa-arrow-circle-right
+  .copyright
+    %p © ZenoRadio Admin #{DateTime.now.strftime("%Y")}
+

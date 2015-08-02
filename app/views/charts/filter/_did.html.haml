@@ -1,0 +1,5 @@
+- if @dids_filter
+  - selected = @did.id if @did
+  = select_tag "did", options_from_collection_for_select(@dids_filter, 'id', 'title', selected), :prompt => "Did's"
+- else
+  = select_tag "did", nil, :prompt => "Did's", :disabled => true

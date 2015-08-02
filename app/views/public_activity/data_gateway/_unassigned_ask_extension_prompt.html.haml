@@ -1,0 +1,9 @@
+unassigned ask extension prompt
+%strong= activity.parameters[:prompt_title]
+on station
+- if activity.trackable
+  - gateway = DataGateway.find_by_title(activity.parameters[:station_name])
+  - if gateway.present?
+    %strong= link_to gateway.try(:title), settings_station_path(gateway.id)
+  - else
+    which has been deleted

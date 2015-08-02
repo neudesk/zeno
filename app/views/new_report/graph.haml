@@ -1,0 +1,96 @@
+.row{:id => 'stationList', :style => ""}
+  %div.col-md-12{:id => 'SlideContainer'}
+    %div
+      .row.slides.slider-group-search.margin-top-0
+        %div.col-md-3
+          %div.input-group
+            = text_field_tag :query, params[:query], :class => "form-control", :style=>'border-top-left-radius: 4px !important;border-bottom-left-radius: 4px !important;padding-left:12px;font-family:"Open Sans"', placeholder: "Enter your search here.."
+            .input-group-btn
+              %input.btn.btn-primary{:type => 'button', :value => 'Search', :id => 'searchStation'}
+
+        %div.col-md-3
+          %span.radio-select
+            = select_tag :country_id, options_from_collection_for_select(DataGroupCountry.get_tagged_countries_on_user(current_user).order(:title), 'id', 'title', params[:country_id]), :prompt => "Select country", :class=>'query-search-country-id select'
+
+        %div.col-md-3
+          - if current_user.is_marketer?
+            %span.radio-select
+              = select_tag :rca_id, options_from_collection_for_select(DataGroupRca.order(:title), 'id', 'title', params[:rca_id]), :prompt => "Select RCA", :class=>'query-search-rca-id select'
+
+        %div.col-md-3{:style=>'padding:0px'}
+          .col-md-6{:style=>'padding:0px'}
+            %a.btn.btn-primary{:href => new_graph_new_report_index_path, :title => "All Stations"}
+              %i.fa.fa-list-alt
+              = "All Stations"
+
+          .pull-right.station_pagination{:style=>'width:90px'}
+            .input-group
+              %input#page.pull-right{:style=>'padding:4px 8px 4px 8px;width:55px; font-family:"Open Sans";border-radius:4px;border:1px solid #eee;', :value=>1}
+              .input-group-btn
+                %button.btn.btn-primary{:style=>'background:none;border:none'}
+                  %span
+                    = "of "
+                  %span#total_page
+                    = @total_page
+      %div.slider_content
+        %div.slider-loading
+        %span.prev#prev-slide
+        %span.next#next-slide
+        #inside_slider.animated
+          #no-data.alert.alert-warning
+            No stations Found
+.row
+  .col-sm-2.pull-right
+    %a.btn.btn-primary.btn-small#pullStationBtn
+      Station Lists
+.row
+  .col-sm-12
+    - if @current_station.present?
+      .row
+        .col-sm-1
+          %span.station_avatar
+            %span{:style=>"background: url(#{(@current_station.logo.exists? ? @current_station.logo.url(:xhdpi) : image_path('radio.png'))}) center center; background-size: 80px"}
+        .col-sm-3
+          %h3{style: 'border: 0px'}= @current_station.try(:title)
+
+%br
+.row
+  .col-sm-12
+    %div.page-header
+      %h1
+        %i.fa.fa-bar-chart
+        = "Reports Graph"
+    %br
+    %div{role: "tabpanel"}
+      %ul.nav.nav-tabs.tab-bricky.tab-blue.tab-padding.tab-space-3{role: "tablist"}
+        %li.active{role: "presentation"}
+          %a{href: "#userByTime", "aria-controls" => "userByTime", role: "tab", "data-toggle" => "tab"} Users by time
+        %li{role: "presentation"}
+          %a.graphSwitch{href: "#minutesReport", "aria-controls" => "minutesReport", role: "tab", "data-toggle" => "tab"} Minutes Report
+      .tab-content
+        #userByTime.active.tab-pane{role: "tabpanel"}
+          .panel.panel-default
+            .panel-heading
+              %i.clip-grid-3
+              = "User By Time"
+            .panel-body.panel-default
+              .col-sm-3.pull-right
+                = select_tag :day, options_for_select(['today', 'yesterday', '7days', '30days', '90days'], params[:users_by_time]), class: 'select users_by_time_select', "data-gateway" => "#{params[:station_id]}"
+              .clearfix
+              #user_by_time.graph
+        #minutesReport.active.graphSwitch.tab-pane{role: "tabpanel"}
+          .panel.panel-default
+            .panel-heading
+              %i.clip-grid-3
+              = "Minutes Report"
+            .panel-body
+              .col-sm-3.pull-right
+                = select_tag :day, options_for_select(['7days', '30days', '90days'], params[:minutes_report]), class: 'select minutes_report_select', "data-gateway" => "#{params[:station_id]}"
+              .clearfix
+              #minutes_report.graph
+
+- content_for :js do
+  :javascript
+    $(document).ready(function(){
+      window.NewReportGraph = new NewReportGraph()
+    });

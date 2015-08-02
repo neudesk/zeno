@@ -1,0 +1,29 @@
+%li.dropdown
+  %a.dropdown-toggle{"data-close-others" => "true", "data-hover" => "dropdown", "data-toggle" => "dropdown", :href => "#"}
+    %i.clip-bubble-3
+    /%span.badge= @conv_length
+  %ul.dropdown-menu.posts
+    %li
+      /%span.dropdown-menu-title= "You have #{@conv_length} messages"
+    %li
+      .drop-down-wrapper
+        %ul
+          - if @last_conversation.present?
+            - @last_conversation.each do |conv|
+              %li
+                %a{:href => "/conversations?message=#{conv.id}"}
+                  .clearfix
+                    .thread-image
+                      %img{:alt => "", :src => "/assets/Profile1.png", :width => "30px", :height => "30px"}
+                    .thread-content
+                      - if conv.conversation_message.author.class.to_s == "Intercom::Admin"
+                        %span.author= @admins.select{|admin| admin[0].to_s == conv.conversation_message.author.id}[0][1]
+                      - else
+                        - conv.conversation_message.author
+                        %span.author= Intercom::User.find(:id => conv.conversation_message.author.id).name
+                      %span.preview= truncate(ActionView::Base.full_sanitizer.sanitize(conv.conversation_message.body.to_s.html_safe), length: 20)
+                      %span.time= conv.created_at.strftime("%H:%M %p, %Y-%m-%d")
+          %li.view-all
+            %a{:href => "/conversations"}
+              See all messages
+              %i.fa.fa-arrow-circle-o-right

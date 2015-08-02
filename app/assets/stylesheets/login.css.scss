@@ -1,0 +1,119 @@
+#login {
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  margin: 8px;
+
+  .alert-error {
+    margin: auto;
+    width: 355px;
+  }
+
+  .header {
+    background-image: url(layout/content_1_bg.jpg);
+    background-repeat: repeat repeat;
+    border: 0 solid red;
+    float: left;
+    height: 460px;
+    width: 100%;
+
+    #sub-header {
+      height: 200px;
+      margin: 0 auto;
+      width: 100%;
+
+      #check-login {
+        height:48px;
+        width:50%;
+        .f-text {
+          margin: 10px 10px 0 0;
+          a {
+            color: #fff !important;
+            text-decoration: none;
+            font-size: 1.5em;
+          }
+        }
+      }
+
+
+      #logo{
+        border:0 solid red;
+        float:left;
+        height:150px;
+        width:100%;
+        #text-form {
+          border:0 solid blue;
+          height:150px;
+          margin:-14px auto;
+          width:408px;
+          #spec-logo {
+            background-image:url(layout/login_logo.png);
+            background-repeat:no-repeat no-repeat;
+            border:0 solid red;
+            float:left;
+            height:155px;
+            width:408px;
+          }
+        }
+      }
+    }
+  }
+
+  .main-content{
+    background-image:url(layout/content_2_bg.jpg);
+    background-repeat:repeat repeat;
+    border:0 solid red;
+    float:left;
+    height:247px;
+    width:100%;
+    #authentication-form {
+      background:url(common/trans_bg.png) repeat repeat;
+      border-radius: 10px;
+      margin: auto;
+      padding: 30px;
+      color:  #FFFFFF;
+      position: relative;
+      top: -207px;
+      width: 345px;
+      label, a {
+        font-size: 16px;
+      }
+      #new_user {
+        margin: auto;
+      }
+      .control-group {
+        text-align: center;
+      }
+      .authentication-input {
+        width: 274px;
+        height: 32px;
+        border-radius: 10px;
+      }
+      .authentication-label {
+        font-size: 20px;
+      }
+      .submit-control {
+        text-align: center;
+      }
+      .submit-btn {
+        background:url(common/find_stat_btn.png) no-repeat;
+        color:  #FFFFFF;
+        width: 290px;
+        height: 52px;
+        margin: 5px 0 0 0;
+        border: 0 none;
+        font-size: 16px;
+      }
+      .authentication-footer {
+        margin: 10px 0 0 30px;
+      }
+    }
+  }
+
+  footer {
+    background-color:#3A4F64;
+    float:left;
+    height:100px;
+    width:100%;
+  }
+}

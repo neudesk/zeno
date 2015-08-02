@@ -1,0 +1,7 @@
+updated content
+%span
+  - if activity.trackable.present?
+    = link_to activity.trackable.title, search_content_search_path(content_query: activity.trackable.title)
+- if activity.parameters[:channel_no]
+  = "(Extension no: #{activity.parameters[:channel_no]})"
+from  "#{activity.parameters[:old_url]}" to  "#{activity.parameters[:new_url]}"

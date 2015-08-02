@@ -1,0 +1,10 @@
+
+%div.page-header
+  %h1
+    %span{:data=>{:bind=>"text:total.sessions"}}
+      - if @usage_percent.present?
+        =" Current Listeners " + @usage_percent[:total_users].to_s
+  - if marketer?
+    %span{:data=>{:bind=>"text:total.stations"}}="in " + @result_total[2].to_s + " stations, "
+    %span{:data=>{:bind=>"text:total.contents"}}= @result_total[1].to_s + " contents "
+    %span{:data=>{:bind=>"text:total.servers"}}= "and " + @result_total[3].to_s + " servers "

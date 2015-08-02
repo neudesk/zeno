@@ -1,0 +1,20 @@
+.slider
+  = render "shared/slides"
+%h1{:style=>"text-align:center;color:gray;"} Numericals Reports
+.row.anis-day-not-active
+  %h1.page_heading Minutes divided by Clec
+  .standard.no-borders
+    %table.table.table-striped.table-hover{:style=>"padding:5px"}
+      %thead
+        %tr
+          %th= "Number of Minutes called on " + "#{Date.today.strftime("%d %b")}"
+          %th Total for the Week
+          %th Name of Carrier
+      %tbody
+        - @reports.each do |report|
+          %tr
+            %td= (report.current_day.to_f/60).round(2)
+            %td= (report.current_week.to_f/60).round(2)
+            %td= report.clec
+      - if @reports.length > 0
+        = paginate @reports

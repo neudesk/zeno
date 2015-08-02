@@ -1,0 +1,15 @@
+.section_name= "Phone Numbers"
+= simple_nested_form_for(@station, :url => data_gateway_unassign_station_dids_path(@station), :multipart => true, :remote => true, :html => { :class => 'unassign_dids_form'} ) do |f|
+  .did_code_list.endless_scroll{:"data-page" => 1, :"data-gateway-id" => @station.id}
+    = render "did_elements"
+  - if current_user.is_marketer?
+    .navigator    
+      = link_to "Delete Station", data_gateway_path(@station), :method => :delete, remote: false, :class => "btn", :confirm => "Are you sure you want to delete #{@station.title} station ?"
+      = link_to "Edit Phone Numbers", "#", remote: false, :class => "btn edit_btn"
+      = link_to "Cancel", "#", remote: false, :class => "btn cancel_btn"
+      %button{"class" => "btn delete_btn"}= "Delete"
+      = link_to "Add", data_gateway_assign_dids_path(@station.id), remote: true, :class => "btn add_btn"
+  - else
+    .clearfix
+
+.modal.hide.fade{id: "addDIDModal", tabindex: "-1", role: "dialog"}

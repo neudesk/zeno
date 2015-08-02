@@ -1,0 +1,2 @@
+module NewCampaignHelper
+end

@@ -1,0 +1,22 @@
+div.fileinput-preview.thumbnail.background {
+    min-width: 220px;
+    min-height: 380px;
+    border: 0;
+    background: url('/assets/mobilepreview.png') no-repeat top center;
+    background-size: 220px 380px;
+}
+div.fileinput-preview.thumbnail.background > img {
+    width: 190px;
+    margin-top: 80px;
+    height: 135px;
+}
+
+div.fileinput-preview.thumbnail {
+    min-width: 180px;
+    min-height: 180px;
+    max-width: 180px;
+    max-height: 180px;
+    border: 1px solid #9F9F9F;
+    /*background: url('/assets/mobilepreview.png') no-repeat top center;*/
+    /*background-size: 140px 140px;*/
+}

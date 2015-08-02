@@ -1,0 +1,16 @@
+%div.modal.fade{:id=>"settingFormModal", :tabindex=>"-1", :role=>"dialog", "aria-labelledby"=>"myModalLabel", "aria-hidden"=>"true"}
+  %div.modal-dialog
+    %div.modal-content
+      %div.modal-header
+        %h4.modal-title{:id=>"myModalLabel"} New Settings
+      %form{:id => "settings_form"}
+        %div.modal-body
+          %div.settings_form
+            = text_field_tag "name" , "", placeholder: 'Name'
+            = text_field_tag "value", "", placeholder: 'Value'
+        %div.modal-footer
+          %button.btn.btn-default{:type=>"button", "data-dismiss"=>"modal"}
+            ="Close"
+          %a.btn.btn-success.btn-sm{:id => "save_settings"}
+            %i.fa.fa-save
+            ="Save"

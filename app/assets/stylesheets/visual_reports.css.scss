@@ -1,0 +1,81 @@
+.title-report {
+  margin-left: 400px;
+  .text-report {
+    font-weight: bold; 
+    font-size: 15pt; 
+    text-decoration: underline;
+  }
+  .station-name {
+    font-weight: bold; 
+    margin-top: 10px;
+    margin-bottom: 25px;
+  }
+}
+.chart_b {
+  width: 180px;
+  margin: 5px 0px; 
+  font-weight: bold;
+  
+}
+.margin-text {
+  margin-left: 20px;
+}
+.chart-b-text {
+  margin-left: 15px;
+  font-size: 13px;
+}
+.width-select {
+  width: 105px;
+  color: #fff;
+  text-align: left;
+  background-color: #BA561D;
+  option{
+    color: #000;
+  }
+}
+.mybtn{
+  font-size: 14px;
+  text-shadow: 0 -1px 1px rgba(255, 255, 255, 0.25);
+  border-radius: 3px;
+  padding-top: 4px;
+  font-weight: normal;
+  padding-bottom: 4px;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.6);
+  color: #fff;
+  cursor: pointer;
+  display: inline-block;
+  position: relative;
+  text-decoration: none;
+  text-align: center;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+
+  &:hover {
+    color: #FFC91E;
+    text-decoration: none;
+  }
+}
+.visual-btn {
+  width: 50px;
+  margin-left: 20px;
+  background-color: #BA561D;
+}
+
+#loading {
+  background: url(loading.gif) no-repeat center center;
+  height: 250px;
+  width: 280px;
+  background-color: #fff;
+  position: relative;
+}
+#lloading {
+  background: url(loading.gif) no-repeat center center;
+  height: 250px;
+  width: 460px;
+  background-color: #fff;
+  position: relative;
+}
+.loading
+{
+  margin-top: 30px;
+  margin-left: 50%;
+}

@@ -1,0 +1,111 @@
+- if upload_list_is_active
+  = render :partial => "phone_no_source"
+
+%div.col-md-5
+  .panel.panel-default
+    .panel-heading
+      .fa.fa-cogs
+      Prompt / Listeners
+      .panel-tools
+        %a.btn-link{"data-toggle" => "modal", "data-target" => "#uploadPromptModal"}
+          %i.fa.fa-upload
+          Upload Prompt
+        %a.btn.btn-xs.btn-link.panel-collapse.collapses{:href=>"#"}
+    .panel-body
+      = form_tag reachout_tab_save_path, :method => :post, :multipart => true do
+        = hidden_field_tag "uploaded_phone_list"
+        = hidden_field_tag  "gateway_id", params[:gateway_id]
+        = hidden_field_tag  "schedule_type"
+        %input{:id => "listeners_type", :name => "listeners_type", :type => 'hidden', :value => ''}
+        %p{:style=>"color:red", :class=>"error"}
+        %div.row
+          %div.control-group.col-md-12
+            %div.controls{:id => 'scheduleOpt'}
+              %label.radio.inline{:for => "setopt-active-listeners", :id => "setopt-active-listeners"}
+                %input.opt{:type =>"checkbox"}
+                %i.fa.fa-users
+                = "Active listeners : " + @listeners_length.to_s
+              %label.radio.inline{:for => "setopt-uploaded-list-phone-numbers", :id => "setopt-uploaded-list-phone-numbers"}
+                %input.opt{:type =>"checkbox"}
+                %i.fa.fa-save
+                = "Uploaded List of Phone Numbers " + @uploaded_listeners.length.to_s
+        %div.row
+          %div.control-group.col-md-4
+            %div.controls
+              %label.radio.inline{:for => "schedule-0"}
+                %input.scheduler{:type =>"radio", :name =>"schedule", :id => "schedule-0", :checked => true, :value => "send_now"}
+                Send Now
+              %label.radio.inline{:for => "schedule-1"}
+                %input.scheduler{:type =>"radio", :name =>"schedule", :id => "schedule-1", :checked => false, :value => "send_later"}
+                Send Later
+          %div.control-group.col-md-8
+            %label.control-label{:for => "textinput"}
+            Date / Time
+            %div.controls
+              %input.span2{:size => "16", :type=>"text", :id => "hourpicker",:name =>"schedule_hour", :readonly => true, :placeholder => "Select hour"}
+              %input.span2{:size => "16", :type=>"text", :id => "datepicker",:name =>"schedule_date", :readonly => true, :placeholder => "Select date"}
+        %div.row
+          %div.col-md-12
+            %button.btn.btn-submit.btn-primary.send
+              = "SCHEDULE CAMPAIGN"
+
+        %div.modal.fade{:id => "uploadPromptModal", :tabindex => "-1", :role => "dialog", "aria-labelledby" => "uploadPromptModalLabel", "aria-hidden" => "true"}
+          %div.modal-dialog
+            %div.modal-content
+              %div.modal-header
+                %button.close{:type => "button", "data-dismiss" => "modal"}
+                  %span{"aria-hidden" => "true"}
+                    = "&times;".html_safe
+                  %span.sr-only
+                    = "Close"
+                %h4.modal-title{:id => "myModalLabel"}
+                  = "Upload Prompt"
+              %div.modal-body
+                =file_field_tag :prompt
+              %div.modal-footer
+                %button.btn.btn-default{:type => "button", "data-dismiss" => "modal"}
+                  = "Continue"
+
+/ = form_tag reachout_tab_save_path, :method => :post, :multipart => true do
+/   = hidden_field_tag "uploaded_phone_list"
+/   = hidden_field_tag  "gateway_id", params[:gateway_id]
+/   = hidden_field_tag  "schedule_type"
+/   .row
+/     %hr
+/     - if @last_called.present?
+/       %a{:style =>"float:right", :href => "/campaign_results/index?campaign_date=#{@last_called.schedule_start_date.strftime("%Y-%m-%d")}"}
+/         %p= "Last Called - " + @last_called.schedule_start_date.strftime("%Y-%m-%d")
+/     - else
+/       %p{:style =>"float:right"} Last Called - None
+/     %p Send Campaign to :
+/     %div{:style => "margin-bottom:20px;float:left;"}
+/       %div{:style => "clear:both;"}
+/         %input{:type => "checkbox",:name =>"active_listeners" , :checked => "checked", :style => "float:left;margin-top: 8px;margin-right: 5px;"}
+/         %h5{:style => "float:left;margin-top:5px !important;"}= "Active Listeners : " + @listeners_length.to_s
+/       %div{:style => "clear:both;margin-bottom:10px;"}
+/         %input{:type => "checkbox" ,:name => "uploaded_listeners", :style => "float:left;margin-top: 8px;margin-right: 5px;"}
+/         %h5{:style => "float:left;margin-top:5px !important;", :class =>"uploaded_listeners"}= @uploaded_listeners.present? ? "Uploaded Listeners : " + @uploaded_listeners.length.to_s : "Uploaded listeners : 0"
+/     .row{:style => "float:left;clear:both;"}
+/       %p{:style=>"color:red", :class=>"error"}
+/       %div
+/         %p Upload Prompt
+/         =file_field_tag :prompt
+/     %div{:style=>"clear:both;margin:15px;"} 
+/     .row
+/       %div
+/         %div{:style => "clear:both;float:left;display: inline;width: 400px;height: 50px;"}
+/           %div{:style => "float:left;margin-right:15px;"}
+/             %input{:type =>"radio", :name =>"schedule", :checked => true, :value => "send_now", :class => "schedule" }
+/               %span{:class => "schedule_lbl"}Send Today
+/           %div{:style => "float:left;margin-right:15px;"}
+/             %input.span2{:size => "16", :type=>"text", :id => "hourpicker",:name =>"schedule_hour", :readonly => true, :placeholder => "Select hour"}
+/         %br
+/         %div{:style => "clear:both;float:left;display: inline;width: 400px;height: 50px;"}
+/           %div{:style => "float:left;margin-right:15px;"}
+/             %input{:type =>"radio", :name =>"schedule",:checked => false, :value => "send_later", :class => "scheduler" }
+/               %span Send Later
+/           %div{:style => "float:left;margin-right:15px;"}
+/             %input.span2{:size => "16", :type=>"text", :id => "datepicker",:name =>"schedule_date", :readonly => true, :placeholder => "Select date"}
+/         %br
+/     %button{"class" => "btn btn-submit btn-primary send"}= "SCHEDULE CAMPAIGN"
+/     %div{:style=>"clear:both;margin:15px;"}

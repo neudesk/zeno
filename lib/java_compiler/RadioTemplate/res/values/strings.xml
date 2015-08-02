@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">zeno_secret_code</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="menu_settings">Settings</string>
+    <string name="website">http://zeno_secret_website</string>
+    <string name="browser">Choose a browser</string>
+</resources>

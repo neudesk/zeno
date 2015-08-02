@@ -1,0 +1,244 @@
+.subFilters {
+  padding: 4px;
+  margin-top: -4px;
+  border: 1px solid #DDD;
+}
+#search_station {
+  background-color: #0F3A55;
+  padding-top: 30px;
+  color: white;
+}
+
+.search_by_station_name {
+  margin-top: -7px; 
+  height: 34px;
+}
+
+.today_minutes {
+  text-align: center;
+  margin-top: 5px;
+}
+
+.search_button {
+  height: 34px !important;
+  margin-top: 3px;
+}
+#station_list{
+  margin-left: 80px;
+  margin-right: 80px;
+  font-size: 14px;
+  margin-top: 20px;
+  color: white;
+  .station_box {
+    .station_name {
+      padding-left: 30px;
+      margin-top: 3px;
+      position: relative;
+      a {
+        font-weight: normal;
+        p {
+          position: absolute;
+          top: 0;
+          right: 50px;
+          line-height: 50px;
+          display: inline-block;
+          text-align: left !important;
+          text-transform: uppercase;
+          color: white;
+          text-transform: uppercase;
+        }
+      }
+      &.active {
+        a {
+          color: #ffffff;
+          font-weight: bold;
+        }
+      }
+    }
+  }
+}
+.station_avatar {
+  border: 6px solid #0063a0;
+  border-radius: 50%;
+  display: inline-block;
+  span {
+    width: 50px;
+    height: 50px;
+    display: block;
+    border: 4px solid #CCCCCC;
+    border-radius: 50%;
+    -webkit-background-clip: padding-box;
+    -moz-background-clip: padding;
+    background-clip: padding-box;
+  }
+}
+.day .btn-primary
+{
+  height: 28px !important;
+  margin-top: -4px !important;
+}
+.station_box {
+  min-height: 60px;
+  padding: -10px;
+}
+.content_schedule .day 
+{
+  height:40px;
+}
+.stream_box
+{
+
+  margin-top: 5px;
+  width:200px;
+}
+.time_box
+{
+  margin-top: 5px;
+  width:55px;
+  float: left;
+  margin-right: 15px;
+}
+.day_label
+{
+  width: 90px;
+  text-align: right;
+  float: left;
+  margin-right: 15px;
+  margin-top: 10px;
+}
+.start_label
+{
+  margin-left: 110px;
+  margin-right: 25px;
+}
+.end_label
+{
+  margin-right: 40px;
+}
+.off_air_label
+{
+  
+}
+.arrow {
+  position: absolute;
+  font-size: 20px;
+
+  &.active {
+    color: #66FF99;
+  }
+}
+
+.station_pagination {
+  font-size: 16px;
+  margin-right: 20px;
+  input {
+    width: 40px;
+    margin-right: 5px;
+  }
+}
+
+.page_left {
+  position: absolute;
+  top: 40%;
+  left: 40px;
+}
+
+.page_right {
+  position: absolute;
+  top: 40%;
+  right: 40px;
+}
+
+.phone_numbers, .phone_form {
+  .col-lg-2 {
+    padding-left: 3px;
+    padding-right: 3px;
+    margin-bottom: 5px;
+  }
+  span.label-inverse {
+    margin-right: 3px;
+    font-size: 14px !important;
+    margin-bottom: 5px;
+    display: inline-block;
+  }
+}
+
+#url_found{
+  display: none;
+}
+
+#data_groups, #data_tags {
+  .panel-body {
+    display: none;
+  }
+}
+
+.data_groups_boxes {
+  margin-top: 3px;
+  margin-bottom: 3px;
+  font-size: 14px;
+}
+
+#data_groups_loader{
+  min-height: 350px;
+}
+
+#settings_graph{
+  height: 50px;
+  width: 350px;
+  margin-bottom: 5px;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+#today_minutes {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.panel-activities {
+    border: none;
+    box-shadow: none;
+  .panel-heading {
+    background-color: #FFF;
+    background-image: none;
+  }
+  .panel-body {
+    border-bottom: none;
+    .row {
+      padding-left: 20px;
+    }
+  }
+}
+
+.daily_minutes{
+  margin-top: 8px !important;
+  text-align: center;
+  .bar {
+    height: 22px !important;
+    .value {
+      background: #c0cadd !important;
+      -webkit-border-radius: 1px;
+      -moz-border-radius: 1px;
+      border-radius: 1px;
+    }
+  }
+}
+
+.verticalChart {
+  margin-bottom: -10px;
+  .singleBar {
+    .bar {
+      width: 15px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .title {
+      width: 25px;
+    }
+
+  }
+}

@@ -1,0 +1,10 @@
+$(".settings-tabs-content").empty().html("#{j(render('extensions', {}))}");
+$(".main-loading").hide();
+
+
+:plain
+  window.extension = new Extension({"extensions": #{(@extensions + @new_extensions).to_json},
+                                         "us_contents": #{@other_contents},
+                                         "default_contry_id": #{(@countries.first && @countries.first[1]) || 0}
+                                        });
+  window.layout.activeTabExtentions();

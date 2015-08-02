@@ -1,0 +1,45 @@
+.row
+  .col-md-4
+    %form#noteForm
+      %input{type: 'hidden', name: 'gateway_id', value: @station.id}
+      %input{type: 'hidden', name: 'user_id', value: current_user.id}
+      %textarea.form-control{name: 'note', style: 'width: 100%', placeholder: 'Add a new note'}
+      %br
+      %button.btn.btn-success.btn-sm.submitNote Add Note
+  .col-md-8
+    #note
+      - if @notes.present?
+        - if @notes.length > 0
+          - @notes.each do |note|
+            .row{id: "noteContainer_#{note.id}"}
+              .col-sm-1{style: 'padding: 5px; margin: 0'}
+                .thumbnail
+                  %img.img-responsive.user-photo{:src => "https://ssl.gstatic.com/accounts/ui/avatar_2x.png"}
+              .col-sm-11
+                .panel.panel-default
+                  .panel-heading{style: 'background: #fff'}
+                    %strong= note.user.title
+                    %span.text-muted.pull-right= note.created_at
+                  .panel-body
+                    .noteContent{id: "noteContent_#{note.id}"}
+                      = note.note
+                    %form{action: '/data_gateway_notes', method: 'put', id: "note_#{note.id}", style: 'display: none'}
+                      = hidden_field_tag :note_id, note.id
+                      = text_area_tag :note, note.note, rows: 10, style: 'width: 100%; display: block'
+                    - if note.user_id.to_i == current_user.id.to_i
+                      .btn-group.pull-right{style: 'margin-top: 10px;'}
+                        %button.btn.btn-primary.btn-xs{:type => "button", data: {target: "#note_#{note.id}", note: "#noteContent_#{note.id}", method: 'edit'}}
+                          %i.fa.fa-pencil
+                          Edit
+                        %button.btn.btn-danger.btn-xs{:type => "button", data: {target: "#note_#{note.id}", note: "#noteContent_#{note.id}", id: note.id, method: 'delete'}}
+                          %i.fa.fa-trash-o
+                          Delete
+                        %button.btn.btn-default.btn-xs{:type => "button", data: {target: "#note_#{note.id}", note: "#noteContent_#{note.id}", method: 'save'}, style: 'display: none'}
+                          %i.fa.fa-save
+                          Save
+                        %button.btn.btn-default.btn-xs{:type => "button", data: {target: "#note_#{note.id}", note: "#noteContent_#{note.id}", method: 'cancel'}, style: 'display: none'}
+                          %i.fa.fa-close
+                          Cancel
+                    .clearfix
+        .pull-right
+          = paginate(@notes)

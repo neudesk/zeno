@@ -1,0 +1,26 @@
+.row
+  - if @stations_result.present?
+    .col-md-12
+      .panel.panel-default
+        .panel-heading
+          .fa.fa-cog
+          Summary List
+          .panel-tools
+        .panel-body
+          %table.table.table-bordered.table-condensed.table-striped
+            %thead
+              %tr
+                %th
+                  %select#select_type.btn{style: "width:100%"}
+                    %option{:value =>"gateway"}
+                      ="Station"
+                    %option{:value =>"content"}
+                      ="Content/Station"
+                    %option{:value =>"entryway"}
+                      ="Phone Number/Station"
+                %th{:style=>"text-align:center"}Calls
+                %th{:style=>"text-align:center",:colspan=>"2"}Calls / ACD (last 15min)
+            %tbody{:class => "summary_list_body"}
+              = render :partial => "summary_list_body"
+          .pull-right
+            = paginate @stations_result

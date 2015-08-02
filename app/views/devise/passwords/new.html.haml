@@ -1,0 +1,13 @@
+.main-login.col-sm-4.col-sm-offset-4
+  .logo
+    ZenoRadio
+  .box-login
+    #authentication-form
+      = simple_form_for(resource, :as => resource_name, :url => password_path(resource_name), :html => { :method => :post }) do |f|
+        %fieldset
+          .form-group
+            = f.input :email, label: false, input_html: { class: 'authentication-input'}, input_html: {class: "form-control"}, :placeholder => 'Place your email here'
+          .form-actions
+            = f.submit "Send me reset password instructions", class: "submit-btn btn btn-primary"
+            %br
+            = render "devise/shared/links"

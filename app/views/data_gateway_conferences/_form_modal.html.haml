@@ -1,0 +1,22 @@
+.modal-dialog
+  .modal-content
+    .modal-header
+      .pull-right
+        = link_to "#", "aria-hidden" => "true", "data-dismiss" => "modal" do
+          %i.clip-close-2
+      .modal_title
+        %h4= "Edit Extension"
+    .modal-body
+      .row-fluid
+        .span12
+          = simple_form_for conference, html: {id: "edit_extension_form", :multipart => true, :novalidate=>false }  do |f|
+            .form-inputs
+              = f.fields_for :content do |ff|
+                = ff.input :title, input_html: {class: "form-control"}, disabled: !marketer?
+                = ff.input :media_url, input_html: {class: "form-control"}, disable: !thirdparty?, required: true
+                = ff.input :backup_media_url, input_html: {class: "form-control"}, disable: !thirdparty?
+                = ff.input :media_type, as: :select, collection: PLAYER_TYPE.collect{|x| [x, x]}, disabled: !marketer?, input_html: {class: "without_search"}
+              = f.input :extension, input_html: {class: "form-control"}
+    .modal-footer
+      = link_to "Close", "#", class: "btn btn-default", "aria-hidden" => "true", "data-dismiss" => "modal"
+      = link_to "Send", "#", class: "btn btn-dark-grey", id: "submit_edit_extension_form"

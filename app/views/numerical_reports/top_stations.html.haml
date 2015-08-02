@@ -1,0 +1,32 @@
+.slider
+  = render "shared/slides"
+.row.top-stations
+  %h1.page_heading Top Stations
+  .standard.no-borders
+    = form_tag top_stations_numerical_reports_path, :method => :get do |f|
+      .pull-left
+        .sec_con
+          %label.pull-left Top Station
+          %p.pull-left
+            %span.radio-select= select_tag :day, options_for_select([["1 Day", 1], ["7 Days", 7], ["14 Days", 14], ["30 Days", 30]], params[:day] || 1 )
+      .pull-left{:style => "margin-top:10px;"}
+        = submit_tag "Generate Report", :style => "padding: 5px;margin-left:5px", :class => "btn"
+    %table.table.table-striped.table-hover
+      %thead
+        %tr
+          %th Radio Station Name
+          %th DIDs
+          %th Country
+          %th RCA
+          %th Broadcaster
+          %th Minutes
+      %tbody
+        - @reports.each do |su|
+          %tr
+            %td.align-left{:style => "width:16%;"}= su.gateway_name
+            %td.align-left{:style => "width:10%;"}= DataGateway.get_dids(su.gateway_id)
+            %td.align-left= su.country_name
+            %td.align-left{:style => "width:15%;"}= su.rca_title
+            %td.align-left{:style => "width:18%;"}= su.broadcaster_title
+            %td.align-center{:style => "width:8%;"}= (su.minutes.to_f/60).round(2)
+    = paginate @reports

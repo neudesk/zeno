@@ -1,0 +1,9 @@
+- object_type = "station"
+- if activity.parameters[:group_type] == 'RCA'
+  - data_user = DataGroupRca.find(activity.parameters[:old_id])
+- if activity.parameters[:group_type] == 'BroadCaster'
+  - data_user = DataGroupBroadcast.find(activity.parameters[:old_id])
+- if activity.parameters[:group_type] == 'ThirdParty'
+  - data_user = DataGroup3rdparty.find(activity.parameters[:old_id])
+  - object_type = "DID"
+= "has removed #{activity.parameters[:group_type]} <strong>#{data_user.title}</strong> to #{object_type} <strong>#{activity.parameters[:object_title]}</strong> via data group".html_safe

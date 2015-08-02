@@ -1,0 +1,5 @@
+$("#editExtensionModal").modal("show");
+$("#editExtensionModal").empty().html("#{j(render('form_edit_extension'))}");
+
+window.extension = new Extension({"ajax": "true"});
+

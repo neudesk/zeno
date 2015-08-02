@@ -1,0 +1,81 @@
+/ #reports
+/   %table.campaign_table
+/     %thead
+/       %tr
+/         %th Gateway
+/         %th Created
+/         %th Schedule
+/         %th File Name
+/         %th Mapping
+/         %th Status
+/         %th Call Status
+/         %th Created by
+/         %th Delete
+/     %tbody
+/       - @campaigns.each do |campaign|
+/         %tr
+/           %td= campaign.gateway_id
+/           %td= campaign.created_at.localtime.strftime("%Y-%m-%d %H:%M")
+/           %td= campaign.schedule_start_date.strftime("%Y-%m-%d %H:%M")
+/           %td{:title => campaign.prompt_file_name }= campaign.prompt_file_name.present? ? campaign.prompt_file_name.truncate(15) : ""
+/           %td 
+/             %a{:class => "settings_modal", :data => {:id => campaign.id, :value => @gateway_id}} Settings
+/           %td= campaign.status == true ? "Active" : "Inactive"
+/           %td
+/             - if campaign.id.present?
+/               %a{:remote =>'true', :class=> "show_campaign_status", :id =>campaign.id, :data => {:value => ReachoutTabCampaign.where(:main_id => campaign.id).map(&:id)}} View
+/             - else
+/               No status
+/           %td
+/             = User.find(campaign.created_by).title
+/           %td 
+/             = link_to content_tag(:i, "", class: "icon-trash icon-white"), reachout_tab_destroy_campaign_path(:id => campaign.id) , method: :delete, class: "btn btn-danger remove_fields", :confirm => "Are you sure ?"
+/ %div
+/   = paginate  @campaigns
+
+%div.panel.panel-default
+  %div.panel-heading
+    .fa.fa-paper-plane-o
+    Campaign
+    .panel-tools
+      %a.btn-link{:id => "campaigns"}
+        %i.fa.fa-reorder
+        = "Show campaigns(#{@campaigns.present? ? @campaigns_length : "" })"
+  %div.panel-body
+    #reports
+      %table.table.table-striped.campaign_table
+        %thead
+          %tr
+            %th Gateway
+            %th DID
+            %th Created
+            %th Schedule
+            %th File Name
+            %th Sent to Listeners by:
+            %th Status
+            %th Call Status
+            %th Delete
+        %tbody
+          - if @campaigns.count > 0
+            - @campaigns.each do |campaign|
+              %tr
+                %td= campaign.gateway_id
+                %td= campaign.did_e164
+                %td= campaign.created_at.localtime.strftime("%Y-%m-%d %H:%M")
+                %td= campaign.schedule_start_date.strftime("%Y-%m-%d %H:%M")
+                %td{:title => campaign.prompt_file_name }= campaign.prompt_file_name.present? ? truncate(campaign.prompt_file_name.to_s, :length => 15) : ""
+                %td NULL
+                %td= campaign.status == true ? "Active" : "Inactive"
+                %td
+                  - if campaign.id.present?
+                    %a{:remote =>'true', :class=> "show_campaign_status", :data => {:id =>campaign.id}} View
+                  - else
+                    No status
+                %td
+                  = link_to content_tag(:i, "", class: "icon-trash icon-white"), reachout_tab_destroy_campaign_path(:id => campaign.id) , method: :delete, class: "btn btn-danger remove_fields", :confirm => "Are you sure ?"
+          - else
+            %tr
+              %td{:colspan => '9'}
+                No Records Yet.
+      %div
+        = paginate @campaigns

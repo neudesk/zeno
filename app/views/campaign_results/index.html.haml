@@ -1,0 +1,55 @@
+.row
+  .col-sm-12
+    %div.page-header
+      %h1
+        %i.fa.fa-tachometer
+        = "Campaign Call Status and History"
+%br
+%br
+= render partial: "campaign_analytics"
+- if current_user.is_marketer?
+  .col-md-12
+    .pull-right{style: 'margin-top: 30px'}
+      .btn-group
+        %a.btn.btn-default{:href => "/campaign_results/campaigns", :class => params[:daily_status].present? ? "" : "active" }
+          Campaign View
+        %a.btn.btn-default.hidden-xs{:href => "/campaign_results?daily_status=true", :class => params[:daily_status].present? ? "active" : "" }
+          Summary View
+%br
+%hr
+%br
+%br
+- if params[:daily_status].present? && params[:daily_status] == "true"
+  = render partial: "daily_list_status"
+- else
+  .row
+    - @displayed_campaign = []
+    - @campaigns.each do |campaign|
+      - @displayed_campaign << campaign.id
+      .col-sm-12
+        .panel.panel-default.panel-campaign{id: "campaign-#{campaign.id}"}
+          .panel-heading
+            %i.clip-stats
+            = campaign.schedule_start_date.strftime("%B %d, %Y")
+          .panel-body{:class => "campaigns_box campaigns_box_#{campaign.schedule_start_date.strftime("%Y-%m-%d")}"}
+            .error.hide
+              = render "shared/error"
+            .loading
+              = render "shared/loading"
+            .loaded{id: "campaign-loaded-#{campaign.id}"}
+          .panel-footer
+            .pull-right
+              - should_open = (Date.today == campaign.schedule_start_date.to_date) ? 'should_open' : 'not_open'
+              = link_to "Show Details", campaign_result_path(campaign), remote: true, class: "btn btn-primary btn-sm toggle-campaign c_#{campaign.schedule_start_date.strftime("%Y-%m-%d")} #{should_open}", :data => {:id =>campaign.schedule_start_date.strftime("%Y-%m-%d")}
+  .row
+    %col-sm-12
+      %div{:style => 'text-align: center'}
+        = paginate  @campaigns
+      %div.clearfix
+#modalHandler
+- content_for :js do
+  :javascript
+    $(document).ready(function(){
+      window.campaign_results = new CampaignResults();
+      setTimeout(function(){$('.should_open').trigger('click')}, 2000);
+    })

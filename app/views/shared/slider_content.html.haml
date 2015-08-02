@@ -1,0 +1,14 @@
+- if @stations.count == 0
+  = render "shared/no_records"
+- else
+  .slides.carousel#gateway_search
+    .items
+      %ul.slider
+        - @stations.each do |station|
+          %li
+            %a.link{'data-toggle'=>'tooltip', :href=>"/#{controller_name}?gateway_id=#{station.id}&country_id=#{params[:country_id]}&rca_id=#{params[:rca_id]}&query=#{params[:query]}", :title=>"",}
+              .item.radio-slide-item{:title=>station.title}
+                %span.stationIco.pull-left
+                  %span
+                %h5
+                  = station.title

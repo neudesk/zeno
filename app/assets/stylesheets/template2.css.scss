@@ -1,0 +1,152 @@
+.backgroundColor.blue {
+  background: #36a9e1;
+}
+
+/* Info Box
+=================================================================== */
+.info-box .backgroundColor {
+  color: white;
+  padding: 10px;
+}
+.info-box .title,
+.info-box .value {
+  font-weight: bold;
+  font-size: 12px;
+  margin: 0;
+  padding: 0;
+}
+.info-box .date,
+.info-box .change {
+  font-size: 10px;
+  margin: 0;
+  padding: 0;
+}
+.info-box .title,
+.info-box .date {
+  float: left;
+}
+.info-box .value,
+.info-box .change {
+  float: right;
+}
+.info-box .quarters {
+  background: white;
+  *zoom: 1;
+}
+.info-box .quarters:before,
+.info-box .quarters:after {
+  display: table;
+  content: "";
+  line-height: 0;
+}
+.info-box .quarters:after {
+  clear: both;
+}
+.info-box .quarters .quarter {
+  padding: 10px;
+}
+.info-box .quarters .quarter span {
+  display: block;
+  font-size: 10px;
+  color: #c0cadd;
+}
+.info-box .quarters .q1,
+.info-box .quarters .q2,
+.info-box .quarters .q3,
+.info-box .quarters .q4 {
+  width: 50%;
+  float: left;
+}
+.info-box .quarters .q1,
+.info-box .quarters .q2 {
+  border-bottom: 1px solid #e1e6ef;
+  height: 60px;
+}
+.info-box .quarters .q2 {
+  padding: 0;
+}
+.info-box .quarters .q2,
+.info-box .quarters .q4 {
+  text-align: right;
+}
+.info-box .quarters .q4 {
+  border-left: 1px solid #e1e6ef;
+}
+.info-box .quarters .verticalChart {
+  float: right;
+  text-align: center;
+  margin: 3px 0 0 0;
+  width: 100%;
+  padding: 6px;
+}
+.info-box .quarters .verticalChart .singleBar {
+  width: 10.5%;
+  margin: 0 0px 0 3px;
+}
+.info-box .quarters .verticalChart .singleBar .bar {
+  height: 22px;
+  -webkit-border-radius: 1px;
+  -moz-border-radius: 1px;
+  border-radius: 1px;
+}
+.info-box .quarters .verticalChart .singleBar .bar .value {
+  background: #c0cadd;
+  -webkit-border-radius: 1px;
+  -moz-border-radius: 1px;
+  border-radius: 1px;
+}
+.info-box .quarters .verticalChart .singleBar .title {
+  margin: 2px auto 0 auto;
+  text-align: center;
+  color: #c0cadd;
+  font-size: 8px;
+  font-weight: 400;
+  width: 100%;
+}
+
+/* Vertical Bar Chart
+=================================================================== */
+.verticalChart {
+  margin: 10px;
+}
+.verticalChart .singleBar {
+  display: inline-block;
+  margin-left: 2px;
+  width: 25px;
+}
+.verticalChart .singleBar .bar {
+  position: relative;
+  height: 120px;
+  background: #FFF;
+  overflow: hidden;
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  border-radius: 2px;
+}
+.verticalChart .singleBar .bar .value {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  background: #79c447;
+  color: white;
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  border-radius: 2px;
+}
+.verticalChart .singleBar .bar .value span {
+  position: absolute;
+  font-size: 12px;
+  bottom: 0;
+  width: 100%;
+  height: 20px;
+  color: white;
+  text-shadow: 0px -1px 0px #79c447, 0px 1px 0px #79c447, 1px 0px 0px #79c447, -1px 0px 0px #79c447, -1px -1px 0px #79c447, -1px 1px 0px #79c447, 1px 1px 0px #79c447, 1px -1px 0px #79c447;
+  display: none;
+  text-align: center;
+}
+.verticalChart .singleBar .title {
+  margin-top: 5px;
+  text-align: center;
+  color: #FFF;
+}
+

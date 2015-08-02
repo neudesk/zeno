@@ -1,0 +1,351 @@
+- if @stations.size > 1 && params[:utf8].nil?
+  %div.row{:id => 'stationList', :style => "#{params[:gateway_id].present? ? 'display: none' : ''}"}
+    %div.col-md-12{:id => 'SlideContainer'}
+      %div
+        .row.slides.slider-group-search.margin-top-0
+
+          %div.col-md-3
+            %div.input-group
+              = text_field_tag :query, params[:query], :class => "form-control", :style=>'border-top-left-radius: 4px !important;border-bottom-left-radius: 4px !important;padding-left:12px;font-family:"Open Sans"', placeholder: "Enter your search here.."
+              .input-group-btn
+                %input.btn.btn-primary{:type => 'button', :value => 'Search', :id => 'searchStation'}
+
+          %div.col-md-3
+            %span.radio-select
+              = select_tag :country_id, options_from_collection_for_select(DataGroupCountry.get_tagged_countries_on_user(current_user).order(:title), 'id', 'title', params[:country_id]), :prompt => "Select country", :class=>'query-search-country-id'
+
+          %div.col-md-3
+            - if current_user.is_marketer?
+              %span.radio-select
+                = select_tag :rca_id, options_from_collection_for_select(DataGroupRca.order(:title), 'id', 'title', params[:rca_id]), :prompt => "Select RCA", :class=>'query-search-rca-id'
+
+          %div.col-md-3{:style=>'padding:0px'}
+            - if current_user.is_marketer?
+              .col-md-6{:style=>'padding:0px'}
+                %a.btn.btn-primary{:href => "#new_station", :title => "Add Station", "data-toggle"=>"modal"}
+                  %i.fa.fa-plus
+                  = "Add New Station"
+
+
+            .pull-right.station_pagination{:style=>'width:90px'}
+              .input-group
+                %input#page.pull-right{:style=>'padding:4px 8px 4px 8px;width:55px; font-family:"Open Sans";border-radius:4px;border:1px solid #eee;', :value=>1}
+                .input-group-btn
+                  %button.btn.btn-primary{:style=>'background:none;border:none'}
+                    %span
+                      = "of "
+                    %span#total_page
+                      = @total_page
+
+        - if @station.present?
+          %div.slider_content.hide
+            %div.slider-loading{:style=>'display:none'}
+            %span.prev#prev-slide
+            %span.next#next-slide
+            #inside_slider.animated.fadeIn
+        - else
+          %div.slider_content
+            %div.slider-loading{:style=>'display:none'}
+            %span.prev#prev-slide
+            %span.next#next-slide
+            #inside_slider.animated.fadeIn
+          
+
+%br
+
+- if @station.present?
+  - unless broadcaster? && @stations.size == 1 && params[:utf8].nil?
+    %button.btn.btn-info.pull-right#stationListToggle{:style=>"margin-right:10px;"}
+      %i.fa.fa-list-ul
+      %span
+        = "Show Station List"
+  .row
+    .col-sm-1
+      %span.station_avatar
+        %span{:style=>"background: url(#{(@station.logo.exists? ? @station.logo.url(:xhdpi) : image_path('radio.png'))}) center center; background-size: 80px"}
+    .col-sm-11
+      %h2{:style => "color: #59B2E5"}
+        = @station.title.titleize
+    .col-sm-8
+      .panel.panel-default.panel-phone
+        .panel-heading.backgroundColor.blue
+          = "Phone Numbers"
+          
+          .pull-right.panel-heading-buttons
+            - if marketer?
+              - if @phone_numbers.present?
+                = link_to "#", class: "btn btn-sm btn-default open_delete", tip: "Delete Phone Number" do
+                  %i.fa.fa-wrench
+                = link_to "#", class: "btn btn-sm btn-default close_delete", tip: "Cancel" do
+                  %i.clip-close
+              = link_to "#new_phone", class: "btn btn-sm btn-default", tip: "Add phone number", data: {toggle: "modal"} do
+                %i.fa.fa-plus
+        .panel-body
+          - if @phone_numbers.present?
+            .row-fluid.phone_numbers
+              - @phone_numbers.each do |phone|
+                .col-lg-2.col-md-3.col-sm-3.col-xs-4{tip: phone.title}
+                  - if phone.desktop?
+                    %i.fa.fa-desktop
+                  - elsif phone.android?
+                    %i.fa.fa-android
+                  - else
+                    %i.fa.fa-phone
+                  = phone.did_e164
+            - if marketer?
+              .row-fluid.phone_form
+                = simple_form_for @station, url: manage_phones_data_gateway_path(@station), method: :post, html: {id: "manage_phones_form"} do |f|
+                  - @phone_numbers.each do |phone|
+                    .col-lg-2.col-sm-3{tip: phone.title}
+                      = check_box_tag 'selected_dids[]', phone.id, false, class: "icheck-me", data: {color: "blue", skin: "square"}
+                      %span.check_box_note
+                        - if phone.desktop?
+                          %i.fa.fa-desktop
+                        - elsif phone.android?
+                          %i.fa.fa-android
+                        - else
+                          %i.fa.fa-phone
+                        = phone.did_e164
+                  .row
+                    .col-sm-12.aright
+                      = f.submit "Delete", class: "btn btn-sm btn-primary", confirm: "Are you sure you want to delete these phone numbers?", data: {target: "manage_phones_form"}
+          - else
+            = render "shared/no_records", msg: "No phone numbers found."
+
+      .tabbable
+        %ul.nav.nav-tabs.tab-bricky.tab-blue.tab-padding.tab-space-3
+          %li{class: "#{ 'active' if flash[:hash].nil? || flash[:hash] == "extensions"}"}
+            = link_to "Extensions", "#extensions", data: {toggle: "tab"}
+          %li{class: "#{ 'active' if flash[:hash] == "prompts"}"}
+            = link_to "Prompts", "#prompts", data: {toggle: "tab"}
+          %li{class: "#{ 'active' if flash[:hash] == "information"}"}
+            = link_to "Station Information", "#information", data: {toggle: "tab"}
+        .tab-content
+          .tab-pane#extensions{class: "#{ 'active' if flash[:hash].nil? || flash[:hash] == "extensions"}"}
+            = render "extensions"
+          .tab-pane#prompts{class: "#{ 'active' if flash[:hash] == "prompts"}"}
+            = render "prompts"
+          .tab-pane#information{class: "#{ 'active' if flash[:hash] == "information"}"}
+            = render "information"
+
+    .col-sm-4
+      / = render "graphs"
+      .row
+        .col-sm-12
+          = link_to "See Station Statistics", reports_path(station_id: @station), class: "btn btn-primary btn-sm", tip: "Click to go to reporting page"
+          -#- if current_user.is_marketer?
+          -#  = link_to "Duplicate This Station", create_station_dup_path(@station.id), class: "btn btn-warning btn-sm", tip: "Create a duplicate of this stations", :confirm => 'Are you sure you want to duplicate this station?'
+      %br
+      = render "history"
+  - if marketer?
+    .row
+      .col-sm-12
+        .tabbable
+          %ul.nav.nav-tabs.tab-bricky.tab-blue.tab-padding.tab-space-3
+            %li#data_groups_button
+              = link_to "Data Groups", data_groups_mass_updates_path(group: "RCA", country_id: DataGroupCountry.find_by_iso_alpha_2("US").id), remote: true, method: :get
+            %li#data_tags_button
+              = link_to "Tags", data_tags_mass_updates_path(tag: "Country"), remote: true, method: :get
+          .tab-content
+            .tab-pane#data_groups
+            .tab-pane#data_tags
+
+
+  = render "new_phone_modal"
+= render "new_station_modal"
+
+- content_for :js do
+  :javascript
+
+    $search = "";
+    $country_id = "";
+    $rca_id = "";
+
+    $(document).ready(function(){
+      $('#new_extension_form').on('submit', function(){
+        $('a[data-target="new_extension_form"]').addClass('disabled');
+      });
+      $('a[href="#new_phone"]').on('click', function(){
+        $.get('/get_phone_list', function(data){
+          data.unshift(['Please Select DID', ''])
+          if(data.length > 0){
+            $('#data_gateway_custom_entryways').html('');
+            $.each(data, function(idx, val){
+              $('#data_gateway_custom_entryways').append('<option value="'+ val[1] +'">'+ val[0] +'</option>');
+            })
+            $('#data_gateway_custom_entryways').select2('destroy')
+            $('#data_gateway_custom_entryways').select2();
+          }
+        });
+      });
+
+      $('#country_id, #rca_id').select2();
+      //$('#data_gateway_language_id, #data_gateway_data_entryway_id, #data_gateway_broadcast_id, #data_gateway_country_id').select2();
+      $('.ajax-submit').parents("form").unbind().ajaxForm({
+          target: '#myResultsDiv',
+          beforeSubmit: function(){
+            $(".loading").show();
+          },
+          success: function (){
+            window.location = document.URL;
+          },
+          error: function(){
+            // redirect on error
+            window.location = document.URL;
+          }
+      });
+
+
+
+      $('#stationListToggle').click( function(event){
+        event.preventDefault();
+        if ( $(this).find('span').text() == 'Hide Station List' ) {
+          $(this).find('span').text('Show Station List');
+          $('.slider_content').addClass('hide');
+        } else {
+          $(this).find('span').text('Hide Station List');
+          $('.slider_content').removeClass('hide');
+        }
+
+      });
+
+     // AJAX SLIDER
+      function ajaxAnim(x) {
+        $('#inside_slider').removeClass().addClass(x + ' animated').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function(){
+          $(this).removeClass();
+        });
+      };
+
+      function ajaxSlide(page){
+        $.ajax({ 
+          url: "/graphs/slider_settings/"+page,
+          data: {
+            search: $search,
+            country_id: $country_id,
+            rca_id: $rca_id
+          },
+          success: function(data){
+            if($("#page").val() == 1){
+              $('#prev-slide').hide();
+            } else if($("#page").val() == data.total_page){
+              $('#next-slide').hide();
+            }
+
+            if(data.total_page == 1){
+               $('#next-slide').hide();
+                $('#prev-slide').hide();
+            }
+          } 
+        }).done(function(data){
+          $("#inside_slider").html(data.content); 
+          $("#total_page").text(data.total_page);
+        });
+      }
+      
+      ajaxSlide(1,"");
+      
+      $("#next-slide").click(function(){
+        ajaxAnim('bounceInRight');
+        $page = parseInt($('#page').val());
+        $('#page').val($page+1);
+        ajaxSlide($page+1, $country_id);
+        $("#prev-slide").show();
+      });
+      
+      $("#prev-slide").click(function(){
+        ajaxAnim('bounceInLeft');
+        $page = parseInt($('#page').val());
+        $('#page').val($page-1);
+        ajaxSlide($page-1);
+         $("#next-slide").show();
+      });
+      
+      $('#page').keyup(function(){
+        $page = parseInt($('#page').val());
+        if($.isNumeric($page)){
+          if($page > parseInt($('#total_page').text())) {
+            $('#page').val(parseInt($('#total_page').text()));
+          }
+        }  
+      });
+      
+      $('#page').keypress(function(e){
+        $page = parseInt($('#page').val());
+        if(e.which == 13) {
+           if($.isNumeric($page)){
+             ajaxSlide($page);
+             $('.slider_content').removeClass('hide');
+           } else {
+            alert('Please enter a valid page.');
+           }
+        }
+      });
+      
+      $('.query-search-country-id').change(function(){
+        ajaxAnim('fadeIn');
+        $country_id = $(this).val();
+        ajaxSlide(1);
+         $('.slider_content').removeClass('hide');
+      });
+      
+      $('.query-search-rca-id').change(function(){
+        ajaxAnim('fadeIn');
+        $rca_id = $(this).val();
+        ajaxSlide(1);
+        $('.slider_content').removeClass('hide');
+      });
+      
+      $('#searchStation').click(function(){
+          ajaxAnim('fadeIn');
+          $search = $('#query').val();
+          $('#page').val(1);
+          ajaxSlide(1);
+          $('.slider_content').removeClass('hide');
+      });
+      
+      $('#query').keyup(function(e){
+        ajaxAnim('fadeIn');
+        $search = $('#query').val();
+        $('#page').val(1);
+        ajaxSlide(1);
+        $('.slider_content').removeClass('hide');
+      });
+
+
+      $('#data_content_extension').keyup(function(){
+
+        if($(this).val() == ""){
+          $("#submit_extension").addClass('disabled');
+        }else{
+          checkChannelNumber($(this).val());
+        }
+        console.log($(this).val());
+      });
+
+    });
+
+    function checkChannelNumber(channel){
+        $.ajax({
+          url: "data_gateways/check_channel_number",
+          data: {
+            id: "#{params[:station_id]}",
+            channel: channel,
+          },
+          success: function(data){
+            if(parseInt(data) > 0){
+              $('#channel_error').removeClass('hide');
+              $("#submit_extension").addClass('disabled');
+            }else{
+             $('#channel_error').addClass('hide');
+             $("#submit_extension").removeClass('disabled');
+            }
+          }
+        });
+    }
+
+    $(document).ajaxStart(function( event,request, settings ) {
+      $('.slider-loading').show();
+    });
+    $(document).ajaxComplete(function( event,request, settings ) {
+      $('.slider-loading').hide();
+    });

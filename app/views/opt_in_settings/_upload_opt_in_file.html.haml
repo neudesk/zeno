@@ -1,0 +1,19 @@
+%div.modal.fade{:id=>"uploadOptModal", :tabindex=>"-1", :role=>"dialog", "aria-labelledby"=>"myModalLabel", "aria-hidden"=>"true"}
+  %div.modal-dialog
+    %div.modal-content
+      = form_tag( {:action => 'upload_opt_in_file'}, :multipart => true ) do
+        %div.modal-header
+          %button.close{:type=>"button", "data-dismiss"=>"modal"}
+            %span{"aria-hidden"=>"true"}
+              = "&times;".html_safe
+            %span.sr-only
+              Close
+          %h4.modal-title{:id=>"myModalLabel"}
+            Modal title
+        %div.modal-body
+          = file_field 'upload', 'datafile'
+        %div.modal-footer
+          %button.btn.btn-default{:type=>"button", "data-dismiss"=>"modal"}
+            Close
+          %button.btn.btn-primary.btn-submit.send{:type=>"submit", "data-dismiss"=>"modal"}
+            = "Upload File"

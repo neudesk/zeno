@@ -1,0 +1,11 @@
+.container
+	.row
+		.col-sm-4.col-sm-offset-4
+			%h2 Authorization
+			.well.well-sm{style: 'text-align: center'}
+				= form_tag data_group_authorized_path do
+					= password_field_tag :access_key, nil, placeholder: 'Password'
+					%button.btn.btn-success.btn-sm{type: 'submit'}
+						%i.fa.fa-lock
+						Authorized
+			%p Note: Please key-in your authorization key to access this page.

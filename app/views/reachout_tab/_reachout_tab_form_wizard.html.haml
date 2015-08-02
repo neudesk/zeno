@@ -1,0 +1,53 @@
+%div.swMain{:id=>"wizard"}
+  %ul
+    %li
+      %a{:href=>"#step-1"}
+        %label.stepNumber
+          1
+        %span.stepDesc
+          Step 1
+          %br
+          %small
+            Phone List to Send Campaign
+    %li
+      %a{:href=>"#step-2"}
+        %label.stepNumber
+          2
+        %span.stepDesc
+          Step 2
+          %br
+          %small
+            Upload Campaign Recordings
+    %li
+      %a{:href=>"#step-3"}
+        %label.stepNumber
+          3
+        %span.stepDesc
+          Step 3
+          %br
+          %small
+            Date and Time to Send Campaign
+    / %li
+    /   %a{:href=>"#step-4"}
+    /     %label.stepNumber
+    /       4
+    /     %span.stepDesc
+    /       Step 4
+    /       %br
+    /       %small
+    /         Summary
+  / = form_tag reachout_tab_save_path, :method => :post, :multipart => true, :id => "save_campaigns_form", :remote => true do
+  /   %input{:type => 'hidden', :name => 'uploaded_phone_list', :value => "#{@uploaded_listeners.count > 0 ? @uploaded_listeners.map{|x| x.ani_e164}.join(', ') : ''}"}
+  = form_tag reachout_tab_save_path, :method => :post, :multipart => true, :id => "save_campaigns_form" do
+    %input{:type => 'hidden', :name => 'uploaded_phone_list', :value => "#{@uploaded_listeners.count > 0 ? @uploaded_listeners.map{|x| x.ani_e164}.join(', ') : ''}"}
+    = hidden_field_tag  "gateway_id", @gateway_id
+    = hidden_field_tag  "schedule_type"
+    = hidden_field_tag  "submit_type"
+
+    %p{:style=>"color:red", :class=>"error"}
+    = render :partial => "step_one"
+    = render :partial => "step_two"
+    = render :partial => "step_three"
+    =# render :partial => "step_four"
+  = render :partial => "modals"
+

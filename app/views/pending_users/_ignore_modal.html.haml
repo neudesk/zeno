@@ -1,0 +1,15 @@
+#ignore_modal.modal{"aria-hidden" => "true", role: "dialog", tabindex: "-1"}
+  .modal-dialog
+    .modal-content
+      .modal-header
+        .modal_title
+          %h4= "Ignore User"
+      .modal-body
+        .row-fluid
+          .span12
+            = simple_form_for :pending_user, url: ignore_pending_user_path(1), html: {id: "ignore_form"}  do |f|
+              .form-inputs
+                = f.input :note, label: false, placeholder: "Enter the reason why you want to ignore this user", input_html: {class: "form-control"}
+      .modal-footer
+        = link_to "Close", "#", class: "btn btn-default", "aria-hidden" => "true", "data-dismiss" => "modal"
+        = link_to "Save", "#", class: "btn btn-dark-grey form-submitter", data: {target: "ignore_form"}

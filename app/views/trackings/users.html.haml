@@ -1,0 +1,56 @@
+%div.page-header
+  %h1
+    %i.fa.fa-columns
+    = "Tracking Users"
+
+.container
+  .row{style: 'padding-top: 20px'}
+    %form{"action" => users_trackings_path, "method" => 'get'}
+      .col-sm-2.col-sm-offset-7{:style=>"padding: 0; margin-top: -3px;"}
+        = select_tag :activity_type, options_for_select([ "All", "Login", "Content", "Gateway","Users Account","Data Groups", "Data Taggings", "Media Types", "Tool Request", "Reachout", "Admin Settings", "Data Group RCA", "Notes"], @activity_type), :class => 'submit_via_onchange select2 without_search'
+      .col-sm-3
+        .input-group
+          = text_field_tag :activity_query, @activity_query, class: "form-control"
+          .input-group-btn
+            %button{"class" => "btn btn-submit btn-primary"}
+              = "Search Activity"
+  .row
+    .col-sm-12
+      - if @activities.present?            
+        .pull-right{style: 'padding-top: 20px'}
+          = paginate(@activities) 
+        .clearfix
+        %ul.timeline
+          - @activities.group_by {|x| x.created_at.strftime("%B %Y")}.each do | month_year, activities |
+            - activities.each do |activity|
+              %li.timeline-inverted
+                = timeline_icon_for(activity)
+                - model, action = activity.key.split(".")
+                .timeline-panel{style: "background: rgba(#{timeline_color(action)}, .1)"}
+                  .timeline-heading
+                    %h4.timeline-title
+                      - if activity.owner.present?
+                        - owner_title = "#{activity.owner.title} (#{activity.owner.email})"
+                        %span= link_to owner_title, users_trackings_path(user: activity.owner.email, q: params[:q])
+                      - else
+                        %span Undefined User
+                    %p
+                      %small.text-muted{style: 'color: #000; font-size: 14px'}
+                        %i.glyphicon.glyphicon-time
+                          = " #{activity.created_at.localtime.to_s(:short)}"
+                  .timeline-body
+                    %p{style: 'word-break: break-word'}= render_activity activity
+        .pull-right
+          = paginate(@activities)
+        %br.clearfix
+      - else
+        = render "shared/no_records", msg: "No activities found."
+
+.show_content_section
+  #showContentModal.modal{"aria-hidden" => "true", role: "dialog", tabindex: "-1"}
+
+- content_for :js do
+  :javascript
+    $(document).ready(function(){
+      $('#activity_type').select2().css({'padding':'0', 'margin-top':'-2px'});
+    })

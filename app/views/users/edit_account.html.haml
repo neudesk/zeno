@@ -1,0 +1,21 @@
+.row
+  .col-sm-12
+    .page-header.main
+      .pull-right
+        = link_to my_account_path, class: "btn btn-primary btn-lg", style: "margin-top: -12px;"  do
+          %i.fa.fa-hand-o-left
+          Back
+      %h3
+        = "Edit Account"
+        %progresfs{:max => 100, :value => @user.profile_percent, :align => "right"}
+        %span.h4 #{@user.profile_percent}% of Profile Completed
+
+.row
+  .col-sm-12
+    = simple_form_for @current_user, url: update_account_path, method: :post do |f|
+      = render "form", f: f
+
+
+
+
+

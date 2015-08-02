@@ -1,0 +1,45 @@
+%table.campaign_table
+  %thead
+    %th Campaign Name
+    %th Gateway
+    %th Created
+    %th Schedule
+    %th Created by
+    %th Call Progress
+    %th Status
+    %th Settings/Results
+    %th Delete
+    %th #
+  %tbody
+    -campaigns.each do |campaign|
+      %tr.campaing_table_row{:class => cycle('odd', 'even'), :data => {:id => campaign[1], :status => campaign[14] == 1 ? "Active" : "Inactive"}} 
+        %td{:title => campaign[0]}= truncate(campaign[0], length: 15)
+        %td{:class => "gateway_id"}= campaign[2]
+        %td= campaign[7].localtime.strftime("%Y-%m-%d %H:%M")
+        %td= campaign[5].strftime("%Y-%m-%d %H:%M")
+        %td{:title => User.find_by_id(campaign[15]).try(:title)}
+          = truncate(User.find_by_id(campaign[15]).try(:title), length: 15)
+        %td
+          
+          %div{:class=>"span8 progress progress-striped active show_popover progress_#{campaign[1]}",:data=>{"original-title" =>campaign[0], :toggle=>"popover", :value => "0,0,0,0", "next-update" => "" }}
+            %div{:id=>"bar", :class=>"bar", :style=>"width: 0%;"}
+        %td
+          %p{:class => "status_#{campaign[1]}", :style => "margin-top:6px;"}= campaign[14]
+        %td
+          %a{:class => "settings_modal", :style =>"margin-right: 30px;margin-left: 5px;", :data => {:id => campaign[1], :value => campaign[2]}} Edit
+          - if campaign[1].present?
+            %a{:remote =>'true', :class=> "show_campaign_status", :id =>campaign[1], :data => {:value => ReachoutTabCampaign.where(:main_id => campaign[1]).map(&:id)}} View
+          - else
+            No status
+        %td 
+          = link_to content_tag(:i, "", class: "icon-trash icon-white", style:"margin:10px;"),campaign_results_destroy_campaign_path(:id => campaign[1]) , method: :delete, :confirm => "Are you sure ?"
+        %td
+          = link_to content_tag(:i, "", class: "fa fa-download", style:"margin:10px;"), download_phone_lists_path(campaign[1])
+- if page_no > 1
+  %nav.pagination
+    %ul
+      - (1..page_no).each do |p|
+        %li{:class => ["page",("active" if current_page==p)]}
+          %a{:class => "custom_pagination", :data => {:value => date, :id => p} , :rel =>"next" }= p
+   
+

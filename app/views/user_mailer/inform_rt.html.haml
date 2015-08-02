@@ -1,0 +1,39 @@
+%div{:style => 'width: 1000px; margin: 0 auto'}
+  %div
+    %img{:src => 'http://dashboard.zenoradio.com/assets/layout/logo-be4b2a8b2ab82d4c488885a228700684.png'}
+  %br
+  %br
+  %div
+    = "Hello <strong>RT</strong>, ".html_safe
+    %br
+    %br
+    %p
+      = "User with email address #{@user.email} has been successfully signed up in our system. Please refer to the data below for more info."
+    %br
+    %h4
+      Account Details
+    %ul
+      %li
+        = "Username/Email: "
+        = @user.email
+      %li
+        = "Company Name: "
+        = @user.company_name
+      %li
+        = "Country: "
+        = @user.country
+      %li
+        = "Station Name: "
+        = @user.station_name
+      %li
+        = "Station Website: "
+        = @user.website
+      %li
+        = "Streaming URL: "
+        = @user.streaming_url
+      %li
+        = "Selected Services: "
+        - services = @user.service_type.split(',')
+        %ol
+          - services.each do |s|
+            %li= s.titleize

@@ -1,0 +1,20 @@
+.google-like
+  = simple_form_for @config, url: save_system_variables_path, method: :post do |f|
+    .row
+      .col-sm-8.col-sm-offset-2.col-xs-10.col-xs-offset-1
+        .form-fields
+          = f.input :value, label: "Content Request Email Address"
+    .row
+      .col-sm-2.col-sm-offset-5.col-xs-4.col-xs-offset-4
+        .form-actions
+          = f.submit "Update", class: "btn btn-primary"
+
+
+/ .system_variables_page
+
+/   .standard.email_section
+/     = simple_nested_form_for(@email_config_form, :url => update_email_system_variables_path(@prompt), :method => :put, :html => { :class => 'email_form'}) do |f|
+/       = f.label :Content_request_email_address, :class => ""
+/       = f.input_field :email, {:class => "", :placeholder => @email, :value => @email}
+/       .save_section
+/         = f.submit "Update", :class => "btn update_btn"

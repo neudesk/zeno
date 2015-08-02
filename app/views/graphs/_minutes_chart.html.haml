@@ -1,0 +1,12 @@
+.loaded_minutes
+  .row
+    .col-sm-12
+      = form_tag("/graphs/minutes_chart?station_id=#{params[:station_id]}", remote: true, method: :get) do
+        .col-sm-8.pull-center
+          = select_tag :scope, options_for_select(["7days", "30days", "90days"], params[:scope]), class: "select without_search change_minutes_chart"
+  #minutes_graph{data: {labels: labels, values: values}}
+  %br
+.row#loader.loading_minutes
+  .col-sm-12.acenter
+    = image_tag("loader.gif") 
+    = "Just a moment"

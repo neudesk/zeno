@@ -1,0 +1,19 @@
+/ %table.data_numerical_reports_table_mini
+/   %thead
+/     %tr
+/       - if controller.action_name.present? && controller.action_name == "rca_minutes" || params[:controller] == "home"
+/         %th= params[:rca_id].present? || params[:controller] == "home" ? "Stations" : "RCA" 
+/       - elsif controller.action_name.present? && controller.action_name == "country_minutes" 
+/         %th= params[:country_id].present? || params[:controller] == "home" ? "Stations" : "Country" 
+/       %th=  "Last week"
+/       %th=  "Current week"
+/   %tbody
+/   - result.each do |res|
+/     %tr{:class => cycle('odd', 'even')} 
+/       %td.name
+/         -if params[:rca_id].present? || params[:country_id].present? || params[:controller] == "home"
+/           %a{:href => "/reports?gateway_id=#{res[1]}"}= res[0]
+/         -else
+/           = res[0]
+/       %td= res[2].present? ? res[2] : 0
+/       %td= res[3].present? ? res[3] : 0 

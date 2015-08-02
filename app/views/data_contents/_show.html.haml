@@ -1,0 +1,45 @@
+
+.modal-dialog
+  .modal-content
+    .modal-header
+      .pull-right
+        = link_to "#", "aria-hidden" => "true", "data-dismiss" => "modal" do
+          %i.clip-close-2
+      .modal_title
+        %h4= @data_content.title
+    .modal-body
+
+      .row.dl-in-modal
+        .col-sm-4.aright
+          Title
+        .col-sm-8
+          = @data_content.title
+
+      .row.dl-in-modal
+        .col-sm-4.aright
+          Media Url
+        .col-sm-8
+          = simple_format(split_str(@data_content.try(:media_url), 50))
+
+      - if @data_content.backup_media_url.present?
+        .row.dl-in-modal
+          .col-sm-4.aright Backup Media Url
+          .col-sm-8= @data_content.backup_media_url
+
+      - if @data_content.country
+        .row.dl-in-modal
+          .col-sm-4.aright Country
+          .col-sm-8= @data_content.country.title
+
+      - if @data_content.language
+        .row.dl-in-modal
+          .col-sm-4.aright Language
+          .col-sm-8= @data_content.language.title
+
+      - if @data_content.genre
+        .row.dl-in-modal
+          .col-sm-4.aright Genre
+          .col-sm-8= @data_content.genre.title
+
+    .modal-footer
+      = link_to "Close", "#", class: "btn btn-default", "aria-hidden" => "true", "data-dismiss" => "modal"

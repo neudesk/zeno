@@ -1,0 +1,45 @@
+= hidden_field_tag "pages", @count.ceil
+.slides#gateway_search
+  .content
+    %ul.slider
+      -if @stations.length > 0
+        - @stations.each do |station|
+          - if @controller_name == 'new_settings' or @controller_name == 'reachout_tab'
+            - unless @rca_ids.include? station.rca_monitor_id
+              %li
+                - if @controller_name == 'reachout_tab'
+                  - new_url = "#{@controller_name + '?gateway_id=' + station.id.to_s}&country_id=#{params[:country_id]}&rca_id=#{params[:rca_id]}&query=#{params[:query]}"
+                - elsif @controller_name == 'new_settings'
+                  - new_url = "/new_settings/station/#{station.id}"
+                - else
+                  - new_url = "#{@controller_name + '?station_id=' + station.id.to_s}&country_id=#{params[:country_id]}&rca_id=#{params[:rca_id]}&query=#{params[:query]}"
+                %a{:class=>'link', :data=>{:toggle=>'tooltip'}, :href=> new_url}
+                  .item.radio-slide-item{:title => station.title}
+                    %span.station.stationIco.pull-left
+                      %span{:style=>"background: url('#{station.logo.url(:thumb)}') center center; background-size: 140% 140%"}
+                    %h5
+                      = station.title
+          - else
+            %li
+              - if @controller_name == 'reachout_tab'
+                - new_url = "#{@controller_name + '?gateway_id=' + station.id.to_s}&country_id=#{params[:country_id]}&rca_id=#{params[:rca_id]}&query=#{params[:query]}"
+              - elsif @controller_name == 'new_settings'
+                - new_url = "/new_settings/station/#{station.id}"
+              - else
+                - new_url = "/#{@controller_name + '?station_id=' + station.id.to_s}&country_id=#{params[:country_id]}&rca_id=#{params[:rca_id]}&query=#{params[:query]}"
+              %a{:class=>'link', :data=>{:toggle=>'tooltip'}, :href=> new_url}
+                .item.radio-slide-item{:title => station.title}
+                  %span.station.stationIco.pull-left
+                    %span{:style=>"background: url('#{station.logo.url(:thumb)}') center center; background-size: 140% 140%"}
+                  %h5
+                    = station.title
+                    %br
+                    - if @rca_ids.present? and @controller_name == 'reports'
+                      - if @rca_ids.include? station.rca_monitor_id
+                        %small Monitored Gateway Only
+                  %h5
+                    = station.de_title if station.respond_to?(:de_title)
+      - else
+        %li
+          #no-data.alert.alert-warning
+            No stations found

@@ -1,0 +1,31 @@
+.row
+  .col-sm-12
+    %div.page-header
+      %h1
+        %i.fa.fa-gears
+        = "Carrier Rule Settings"
+%br
+
+.row
+  .col-sm-12
+    = render 'form' 
+%br
+.row
+  .col-sm-12
+    = render 'rules_table'        
+
+= render "new_carrier"
+= render "new_carrier_prompt"
+= render "edit_rule"
+= render "player"
+
+- content_for :js do
+  :javascript
+    $(document).ready(function(){
+       window.DataCarrierRule = new DataCarrierRule()
+       $errorCan = $('#formErrors')
+       $.validate({
+        scrollToTopOnError : false,
+        errorMessagePosition: $errorCan
+       })
+    });

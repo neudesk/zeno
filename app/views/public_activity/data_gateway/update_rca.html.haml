@@ -1,0 +1,8 @@
+Updated RCA
+- if activity.parameters[:old_rca]
+  %span= DataGroupRca.find(activity.parameters[:old_rca]).title if DataGroupRca.find(activity.parameters[:old_rca])
+on a station
+- if activity.trackable
+  = link_to activity.trackable_title, new_settings_path(station_id: activity.trackable.id)
+- else
+  which has since been removed

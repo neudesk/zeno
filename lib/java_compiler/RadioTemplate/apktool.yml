@@ -1,0 +1,13 @@
+version: 1.5.2
+apkFileName: zeno_secret_code.apk
+isFrameworkApk: false
+usesFramework:
+  ids:
+  - 1
+sdkInfo:
+  minSdkVersion: '8'
+  targetSdkVersion: '17'
+packageInfo:
+  cur_package: com.iconstrats.zeno_secret_code
+  orig_package: com.iconstrats.zeno_secret_code
+compressionType: false

@@ -1,0 +1,32 @@
+.row
+  .col-sm-12
+    .page-header.main
+      .pull-right.header-buttons
+        - if params[:from].present? || params[:from] == "index"
+          = link_to :back, class: "btn btn-primary with-margin-right" do
+            %i.fa.fa-hand-o-left
+            Back
+        - else
+          = link_to user_path(@user), class: "btn btn-primary with-margin-right" do
+            %i.fa.fa-hand-o-left
+            Back
+        - if current_user.is_marketer?
+          = link_to new_user_path, class: "btn btn-primary" do
+            %i.clip-user-plus
+            Create New
+      %h3
+        = "Edit Account"
+
+.row
+  .col-sm-12
+    = simple_form_for @user, url: user_path(id: @user.id), method: :put do |f|
+      = render "form", f: f
+
+- content_for :js do
+  :javascript
+    $(document).ready(function(){
+      window.user_group = new UserGroup();
+    })
+
+
+

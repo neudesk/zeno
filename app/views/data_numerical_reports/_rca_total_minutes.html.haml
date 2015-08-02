@@ -1,0 +1,46 @@
+/ %table{:class => "data_numerical_reports_table  data_numerical_minutes"}
+/   %thead
+/     %tr
+/       %th RCA
+/       %th=  4.week.ago.at_beginning_of_week(:sunday).strftime("%b %e") + " - " + 4.week.ago.end_of_week(:sunday).strftime("%b %e")
+/       %th=  3.week.ago.at_beginning_of_week(:sunday).strftime("%b %e") + " - " + 3.week.ago.end_of_week(:sunday).strftime("%b %e") 
+/       %th=  2.week.ago.at_beginning_of_week(:sunday).strftime("%b %e") + " - " + 2.week.ago.end_of_week(:sunday).strftime("%b %e")
+/       %th=  1.week.ago.at_beginning_of_week(:sunday).strftime("%b %e") + " - " + 1.week.ago.end_of_week(:sunday).strftime("%b %e") 
+/       %th=  0.week.ago.at_beginning_of_week(:sunday).strftime("%b %e") + " - " + DateTime.now.strftime("%b %e") 
+/   %tbody
+/   - @result.each do |rca|
+/     %tr{:class => cycle('odd', 'even')} 
+/       %td.name
+/         %a{:href =>("/data_numerical_reports/rca_minutes?type=#{params["type"]}&rca_id=#{rca[1]}" if rca[1]!= params["rca_id"].to_i), :class => [("active_rca" if rca[1] == params["rca_id"].to_i)]}= rca[0]
+/       -if 0 > rca[2].to_i
+/         %td.red= rca[2]
+/       -elsif 0 < rca[2].to_i
+/         %td.green= rca[2]
+/       -else
+/         %td= rca[2]
+/       -if rca[2].to_i > rca[3].to_i
+/         %td.red= rca[3]
+/       -elsif rca[2].to_i < rca[3].to_i
+/         %td.green= rca[3]
+/       -else
+/         %td= rca[3]
+/       -if rca[3].to_i > rca[4].to_i
+/         %td.red= rca[4]
+/       -elsif rca[3].to_i < rca [4].to_i
+/         %td.green= rca[4]
+/       -else
+/         %td= rca[4]
+/       -if rca [4].to_i > rca[5].to_i
+/         %td.red= rca[5]
+/       -elsif rca[4].to_i < rca[5].to_i
+/         %td.green= rca[5]
+/       -else
+/         %td= rca[5]
+/       -if rca[5].to_i > rca[6].to_i
+/         %td.red= rca[6]
+/       -elsif rca[5].to_i < rca [6].to_i
+/         %td.green= rca[6]
+/       -else
+/         %td= rca[6]
+
+

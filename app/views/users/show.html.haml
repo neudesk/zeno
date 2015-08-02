@@ -1,0 +1,182 @@
+.row
+  .col-sm-12
+    .page-header.main
+      .pull-right.header-buttons
+        - if (current_user.is_rca? || current_user.is_marketer?) && current_user.is_intercom_admin?
+          = button_tag "Message", class: "btn btn-success", id: "create_message", data: {:email => @user.email, :name => @user.title}
+        = link_to switch_user_path(@user), class: "btn btn-primary with-margin-right", method: :post do
+          %i.clip-users
+          Login as this user
+        = link_to edit_user_path(@user), class: "btn btn-primary with-margin-right" do
+          %i.fa.fa-edit
+          Edit
+        = link_to users_account_users_path, class: "btn btn-primary with-margin-right" do
+          %i.fa.fa-hand-o-left
+          Back
+        - if current_user.is_marketer?
+          = link_to new_user_path, class: "btn btn-primary" do
+            %i.clip-user-plus
+            Create New
+      %h3
+        = "Users Info"
+.row
+  .col-sm-5
+    .user-left
+      %table.table.table-condensed.table-hover
+        %thead
+          %tr
+            %th{colspan: 2}
+              = "Account Information"
+        %tbody
+          %tr
+            %td.col-sm-5
+              = "Company/Name"
+            %td.col-sm-7
+              = @user.name
+          %tr
+            %td= "Title/Contact Name"
+            %td= @user.title
+          %tr
+            %td= "Email"
+            %td= @user.email
+          %tr
+            %td= "Role"
+            %td= html_role(@user.role_name, @user.permission_id)
+          %tr
+            %td= "Group Name"
+            %td= html_group_name(@user)
+          %tr
+            %td= "Status"
+            %td= display_status(@user.enabled? ? "enabled" : "disabled")
+          %tr
+            %td
+            %td
+      %table.table.table-condensed.table-hover
+        %thead
+          %tr
+            %th{colspan: 2}
+              = "Contact Information"
+        %tbody
+          %tr
+            %td.col-sm-4
+              %i.clip-phone-4
+              = "Landline"
+            %td.col-sm-8
+              = @user.landline
+          %tr
+            %td= "Cellphone"
+            %td= @user.cellphone
+          %tr
+            %td= "Address"
+            %td= @user.address
+          %tr
+            %td
+              %i.clip-earth-2
+              = "City"
+            %td= @user.city
+          %tr
+            %td
+              %i.fa.fa-globe
+              = "State"
+            %td= @user.state
+          %tr
+            %td
+              = "Zip Code"
+            %td= @user.zip_code
+          %tr
+            %td
+              = "Country"
+            %td= @user.country
+          %tr
+            %td
+              %i.fa.fa-facebook-square
+              = "Facebook"
+            %td= @user.signup_facebook
+          %tr
+            %td
+              %i.fa.fa-twitter-square
+              = "Twitter"
+            %td= @user.signup_twitter
+          %tr
+            %td
+            %td
+  - unless @user.is_marketer?
+    .col-sm-7
+      %ul.activities
+        %li
+          %i.clip-user-3.circle-icon.circle-green
+          %span.desc= "RCA: #{@user.signup_rca}"
+        %li
+          %i.clip-cube-2.circle-icon.circle-bricky
+          %span.desc= "Affiliate: #{@user.signup_affiliate}"
+        %li
+          %i.clip-clock-2.circle-icon.circle-teal
+          %span.desc= "Member Since: #{html_date(@user.created_at)}"
+      %br/
+      %table.table.table-condensed.table-hover
+        %thead
+          %tr
+            %th{colspan: 2}
+              = "Station Information"
+        %tbody
+          %tr
+            %td.col-sm-3
+              = "Station Name"
+            %td.col-sm-9
+              = @user.signup_station_name
+          %tr
+            %td= "Streaming URL"
+            %td= @user.signup_streaming_url
+          %tr
+            %td= "Website"
+            %td= @user.signup_website
+          %tr
+            %td= "Language"
+            %td= @user.signup_language
+          %tr
+            %td= "Genre"
+            %td= @user.signup_genre
+          %tr
+            %td= "On-Air Schedule"
+            %td= @user.signup_on_air_schedule
+      - if current_user.is_marketer? and @gateways.count > 0
+        %table.table.table-condensed.table-hover
+          %thead
+            %tr
+              %th
+                = "Station Lists"
+          %tbody
+            - @gateways.each do |station|
+              %tr
+                %td.col-sm-9
+                  = link_to station.title, settings_station_path(station.id)
+        = paginate(@gateways)
+      %table.table.table-condensed.table-hover
+        %thead
+          %tr
+            %th{colspan: 2}
+              = "Keywords"
+          %tr
+            %td.col-sm-3= "Tags"
+            %td.col-sm-9= displayable_tags(@user.tags)
+          %tr
+            %td= "Countries"
+            %td= displayable_countries(@user.countries)
+      %br
+      - services = @user.service_type.split(',') if @user.service_type.present?
+      - unless services.nil?
+        %table.table.table-hover.no-border.small-padding
+          %thead
+            %tr.no-border
+              %th{colspan: 2}
+                = "Services"
+        %br
+        .row
+          - services.each do |s|
+            %div.col-xs-6{:style => 'text-align: center; margin-bottom: 10px'}
+              %span{:class => "deviceBox #{s}"}
+              = s.gsub('_', ' ').titleize
+            
+- if params[:new_user].present?
+  = render "shared/intercom", user: @user
+= render partial: "send_message"

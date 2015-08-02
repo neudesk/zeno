@@ -1,0 +1,9 @@
+$(".alert").hide();
+var notice = "#{@notice}";
+var alert = "#{@alert}";
+var main_id = "#{@main_id}";
+var gateway_id = "#{@gateway_id}";
+if ($('#submit_type').val() == "finish" && notice == $.trim("Campaign saved.")){$(".alert-success").show();$(".alert-success").text(notice);setTimeout(function(){ window.location.href = "/reachout_tab";},3000);}else if($('#submit_type').val() == "save" && notice == $.trim("Campaign saved.")){$(".alert-success").show();$(".alert-success").text(notice);$('.loading').show();window.ReachoutTab.get_campaigns(true, main_id, gateway_id);setTimeout(function(){$(".alert-success").hide()},5000)}else{$(".alert-danger").show();$(".alert-danger").text(alert);setTimeout(function(){$(".alert-danger").hide();},5000)}
+if (alert != ""){$('#step-4 .file-caption-name').text('');}
+
+

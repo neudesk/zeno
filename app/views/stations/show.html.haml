@@ -1,0 +1,106 @@
+.row
+  .col-sm-12
+    .page-header.main
+      .pull-right
+        = link_to stations_path, class: "btn btn-primary" do
+          %i.fa.fa-hand-o-left
+          Back
+      %h1
+        = "Station: #{@station.title}"
+
+.row
+  .col-sm-2
+    = render "sidebar"
+  .col-sm-10
+    .col-sm-12
+      %h3
+        Basic Information
+    .col-sm-9
+      %table.table.table-hover
+        %tbody
+          %tr
+            %td
+              = "Station Name"
+            %td
+              = @station.title
+          %tr
+            %td
+              = "Country"
+            %td
+              = @station.country.try(:title)
+          %tr
+            %td
+              = "Language"
+            %td
+              = @station.language.try(:title)
+          %tr
+            %td
+              = "Broadcaster Group"
+            %td
+              = @station.broadcaster_group.try(:title)
+          %tr
+            %td
+              = "RCA Group"
+            %td
+              = @station.rca_group.try(:title)
+          - if @station.website?
+            %tr
+              %td
+                = "Website"
+              %td
+                = @station.website
+    .col-sm-3
+      = image_tag @station.logo.url(:large), class: 'img-responsive img-thumbnail block'
+    .col-sm-12
+      .page-header
+        .pull-right.menu-inside
+          = link_to "#", class: "btn btn-dark-grey", tip: "Add New Stream" do
+            %i.fa.fa-plus
+        %h3
+          Streams
+      - if @streams.present?
+        %table.table.table-hover.table-striped
+          %thead
+            %tr
+              %th= "Title"
+              %th= "Media URL"
+              %th= "Genre"
+              %th= "Country"
+              %th= "Language"
+              %th= "Status"
+          %tbody
+            - @streams.each do |stream|
+              %tr
+                %td= stream.title
+                %td= stream.media_url
+                %td= stream.genre.try(:title)
+                %td= stream.country.try(:title)
+                %td= stream.language.try(:title)
+                %td= stream.active? ? "Up" : "Down"
+      - else
+        = render "shared/no_records", msg: "No streams found."
+    .col-sm-12
+      .page-header
+        %h3
+          Phone Numbers
+      - if @phone_numbers.present?
+        %table.table.table-hover.table-striped
+          %thead
+            %tr
+              %th= "Title"
+              %th= "Number"
+              %th= "Provider"
+              %th= "Timeout Ad"
+              %th= "Ad"
+              %th= "Preroll Ad"
+          %tbody
+            - @phone_numbers.each do |phone|
+              %tr
+                %td= phone.title
+                %td= phone.did_e164
+                %td= phone.provider.title
+                %td= phone.flag_no_listener_timeout_ad
+                %td= phone.flag_no_ad
+                %td= phone.flag_no_listener_preroll_ad
+      - else
+        = render "shared/no_records", msg: "No phone numbers found."

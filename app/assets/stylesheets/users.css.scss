@@ -1,0 +1,222 @@
+#user_filter, #pending_user_filter{
+  margin-top: -10px;
+  height: 30px;
+}
+
+.user_group_field{
+  padding-right: 0;
+}
+
+.user_group_button{
+  margin-top: 30px;
+  padding-left: 0px;
+}
+
+.user_new_group{
+  label {
+    margin-bottom: 8px;
+  }
+}
+
+.new_group_btn {
+  margin-top: -7px;
+  padding-top: 5px !important;
+  height: 34px !important;
+  font-size: 16px !important;
+}
+
+.conversation .messages-list
+{
+  border-right: none !important;
+  height: 100%;
+
+}
+.conversation .messages-list .messages-item
+{
+  padding: 5px 15px 30px 25px;
+}
+.conversation .messages-list .messages-item .messages-item-preview
+{
+  margin-top: 32px;
+}
+.conversation .messages-content
+{
+  float:left;
+  width :75%;
+  margin-left: 0px;
+  padding:50px;
+  border-left: 1px solid #ECEAF3;
+}
+.conversation .messages-list
+{
+  float:left;
+  width :25%;
+}
+
+.conversation .message-time
+{
+  position:relative !important;
+}
+.conversation .message-time p
+{
+  font-size: 10px;
+}
+
+.bubble {
+    background-color: #fff;
+    border-radius:    5px;
+    border:           1px solid #bbb;;
+    box-shadow:       0 1px 6px #B2B2B2;;
+    display:          block;
+    padding:          10px 18px;
+    margin:           1em (6px + 12px);
+    position:         relative;
+    vertical-align:   top;
+}
+
+.tail {
+    position: absolute;
+    height:  50px;
+    width:   50px;
+    overflow: hidden;
+    left: -60px;
+
+}
+
+
+.bubble.left {
+    float: left;
+    text-align: left;
+    background: #8DD1F8;
+    color: #fff;
+
+    .tail {
+        top:      22px;
+        left:   0 1px 6px #B2B2B2;
+
+        &:before {
+            left:              12px;
+            -webkit-transform: skewX( -45deg );
+            -moz-transform:    skewX( -45deg );
+            -o-transform:      skewX( -45deg );
+        }
+    }
+}
+
+
+.bubble.right {
+    float: right;
+    text-align: right;
+    background: #8FDA8A;
+    color: #fff;
+    
+    .tail {
+        top:      12px;
+        right:   0 1px 6px #B2B2B2;
+
+        &:before {
+            right:              12px;
+            -webkit-transform: skewX( 45deg );
+            -moz-transform:    skewX( 45deg );
+            -o-transform:      skewX( 45deg );
+        }
+    }
+}
+.conversation .message_reply
+{
+  width:100%;
+  float:left;
+  border: 1px solid #dbe0e3;
+  padding: 13px 16px 16px;
+}
+.conversation .message_box
+{
+  width: 100%;
+  height: 70px;
+}
+.conversation hr
+{
+  clear: both;
+  margin-top:12px;
+  margin-bottom:5px;
+}
+.conversation .messages-list
+{
+  border-top: 1px solid #ECEAF3;
+  border-left: 1px solid #ECEAF3;
+}
+.conversation .message_reply input[type="textarea"]
+{
+  border: 1px solid #a5c9e1;
+  resize: none;
+}
+.message_reply
+{ 
+  margin-top: 40px;
+  background: #F7F8F8
+}
+.conversation .message_reply .btn-message-reply
+{
+  float: right;
+  margin-top: 10px;
+}
+.pull-right .bubble
+{
+  float:left;
+  margin-right:20px;
+  height:30px;
+  width:38px;
+  background: #153A5A;
+  border-radius: 3px;
+  box-shadow: 0 1px 6px #B2B2B2;
+  margin-top: 0px !important;
+  margin-bottom: 0px !important;
+  padding: 0px !important;
+}
+.pull-right .bubble:hover
+{
+  background: #3276b1;
+}
+.pull-right .bubble .bubble_messagging
+{
+  text-align: center;
+  margin-top: 5px;
+  margin-left: 8px;
+}
+#show_bubble_create_message #message
+{
+  width:100%;
+  height:70px;
+}
+progress {
+  width: 400px;
+  height: 14px;
+  -webkit-appearance: none;
+  border: none;
+  background-color: #ccc;
+  border-radius: 7px;
+}
+progress::-webkit-progress-bar {
+  background: #ccc;
+  border-radius: 50px;
+  padding: 2px;
+  box-shadow: 0 1px 0px 0 rgba(255, 255, 255, 0.2);
+}
+progress::-webkit-progress-value {
+  border-radius: 50px;
+  box-shadow: inset 0 1px 1px 0 rgba(255, 255, 255, 0.4);
+  background:
+    -webkit-linear-gradient(45deg, transparent, transparent 33%, rgba(0, 0, 0, 0.1) 33%, rgba(0, 0, 0, 0.1) 66%, transparent 66%),
+    -webkit-linear-gradient(top, rgba(255, 255, 255, 0.25), rgba(0, 0, 0, 0.2)),
+    -webkit-linear-gradient(left, #5a8fc2, #2e6b99);
+  background-size: 25px 14px, 100% 100%, 100% 100%;
+  -webkit-animation: move 5s linear 0 infinite;
+}
+@-webkit-keyframes move {
+  0% {background-position: 0px 0px, 0 0, 0 0}
+  100% {background-position: -100px 0px, 0 0, 0 0}
+}
+progress::-moz-progress-bar { 
+  background: #5a8fc2; 
+  border-radius: 7px;
+}

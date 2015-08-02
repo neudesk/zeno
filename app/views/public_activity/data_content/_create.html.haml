@@ -1,0 +1,5 @@
+created a new content
+- if activity.trackable
+  %span= link_to activity.trackable.title, search_content_search_path(content_query: activity.trackable.title)
+- else
+  which has since been removed

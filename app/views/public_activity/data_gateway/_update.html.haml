@@ -1,0 +1,12 @@
+updated phone number
+- if activity.parameters[:entryway]
+  - activity.parameters[:entryway].each do |entryway_id|
+    - entryway = DataEntryway.find(entryway_id)
+    - if entryway
+      %span= entryway.did_e164
+on station
+- if activity.trackable
+  %span
+    = link_to activity.trackable_title, settings_station_path(activity.trackable.id)
+- else
+  which has since been removed.

@@ -1,0 +1,15 @@
+#duplicate_modal.modal{"aria-hidden" => "true", role: "dialog", tabindex: "-1"}
+  .modal-dialog
+    .modal-content
+      .modal-header
+        .modal_title
+          %h4= "Duplicate User"
+      .modal-body
+        .row-fluid
+          .span12
+            = simple_form_for :pending_user, url: duplicate_pending_user_path(1), html: {id: "duplicate_form"}  do |f|
+              .form-inputs
+                = f.input :note, label: false, placeholder: "Enter the reason why you want this to be marked as duplicate", input_html: {class: "form-control"}
+      .modal-footer
+        = link_to "Close", "#", class: "btn btn-default", "aria-hidden" => "true", "data-dismiss" => "modal"
+        = link_to "Save", "#", class: "btn btn-dark-grey form-submitter", data: {target: "duplicate_form"}

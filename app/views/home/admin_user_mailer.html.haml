@@ -1,0 +1,56 @@
+= form_for 'mail' do |f|
+  = f.hidden_field :attachments
+  .page-header
+    %h1
+      %i.fa.fa-envelope
+      User Signup Webmail
+    %br
+  - template = render 'home/webmail_template'
+  .row
+    .col-md-4
+      .control-group
+        %label.control-label{for: 'mail[recipient]'} Recipient
+        .controls
+          = f.email_field :recipient, value: nil, placeholder: 'mail@example.com'
+      .control-group
+        %label.control-label{for: 'mail[recipient]'} Bcc
+        .controls
+          = f.text_field :bcc, value: nil, placeholder: 'Separate each email with comma.'
+      .control-group
+        %label.control-label{for: 'mail[subject]'} Subject
+        .controls
+          = f.text_field :subject, value: 'Welcome to ZenoRadio', style: 'width: 100%'
+          %br
+          %br
+          %span#attachmentHolder{style: 'display: none'}
+            %strong Attachments:
+            %ul{style: 'list-style-type: none'}
+      %br
+        %p
+          %a.btn.btn-primary.sendMessage{style: 'margin-right: 10px'} Send Mail
+          %a{href: '#', data: {toggle: 'modal', target: '#attachmentModal'}}
+            %i.fa.fa-paperclip
+            Attach
+          %br
+          %a.preloader.text-center{style: 'display: none'}
+            %img{src: '/assets/loading.gif', width: 30, height: 30}
+            Please wait...
+    .col-md-8
+      .control-group
+        .controls
+          = f.cktext_area :content, as: :ckeditor, value: template, ckeditor: {toolbar: 'mini', height: 1000}
+
+#attachmentModal.modal.fade
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %button.close{"aria-label" => "Close", "data-dismiss" => "modal", :type => "button"}
+          %span{"aria-hidden" => "true"} ×
+        %h4.modal-title Upload Attachments
+      .modal-body
+        %input#attachment.file-loading{name: 'attachments[]', type: 'file', multiple: true}
+
+:javascript
+  $(document).ready(function(){
+    window.webmail = new WebMail()
+  });

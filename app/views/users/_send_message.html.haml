@@ -1,0 +1,25 @@
+#show_bubble_create_message.modal
+  .modal-dialog
+    .modal-content
+      .modal-header
+        .modal_title
+          %p
+      .modal-body
+        .loading{:style => "display: none;"}
+          #loader.row.loading{:style => "display: none;"}
+            .col-sm-12.acenter
+              %img{:alt => "Loader", :src => "/assets/loader.gif"}
+              Just a moment
+        = form_tag(write_message_path, :method => "POST", id: "write_message_form") do
+          = hidden_field_tag "user_email"
+          = text_field_tag "subject", "", placeholder: "Enter a subject...", style: "display: none;"
+          %br
+          %br
+          = text_area_tag("message", nil, class: "message_box")
+          %br
+          %br
+          = select_tag  "message_type", options_for_select([["Conversation", "inapp"], ["Email", "email"]]), class: "btn btn-primary btn-sm dropdown-toggle"
+          = button_tag "Send", id: "send_message", class: "btn btn-default btn-sm btn-primary", "aria-hidden" => "true"
+      .modal-footer
+        
+        = link_to "Close", "#", class: "btn btn-default", "aria-hidden" => "true", "data-dismiss" => "modal"

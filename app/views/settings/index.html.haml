@@ -1,0 +1,46 @@
+/ Main hero unit for a primary marketing message or call to action
+/ For slides
+- if @no_of_stations > 1 || current_user.is_marketer?
+  = render "shared/slides"
+.settings_page
+  - if @station_id
+    .did_section.standard
+      = render "dids"
+  .clearfix
+    .row-fluid
+      .col-sm-12{style: "padding-bottom: 5px;"}
+        %iframe{src: "#{hostname}/banner1/1", seamless: true, scrolling: "no", height: "165px", width: "580px"}
+      .col-sm-12
+        - val = "<iframe src=\"#{hostname}/banner1/1\" height=\"165px\" scrolling=\"no\" seamless=\"\" width=\"580px\"></iframe>"
+        = text_area_tag "embed_body", val, style: "width: 100%", rows: 1
+      .col-sm-12{style: "padding-bottom: 5px;"}
+        %iframe{src: "#{hostname}/banner2/1", seamless: true, scrolling: "no", height: "239px", width: "275px"}
+      .col-sm-12
+        - val = "<iframe src=\"#{hostname}/banner2/1\" height=\"239px\" scrolling=\"no\" seamless=\"\" width=\"275px\"></iframe>"
+        = text_area_tag "embed_body", val, style: "width: 100%", rows: 1
+
+      %h1.page_heading.clearfix
+        .pull-left EXTENSIONS
+        - if current_user.is_marketer?
+          = link_to "Add New Station", new_data_gateway_path, :class => "btn pull-right", style: "margin-right: 10px; margin-top: 5px" if current_user.is_marketer?
+          = link_to "Edit Station", edit_data_gateway_path(@station), :class => "btn pull-right", style: "margin-right: 10px; margin-top: 5px" if current_user.is_marketer?
+
+      .settings_section.data-tagging.tabs
+        %ul.nav.nav-tabs.setting-nav-tabs
+          %li.extensions-tab.default-tab.active-tab
+            = link_to I18n.t("titles.pages.settings.labels.extentions").pluralize, extensions_path(station_id: @station_id, slider_search_enabled: @slider_search_enabled, query: @slider_query, country_id: @slider_country_id, rca_id: @slider_rca_id), remote: true, :class => "extentions-link"
+          %li
+            - if @station_id
+              = link_to I18n.t("titles.pages.settings.labels.prompts").pluralize, data_gateway_prompts_path(@station_id, {slider_search_enabled: @slider_search_enabled, query: @slider_query, country_id: @slider_country_id, rca_id: @slider_rca_id}), remote: true, :class => "data-group-link"
+            - else
+              = link_to I18n.t("titles.pages.settings.labels.prompts").pluralize, prompts_index_path, remote: true, :class => "data-group-link"
+          %li.tags-tab
+            /= link_to I18n.t("titles.pages.settings.labels.tags").pluralize, my_radio_station_path(:id => @station_id, slider_search_enabled: @slider_search_enabled, query: @slider_query, country_id: @slider_country_id, rca_id: @slider_rca_id), remote: true, :class => "tagging-link"
+            = link_to 'Station Information', my_radio_station_path(:id => @station_id, slider_search_enabled: @slider_search_enabled, query: @slider_query, country_id: @slider_country_id, rca_id: @slider_rca_id), remote: true, :class => "tagging-link"
+        #content-tabs.tab-content.settings-tabs-content
+          .data
+- content_for :js do
+  :javascript
+    $(document).ready(function(){
+      window.settings = new Settings()
+    });

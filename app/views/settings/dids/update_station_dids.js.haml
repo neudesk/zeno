@@ -1,0 +1,4 @@
+$(".did_section").empty().html("#{j(render('settings/dids', {}))}");
+$(".main-loading").hide();
+$(".modal-backdrop").remove();
+window.settings = new Settings({"ajax": true})

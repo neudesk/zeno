@@ -1,0 +1,28 @@
+= simple_nested_form_for(@data_content) do |f|
+  #edit_data_content_container
+    .modal-header
+      %button{"type" => "button", "class" => "close", "data-dismiss" => "modal", "aria-hidden" => "true"}="×"
+      %h3 Edit Content
+    .modal-body
+      = hidden_field_tag :content_query, @content_query
+      .clearfix
+        = f.label :title, :class => ""
+        = f.text_field :title, :class => "input-xlarge", "data-error-class" => "title-error", "data-text-error" => "Title"
+        %p.text-error.title-error.hide.message-info.error-in-add{:style => "font-style:italic"}
+      .clearfix
+        = f.label :media_url, :class => ""
+        = f.text_field :media_url, :class => "input-xlarge", "data-error-class" => "media-url-error", "data-text-error" => "Media Url"
+        %p.text-error.media-url-error.hide.message-info.error-in-add{:style => "font-style:italic"}
+      .clearfix
+        = f.label :backup_media_url, :class => ""
+        = f.text_field :backup_media_url, :class => "input-xlarge", disabled: (current_user.is_marketer? || current_user.is_rca? ? nil: true), "data-error-class" => "backup-media-url-error", "data-text-error" => "Backup Media Url"
+        %p.text-error.backup-media-url-error.hide.message-info.error-in-add{:style => "font-style:italic"}
+        -if (current_user.is_marketer? || current_user.is_broadcaster? || current_user.is_rca?) && f.object.media_url.present? && f.object.backup_media_url.present?
+          %span{"class" => "btn", "id" => "switch_streams", "style" => "margin-top: -12px" }="Switch Streams"
+      .clearfix
+        = f.label :media_type              
+        = f.select :media_type, options_for_select(PLAYER_TYPE, f.object.media_type), {}, disabled: (current_user.is_marketer? ? nil: true)
+
+    .modal-footer
+      %button{"class" => "btn btn-cancel", "data-dismiss" => "modal", "aria-hidden" => "true"}= "Close"
+      %button{"class" => "btn btn-primary btn-submit"}= "Save"

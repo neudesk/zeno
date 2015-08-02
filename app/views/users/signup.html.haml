@@ -1,0 +1,93 @@
+.row
+  .col-xs-12
+    #iframeform
+      %p.subHeadings
+        Join ZenoRadio's network of stations, the fastest growing network of immigrant focused content in the U.S.
+      = simple_form_for @user, url: signup_new_user_path, method: :post do |f|
+        = f.hidden_field :permission_id, :value => '3'
+        %fieldset
+          %legend Account Information
+          .row
+            .col-xs-4
+              %label{:class => 'required control-label'}
+                Email Address
+              = f.input :email, label: false, input_html: {class: "input-large bigGreyInput", :value => params[:email].present? ? params[:email] : @user.email, :data => {:validation => "email"}}
+            .col-xs-4
+              %label{:class => 'required control-label'}
+                Company/Name
+              = f.input :name, label: false, input_html: {class: "input-large bigGreyInput", :data => {:validation => "required"}}
+            .col-xs-4
+              = f.label :landline, label: "Phone Number", class: "control-label"
+              = f.input :landline, input_html: {class: "input-large bigGreyInput"}, label: false
+        %fieldset
+          %legend Station Information
+          .row
+            .col-xs-4
+              %label{:class => 'required control-label'}
+                Station Name
+              = f.input :signup_station_name, label: false, input_html: {class: "bigGreyInput", :value => params[:station_name].present? ? params[:station_name] : @user.signup_station_name, :data => {:validation => "required"}}
+            .col-xs-4
+              %label{:class => 'control-label'}
+                Website
+              = f.input :signup_website, label: false, input_html: {:value => params[:website].present? ? params[:website] : @user.signup_website, class: "bigGreyInput"}
+            .col-xs-4
+              = f.label :country, label: "Country", class: "control-label"
+              %div
+                = f.select :country, options_from_collection_for_select(DataGroupCountry.order('title'), "title", "title", @user.country), { :include_blank=>true }, { :class => 'bigGreyInput', :data => {:validation => "required", "data-validation-error-msg" => "Required field"} }
+          %br
+          .row
+            .col-xs-6.col-xs-offset-3.acenter
+              %label.control-label= "Do you have streaming URL?"
+              = f.input :signup_streaming_url, label: false, input_html: {class: "bigGreyInput streamUrl #{(@user.signup_streaming_url.nil? and params[:streaming_url].nil?) ? 'hide' : ''}", :value => params[:streaming_url].present? ? params[:streaming_url] : @user.signup_streaming_url}
+              %div.selectOpt
+                %label{:for => 'has_stream_yes', :style => 'padding-right: 10px'}
+                  = radio_button_tag 'has_stream', 'yes', (params[:streaming_url].present? or @user.signup_streaming_url.present?) ? true : false
+                  Yes
+                %label{:for => 'has_stream_no'}
+                  = radio_button_tag 'has_stream', 'no', (params[:streaming_url].present? or @user.signup_streaming_url.present?) ? false : true
+                  No
+          %fieldset
+            %legend Select Your Services
+            .row
+              .col-xs-3{:style => 'text-align: center'}
+                %label
+                  = image_tag("gadget1.png")
+                  %br
+                  %br
+                  = check_box_tag "service_type[]", 'free_streaming', params[:streaming_url].present? ? false : true, :class => 'square-teal'
+                  Free Streaming
+              .col-xs-3{:style => 'text-align: center'}
+                %label
+                  = image_tag("gadget2.png")
+                  %br
+                  %br
+                  = check_box_tag "service_type[]", 'dial_in_service', true, :class => 'square-teal'
+                  Dial In Service
+              .col-xs-3{:style => 'text-align: center'}
+                %label
+                  = image_tag("gadget3-1.png")
+                  %br
+                  %br
+                  = check_box_tag "service_type[]", 'media_player', false, :class => 'square-teal'
+                  Media Player
+              .col-xs-3{:style => 'text-align: center'}
+                %label
+                  = image_tag("gadget4.png")
+                  %br
+                  %br
+                  = check_box_tag "service_type[]", 'android_app', false, :class => 'square-teal'
+                  Android App
+            %br
+            %br
+            .row
+              .col-xs-12
+                %label{:class => 'required control-label'}
+                Indicates a required field.
+          .row
+            = f.submit "Sign Up", class: "btn btn-primary btn-lg submitbtn", :style => 'padding: 10px; '
+
+:javascript
+  $(document).ready(function(){
+    $.validate();
+  });
+

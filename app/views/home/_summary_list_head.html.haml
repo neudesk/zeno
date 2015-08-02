@@ -1,0 +1,13 @@
+%table{:class=>"table table-bordered table-condensed table-striped"}
+  %thead
+    %tr
+      %th{:colspan=>"4"}
+        %i{:class => "icon-refresh make-transparent", :style =>"float:left;margin-right:5px;"}
+        %span=" Summary list"
+    %tr
+      %th
+        = select_tag options_for_select([['Station', 'gateway'], ['Content/Station', ['Phone Number/Station', 'content']], 'entryway'], params[:type]),:id => "select_type", :style=>"width:100%"
+      %th{:style=>"text-align:center"}Calls
+      %th{:style=>"text-align:center",:colspan=>"2"}Calls / ACD (last 15min)
+  %tbody{:class => "summary_list_body"}
+    = render :partial => "summary_list_body"

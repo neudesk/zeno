@@ -1,0 +1,40 @@
+%table.table.table-striped.table-bordered
+  %thead
+    %tr
+      %th.span1.acenter{colspan: "2"} 
+        = "Day"
+      %th.span1.acenter
+        = "New users"
+      %th.acenter
+        = "Active users"
+      %th.acenter
+        = "Sessions"
+      %th.acenter
+        = "Minutes"
+  %tbody
+    - result.each do |data|
+      %tr
+        %td.acenter
+          = data[0][:month] + ' ' + data[0][:day]
+        %td.acenter
+          = data[0][:dayinwords]
+        %td.acenter
+          = format_decimal(data[1])
+        %td.acenter
+          = format_decimal(data[2])
+        %td.acenter
+          = format_decimal(data[3])
+        %td.acenter
+          = format_decimal(data[4])
+  %tfoot
+    %tr
+      %td.aright{:colspan => '2'}
+        %b= "Total"
+      %td.acenter
+        %b= format_decimal(total[0])
+      %td.acenter
+        %b= format_decimal(total[1])
+      %td.acenter
+        %b= format_decimal(total[2])
+      %td.acenter
+        %b= format_decimal(total[3])

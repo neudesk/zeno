@@ -1,0 +1,9 @@
+- object_type = "content"
+- if activity.parameters[:group_type] == 'Country'
+  - object_type = "station"
+  - data_tag = DataGroupCountry.find(activity.parameters[:new_id])
+- if activity.parameters[:group_type] == 'Genre'
+  - data_tag = DataGroupGenre.find(activity.parameters[:new_id])
+- if activity.parameters[:group_type] == 'Language'
+  - data_tag = DataGroupLanguage.find(activity.parameters[:new_id])
+= "tagged #{activity.parameters[:group_type]} <strong>#{data_tag.title}</strong> to #{object_type} <strong>#{activity.parameters[:object_title]}</strong> via data tagging".html_safe

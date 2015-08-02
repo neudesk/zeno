@@ -1,0 +1,7 @@
+= form_tag reachout_tab_settings_add_default_prompt_path, :method => :post, :multipart => true do
+  %div
+    // Initialize file input widget via javascript. Hide the caption and display widget with only buttons.
+    %input{:id=>"prompt", :name=>"prompt", :type=>"file", :multiple=>"true"}
+    %br
+    %p=@default_prompt.present? ?  "Default : '" +@default_prompt.prompt_file_name + "'":  "Default : None"
+

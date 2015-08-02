@@ -1,0 +1,51 @@
+- stations_size = @stations.length
+- height = cal_slider_height(stations_size)
+- sorted_stations = sort_slider_stations(@stations, 6, height)
+- g_stations = sorted_stations.each_slice(height).to_a
+
+- if !defined? selected_station_id
+  - selected_station_id = 0
+- if !defined? slider_search_enabled
+  - slider_search_enabled = false
+- if !defined? query
+  - query = ''
+- if !defined? country_id
+  - country_id = ''
+- if !defined? rca_id
+  - rca_id = ''
+.row.slides.margin-top-0
+  = form_tag my_radio_slider_search_path, method: :Get, remote: true, :class => 'search_form' do
+    %p.search
+      = hidden_field_tag :slider_search_enabled, true
+      = text_field_tag :query, params[:query], :class => "input-large search-query", placeholder: "Enter your search here and enter"
+      %span.radio-select= select_tag :country_id, options_from_collection_for_select(DataGroupCountry.get_tagged_countries_on_user(current_user).order(:title), 'id', 'title', params[:country_id]), :prompt => "Select country"
+      - if current_user.is_marketer?
+        %span.radio-select= select_tag :rca_id, options_from_collection_for_select(DataGroupRca.order(:title), 'id', 'title', params[:rca_id]), :prompt => "Select RCA"
+  %ul#mycarousel.jcarousel-skin-tango
+    - g_stations.each do |stations|
+      %li
+        - stations.each_with_index do |station, index|
+          - if station
+            - class_names = [index == 0 ? "" : "more", station.id == selected_station_id ? "active" : ""]
+            = link_to(my_radio_station_path(id: station.id, slider_search_enabled: slider_search_enabled, query: query, country_id: country_id, rca_id: rca_id), {:class => "linked_item"}) do
+              .item{:class => class_names, "data-gateway-id" => station.id}
+                %h5{:title => station.title, "data-toggle" => "tooltip", "data-gateway-id" => station.id}= truncate(station.title, :length => 15)
+          - else
+            / For empty stations
+            .item{:class => height > 1 ? "more" : ""}
+        / For empty stations
+        - if height > 1 && stations.size < height
+          - 1.upto(height - stations.size) do
+            .item.more
+    / For empty stations
+    - if g_stations.size < 6
+      - 1.upto(6 - g_stations.size) do
+        %li
+          - 1.upto(height)
+          .item{:class => height > 1 ? "more" : ""}
+- content_for :js do
+  :javascript
+    $(document).ready(function(){
+      window.slider = new Slider()
+      window.slider.setupPrevNextButtonsAligments(#{height})
+    });

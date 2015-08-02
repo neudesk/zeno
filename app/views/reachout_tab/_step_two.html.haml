@@ -1,0 +1,20 @@
+%div{:id=>"step-2"}
+  .panel.panel-default
+    .panel-heading
+      .fa.fa-cogs
+      Upload Campaign Recordings
+      .panel-tools
+        %a.btn-link.back-step{:href=>"#"}
+          %i.fa.fa-arrow-circle-left
+          Go Back
+    .panel-body
+      .step_two_content{:style => "min-height:200px;"}
+        = "Upload Prompt"
+        =file_field_tag :prompt
+        %br
+        %p
+          Please upload .wav or .mp3 file
+  %button.btn.btn-blue.next-step.btn-block
+    Next
+    %i.fa.fa-arrow-circle-right
+  .clearfix

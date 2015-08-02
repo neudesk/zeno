@@ -1,0 +1,47 @@
+%p
+  = "Hello #{@content[:rca]}"
+%p
+  = "User #{@content[:from].email} is requesting a #{@content[:player_data].tool_type == 'media_player' ? 'Media Player Widget' : 'Mobile App'}"
+- if @content[:player_data].tool_type == 'media_player'
+  %p
+    = "Media Player Widget Specifications"
+  %br
+  %ul
+    %li
+      = "Media Player Type: #{@content[:player_data].is_customized? ? "Customized" : "Default"}"
+    %li
+      = "Media Player Channeling: #{@content[:player_data].channeling_type}"
+    %li
+      = "Displayed Station Name: #{@content[:player_data].station_name}"
+    %li
+      = "Displayed Phone #: #{@content[:player_data].phone_number_display}"
+    - if @content[:player_data].is_customized?
+      %li
+        = "Is Auto Play?: #{@content[:player_data].is_auto_play? ? 'Yes' : 'No'}"
+      - if @content[:player_data].is_auto_play?
+        %li
+          = "Channel To Play Auto: #{@content[:player_data].channel_to_auto_play?}"
+      %li
+        = "Player Width: #{@content[:player_data].player_width}"
+      %li
+        = "Player Height: #{@content[:player_data].player_height}"
+      %li
+        = "Volume Percentage: #{@content[:player_data].player_volume}"
+      %li
+        = "Additional Info: #{@content[:player_data].additional_info}"
+
+- if @content[:player_data].tool_type == 'mobile_app'
+  %p
+    Mobile App Specifications
+  %br
+  %ul
+    %li
+      = "Station Name Display: #{@content[:player_data].station_name}"
+    %li
+      = "Station Description: #{@content[:player_data].station_description}"
+    %li
+      = "Station DID: #{@content[:player_data].did}"
+    %li
+      = "Station Website: #{@content[:player_data].station_website}"
+    %li
+      = "Station Tagline: #{@content[:player_data].tagline}"

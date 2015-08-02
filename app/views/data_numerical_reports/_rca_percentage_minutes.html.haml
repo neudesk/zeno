@@ -1,0 +1,37 @@
+%table.data_numerical_reports_table
+  %thead
+    = render partial: "rca_table_head"
+  %tbody
+  - @result.each do |rca|
+    %tr{:class => cycle('odd', 'even')} 
+      %td.name
+        - type = params["type"].present? ? params["type"] : "percentage"
+        %a{:href =>("/data_numerical_reports/rca_minutes?type=#{type}&rca_id=#{rca[1]}" if rca[1] != params["rca_id"].to_i), :class => [("active_rca" if rca[1] == params["rca_id"].to_i)]}= rca[0]
+      -if 0 > rca[2]
+        %td.green= rca[2].abs.to_s + " %" 
+      -elsif 0 < rca [2]
+        %td.red= rca[2].abs.to_s + " %"
+      -else
+        %td= rca[2].abs.to_s + " %"
+
+      -if 0 > rca[3]
+        %td.green= rca[3].abs.to_s + " %" 
+      -elsif 0 < rca [3]
+        %td.red= rca[3].abs.to_s + " %"
+      -else
+        %td= rca[3].abs.to_s + " %"
+
+      -if 0 > rca[4]
+        %td.green= rca[4].abs.to_s + " %" 
+      -elsif 0 < rca [4]
+        %td.red= rca[4].abs.to_s + " %"
+      -else
+        %td= rca[4].abs.to_s + " %"
+
+      -if 0 > rca[5]
+        %td.green= rca[5].abs.to_s + " %" 
+      -elsif 0 < rca [5]
+        %td.red= rca[5].abs.to_s + " %"
+      -else
+        %td= rca[5].abs.to_s + " %"
+

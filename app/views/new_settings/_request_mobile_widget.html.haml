@@ -1,0 +1,76 @@
+%div.modal.fade{:id => "mobileWidgetModal", :role => "dialog", 'aria-labelledby' => "mobileWidgetModalLabel",  'aria-hidden' => "true"}
+  %div.modal-dialog
+    %div.modal-content{:style => 'width: 700px; margin-left: -70px'}
+      %div.modal-header
+        %h4.modal-title{:id => "mediaPlayerModalLabel"}
+          Mobile App Request Form
+      %div.modal-body
+        .row
+          = form_for @station_tool, :url => send_widget_request_path, :method => 'post', :html => { :id => "sendRequestMobileForm" } do |f|
+            = hidden_field_tag 'station_id', params[:station_id]
+            = f.hidden_field :tool_type , :value => 'mobile_app'
+            = f.hidden_field :phone_number_display, :value => '0'
+            .col-md-5
+              %div.control-group
+                %label.control-label{:for => "station_display_name_id"}
+                  Station Name Display
+                %div.controls
+                  = f.text_field :station_name, :placeholder => 'Station Name Display', :class => 'input-xlarge', "data-validation" => "required", :value => @station.title
+              %div.control-group
+                %label.control-label{:for => "station_did_id"}
+                  Station DID
+                %div.controls
+                  = f.text_field :did, :placeholder => 'Station DID', :class => 'input-xlarge', "data-validation" => "number", :value => @station.data_entryways.present? ? @station.data_entryways.first.did_e164 : nil
+              %div.control-group
+                %label.control-label{:for => "station_did_id"}
+                  Station Website
+                  %br
+                  %small{:style => 'font-size: 55%'}
+                    Please follow the correct URL format
+                %div.controls
+                  = f.text_field :station_website, :placeholder => 'http://www.website.com', :class => 'input-xlarge', "data-validation" => "url"
+              %br
+              %div.control-group
+                %label.control-label{:for => "station_did_id"}
+                  Upload Station Image
+              %div.fileinput.fileinput-new{:data => {:provides => "fileinput"}, :style => 'position: relative;'}
+                %div.fileinput-preview.thumbnail.background{:data => {:trigger => "fileinput"}}
+                %div
+                  %span.btn.btn-default.btn-file
+                    %span.fileinput-new Select image
+                    %span.fileinput-exists Change
+                    = f.file_field :background, :accept => 'image/png,image/gif,image/jpeg', "data-validation" => "required", "data-validation-error-msg" => "Required field"
+                  %a.btn.btn-default.fileinput-exists{:href => '#', :data => {:dismiss => "fileinput"}} Remove
+            .col-md-6.pull-right{:style=>'margin-right: 20px'}
+              %div.control-group
+                %label.control-label{:for => "station_website_id"}
+                  Station Description
+                %div.controls
+                  = f.text_area :station_description, :rows => '6', "data-validation" => "required"
+              %div.control-group
+                %label.control-label{:for => 'tagline_id'}
+                  Station Taglines
+                %div.controls
+                  = f.text_area :tagline, :rows => '3', "data-validation" => "required"
+              %div.control-group
+                %label.control-label{:for => "station_did_id"}
+                  Upload Logo
+              %div.fileinput.fileinput-new{:data => {:provides => "fileinput"}, :style => 'position: relative;'}
+                %div.fileinput-preview.thumbnail{:data => {:trigger => "fileinput"}}
+                %div
+                  %span.btn.btn-default.btn-file
+                    %span.fileinput-new Select image
+                    %span.fileinput-exists Change
+                    = f.file_field :logo, :accept => 'image/png,image/gif,image/jpeg', "data-validation" => "required", "data-validation-error-msg" => "Required field"
+                  %a.btn.btn-default.fileinput-exists{:href => '#', :data => {:dismiss => "fileinput"}} Remove
+      .modal-footer
+        = link_to "Close", "#", class: "btn btn-default", "aria-hidden" => "true", "data-dismiss" => "modal"
+        %button.btn.btn-success.pull-right{:type => 'submit', data: {target: "sendRequestMobileForm"}}
+          Finish
+          %i.fa.fa-check-circle
+
+:javascript
+  $('button[data-target="sendRequestMobileForm"]').click(function(){
+    form = $('#'+$(this).attr('data-target'));
+    form.submit();
+  });

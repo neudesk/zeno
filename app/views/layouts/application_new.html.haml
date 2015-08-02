@@ -1,0 +1,42 @@
+!!! 5
+%html(lang="en")
+  %head
+    %meta(charset="utf-8")
+    %meta(http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1")
+    %meta(name="viewport" content="width=device-width, initial-scale=1.0")
+    %title= content_for?(:title) ? yield(:title) : "ZenoRadio"
+    = csrf_meta_tags
+    / Le HTML5 shim, for IE6-8 support of HTML elements
+    /[if lt IE 9]
+      = javascript_include_tag "//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.6.1/html5shiv.js"
+    = javascript_include_tag "https://www.google.com/jsapi"
+    = stylesheet_link_tag "application", :media => "all"
+    = javascript_include_tag "#{hostname}/embed/bookmarked.js"
+    %script{src: "https://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"}
+    = javascript_include_tag "application"
+    = yield(:js)
+
+%body.page-full-width.bg_style_2
+  .navbar.navbar-inverse.navbar-fixed-top
+    .container
+      .navbar-header
+        = link_to image_tag("layout/logo.png"), root_path
+      .navbar-tools
+        %ul.nav.navbar-right
+          %li.dropdown.current-user
+            %a.dropdown-toggle{"data-close-others" => "true", "data-hover" => "dropdown", "data-toggle" => "dropdown", href: "#"}
+              %span.username
+                = "Hi #{current_user.title}"
+              %i.clip-chevron-down
+            %ul.dropdown-menu
+              %li
+                = link_to "Logout", logout_path
+      .horizontal-menu.navbar-collapse.collapse
+        = render "shared/menu"
+  .main-container
+    .main-content
+      .container
+        = yield
+  .footer.clearfix.acenter
+    %p © ZenoRadio Admin #{DateTime.now.strftime("%Y")}
+

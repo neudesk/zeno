@@ -1,0 +1,17 @@
+created an extension
+- if activity.parameters[:content_id]
+  - data_content = DataContent.find(activity.parameters[:content_id]) rescue nil
+  - if data_content
+    %span= link_to data_content.title, data_content_path(data_content), :remote => 'true'
+    - if activity.parameters[:channel_no]
+      = "(Extension no: " + activity.parameters[:channel_no].to_s + ")"
+    - if activity.parameters[:media_url]
+      = activity.parameters[:media_url]
+on station
+- if activity.parameters[:gateway_id]
+  - gateway = DataGateway.find(activity.parameters[:gateway_id]) rescue nil
+  - if gateway
+    = link_to gateway.title, settings_station_path(gateway.id)
+  - else
+    which has since been removed
+

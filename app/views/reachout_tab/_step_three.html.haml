@@ -1,0 +1,36 @@
+%div{:id=>"step-3"}
+  .panel.panel-default
+    .panel-heading
+      .fa.fa-cogs
+      Phone List
+      .panel-tools
+        %a.btn-link.back-step{:href=>"#"}
+          %i.fa.fa-arrow-circle-left
+          Go Back
+    .panel-body
+      .step_three_content{:style => "min-height:200px;"}
+        %div.row
+          %div.control-group.col-md-4
+            %div.controls
+              = hidden_field_tag :start, @start, readonly: true
+              = hidden_field_tag :stop, @stop, readonly: true
+              %label.radio.inline{:for => "schedule-0"}
+                %input.scheduler{:type =>"radio", :name =>"schedule", :id => "schedule-0", :checked => true, :value => "send_now"}
+                Send Today
+              %label.radio.inline{:for => "schedule-1"}
+                %input.scheduler{:type =>"radio", :name =>"schedule", :id => "schedule-1", :checked => false, :value => "send_later"}
+                Send Later
+          %div.control-group.col-md-8
+            %label.control-label{:for => "textinput"}
+            Date / Time
+            %div.controls
+              %input.span2{:size => "16", :type=>"text", :id => "hourpicker",:name =>"schedule_hour", :readonly => true, :placeholder => "Select hour"}
+              %input.span2{:size => "16", :type=>"text", :id => "datepicker",:name =>"schedule_date", :readonly => true, :placeholder => "Select date"}
+  / %button.btn.btn-blue.next-step.btn-block
+  /   Next
+  /   %i.fa.fa-arrow-circle-right
+  / .clearfix
+  %button.btnFinish.btn.btn-success.btn-block
+    Finish
+    %i.fa.fa-arrow-circle-right
+  .clearfix
